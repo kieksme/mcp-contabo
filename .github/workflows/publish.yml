@@ -4,12 +4,6 @@ on:
   push:
     tags:
       - "*.*.*"
-  workflow_call:
-    inputs:
-      tag:
-        description: Semver tag to publish (e.g. 1.0.3)
-        required: true
-        type: string
   workflow_dispatch:
     inputs:
       tag:
