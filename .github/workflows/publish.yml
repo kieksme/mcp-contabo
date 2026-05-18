@@ -1,18 +1,20 @@
-name: CI
+name: Publish to npm
 
 on:
   push:
-    branches: [main]
-  pull_request:
-    branches: [main]
+    tags:
+      - "v*"
 
 defaults:
   run:
     working-directory: contabo-mcp
 
 jobs:
-  test:
+  publish:
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      id-token: write
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -26,8 +28,19 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: "22"
+          registry-url: https://registry.npmjs.org
           cache: pnpm
           cache-dependency-path: contabo-mcp/pnpm-lock.yaml
+
+      - name: Verify tag matches package version
+        working-directory: .
+        run: |
+          TAG="${GITHUB_REF_NAME#v}"
+          PKG=$(node -p "require('./contabo-mcp/package.json').version")
+          if [ "$TAG" != "$PKG" ]; then
+            echo "Tag v$TAG does not match contabo-mcp/package.json version $PKG"
+            exit 1
+          fi
 
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
@@ -40,3 +53,8 @@ jobs:
 
       - name: Verify npm pack contents
         run: pnpm run pack:check
+
+      - name: Publish to npm
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+        run: npm publish --provenance --access public

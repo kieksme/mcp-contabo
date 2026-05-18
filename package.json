@@ -1,20 +1,10 @@
 {
-  "name": "contabo-mcp",
-  "version": "1.0.0",
-  "description": "MCP server for the Contabo API (install from GitHub without cloning)",
-  "type": "module",
-  "bin": {
-    "contabo-mcp": "./contabo-mcp/dist/index.js"
-  },
-  "scripts": {
-    "postinstall": "node scripts/postinstall.mjs"
-  },
+  "name": "mcp-contabo",
+  "private": true,
+  "description": "Monorepo for the Contabo MCP server (npm package in contabo-mcp/)",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/kieksme/mcp-contabo.git"
   },
-  "license": "GPL-3.0-or-later",
-  "engines": {
-    "node": ">=20"
-  }
+  "license": "GPL-3.0-or-later"
 }

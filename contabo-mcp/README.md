@@ -4,7 +4,7 @@ MCP (Model Context Protocol) server for the [Contabo API](https://api.contabo.co
 
 ## Features
 
-- **52 tools** with `contabo_*` naming
+- **57 tools** with `contabo_*` naming
 - OAuth2 password grant (or static bearer token for development)
 - Automatic `x-request-id` per request and token refresh on 401
 - Secret value redaction in tool responses
@@ -15,24 +15,20 @@ MCP (Model Context Protocol) server for the [Contabo API](https://api.contabo.co
 2. Enable API access in the [Contabo Customer Control Panel](https://my.contabo.com/api/details)
 3. Set **Client ID**, **Client Secret**, and API user password ([help article](https://help.contabo.com/en/support/solutions/articles/103000270527-how-can-i-access-the-contabo-api-))
 
-## Run without cloning the repository
+## Install from npm (recommended)
 
-You can use the server directly from GitHub. The first start downloads the package and builds `contabo-mcp` with **pnpm** (via [Corepack](https://nodejs.org/api/corepack.html) on Node 20+). This can take about a minute.
+Published as [`contabo-mcp`](https://www.npmjs.com/package/contabo-mcp) on npm. No clone and no build step required.
 
-### Cursor / MCP client (recommended)
+### Cursor / MCP client
 
-Add to `.cursor/mcp.json` (or your global MCP config). Replace `main` with a tag or branch if needed:
+Add to `.cursor/mcp.json` (or your global MCP config):
 
 ```json
 {
   "mcpServers": {
     "contabo": {
       "command": "npx",
-      "args": [
-        "-y",
-        "--package=git+https://github.com/kieksme/mcp-contabo.git#main",
-        "contabo-mcp"
-      ],
+      "args": ["-y", "contabo-mcp"],
       "env": {
         "CONTABO_CLIENT_ID": "your-client-id",
         "CONTABO_CLIENT_SECRET": "your-client-secret",
@@ -51,11 +47,7 @@ With **pnpm**:
   "mcpServers": {
     "contabo": {
       "command": "pnpm",
-      "args": [
-        "dlx",
-        "--package=git+https://github.com/kieksme/mcp-contabo.git#main",
-        "contabo-mcp"
-      ],
+      "args": ["dlx", "contabo-mcp"],
       "env": {
         "CONTABO_CLIENT_ID": "your-client-id",
         "CONTABO_CLIENT_SECRET": "your-client-secret",
@@ -67,50 +59,47 @@ With **pnpm**:
 }
 ```
 
+See [`mcp.json.example`](mcp.json.example) for more variants.
+
 ### Terminal (stdio)
 
 ```bash
+npx -y contabo-mcp
+```
+
+```bash
+pnpm dlx contabo-mcp
+```
+
+### Global install
+
+```bash
+npm install -g contabo-mcp
+contabo-mcp
+```
+
+## Install from GitHub (alternative)
+
+Without npm, install from the repository (first run builds the package; requires pnpm via Corepack on Node 20+):
+
+```json
+{
+  "mcpServers": {
+    "contabo": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "--package=git+https://github.com/kieksme/mcp-contabo.git#main",
+        "contabo-mcp"
+      ],
+      "env": { "...": "..." }
+    }
+  }
+}
+```
+
+```bash
 npx -y --package=git+https://github.com/kieksme/mcp-contabo.git#main contabo-mcp
-```
-
-Or with pnpm:
-
-```bash
-pnpm dlx --package=git+https://github.com/kieksme/mcp-contabo.git#main contabo-mcp
-```
-
-Export credentials first, or use a `.env` file with [dotenv-cli](https://www.npmjs.com/package/dotenv-cli):
-
-```bash
-export CONTABO_CLIENT_ID=...
-export CONTABO_CLIENT_SECRET=...
-export CONTABO_API_USER=...
-export CONTABO_API_PASSWORD=...
-npx -y --package=git+https://github.com/kieksme/mcp-contabo.git#main contabo-mcp
-```
-
-### Global install (no clone)
-
-```bash
-npm install -g "git+https://github.com/kieksme/mcp-contabo.git#main"
-# then: contabo-mcp
-```
-
-```bash
-pnpm add -g "github:kieksme/mcp-contabo#main"
-# then: contabo-mcp
-```
-
-### Download source without `git clone`
-
-If you prefer a local folder but do not use Git:
-
-```bash
-curl -fsSL https://github.com/kieksme/mcp-contabo/archive/refs/heads/main.tar.gz \
-  | tar -xz
-cd mcp-contabo-main/contabo-mcp
-pnpm install && pnpm build
-node dist/index.js
 ```
 
 ## Setup from a cloned repository
@@ -143,8 +132,6 @@ If you cloned the repo, point Cursor at the built entry file:
   }
 }
 ```
-
-See also [`mcp.json.example`](mcp.json.example) for a clone-based setup.
 
 ## CI
 
@@ -180,6 +167,35 @@ Object storage S3 credentials require `userId` (Contabo user UUID from the contr
 
 The spec is vendored at [`openapi/contabo.openapi.json`](openapi/contabo.openapi.json), extracted from the official Redoc documentation. Refresh with `pnpm run fetch-openapi`.
 
+## Publishing (maintainers)
+
+Releases are published to npm when a Git tag matching the package version is pushed.
+
+1. Bump `version` in [`package.json`](package.json) (semver).
+2. Commit and push to `main`.
+3. Create and push a tag: `git tag v1.0.x && git push origin v1.0.x`
+4. The [publish workflow](https://github.com/kieksme/mcp-contabo/actions/workflows/publish.yml) runs tests, verifies the npm tarball, and publishes with provenance.
+
+### One-time setup
+
+1. Create an npm account and ensure you can publish the [`contabo-mcp`](https://www.npmjs.com/package/contabo-mcp) package name (or use a scoped name and update `name` in `package.json`).
+2. Create an npm **Granular Access Token** with publish rights for this package.
+3. Add the token as repository secret **`NPM_TOKEN`** in GitHub (Settings → Secrets → Actions).
+
+### First publish (manual)
+
+If you need to publish before CI is configured:
+
+```bash
+cd contabo-mcp
+pnpm install
+pnpm run build
+pnpm test
+pnpm run pack:check
+npm login
+npm publish --access public --provenance
+```
+
 ## License
 
-GPL-3.0-or-later (see repository root LICENSE).
+GPL-3.0-or-later (see [LICENSE](LICENSE)).
