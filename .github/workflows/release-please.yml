@@ -14,8 +14,8 @@ jobs:
   release-please:
     runs-on: ubuntu-latest
     outputs:
-      release_created: ${{ steps.release.outputs.release_created }}
-      tag_name: ${{ steps.release.outputs.tag_name }}
+      release_created: ${{ steps.release.outputs['contabo-mcp--release_created'] == 'true' || steps.release.outputs.releases_created == 'true' }}
+      tag_name: ${{ steps.release.outputs['contabo-mcp--tag_name'] }}
     steps:
       - name: Release Please
         id: release
@@ -25,11 +25,11 @@ jobs:
 
   publish:
     needs: release-please
-    if: ${{ needs.release-please.outputs.release_created == 'true' }}
+    if: ${{ needs.release-please.outputs.release_created == 'true' && needs.release-please.outputs.tag_name != '' }}
     uses: ./.github/workflows/publish.yml
     with:
       tag: ${{ needs.release-please.outputs.tag_name }}
     permissions:
-      contents: write
+      contents: read
       id-token: write
     secrets: inherit
