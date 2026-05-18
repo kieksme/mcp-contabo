@@ -55,10 +55,9 @@ jobs:
   publish-npm:
     needs: validate
     runs-on: ubuntu-latest
-    continue-on-error: true
     permissions:
       contents: read
-      id-token: write
+      id-token: write # npm trusted publishing (OIDC)
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -82,15 +81,11 @@ jobs:
       - name: Build
         run: pnpm run build
 
-      - name: Publish to npm
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
-        run: |
-          if [ -z "$NODE_AUTH_TOKEN" ]; then
-            echo "::warning::NPM_TOKEN secret is not set. Skipping npm publish."
-            exit 0
-          fi
-          npm publish --provenance --access public
+      - name: Ensure npm CLI supports trusted publishing
+        run: npm install -g npm@^11.5.1
+
+      - name: Publish to npm (trusted publishing)
+        run: npm publish --access public
 
   github-release:
     needs: validate

@@ -176,12 +176,19 @@ Releases are published to npm when a Git tag matching the package version is pus
 3. Create and push a tag (no `v` prefix): `git tag 1.0.x && git push origin 1.0.x`
 4. The [publish workflow](https://github.com/kieksme/mcp-contabo/actions/workflows/publish.yml) runs tests, verifies the npm tarball, and publishes with provenance.
 
-### One-time setup
+### One-time setup (npm Trusted Publishing)
 
-1. Create an npm account and ensure you can publish the [`contabo-mcp`](https://www.npmjs.com/package/contabo-mcp) package name (or use a scoped name and update `name` in `package.json`).
-2. Create an npm **Granular Access Token** with **Publish** permission for this package and enable **Bypass 2FA** (required for CI publishes).
-3. Add the token as repository secret **`NPM_TOKEN`** in GitHub (Settings → Secrets → Actions).
-4. Re-run the [Release workflow](https://github.com/kieksme/mcp-contabo/actions/workflows/publish.yml) or push the tag again after fixing the token.
+CI publishes via [npm Trusted Publishing](https://docs.npmjs.com/trusted-publishers/) (OIDC from GitHub Actions). **Do not** use a long-lived `NPM_TOKEN` with “Bypass 2FA” for releases.
+
+1. Create an npm account and publish the package once if it does not exist yet (see [First publish (manual)](#first-publish-manual) below).
+2. On [npmjs.com](https://www.npmjs.com/) → **contabo-mcp** → **Settings** → **Trusted publishing**, add **GitHub Actions**:
+   - **Repository**: `kieksme/mcp-contabo`
+   - **Workflow filename**: `publish.yml` (must match [`.github/workflows/publish.yml`](../../.github/workflows/publish.yml) exactly)
+   - **Environment** (optional): leave empty unless you use a GitHub deployment environment
+3. (Recommended) Under **Publishing access**, choose **Require two-factor authentication and disallow tokens**, then revoke old automation tokens you no longer need.
+4. Re-run the [Release workflow](https://github.com/kieksme/mcp-contabo/actions/workflows/publish.yml) or push the version tag again.
+
+Requirements: GitHub-hosted runners, Node **22.14+** (workflow uses Node 22), npm CLI **11.5.1+** (installed in the release job). The package `repository.url` in `package.json` must match this GitHub repo.
 
 ### First publish (manual)
 
