@@ -1,0 +1,41 @@
+# Fallback GitHub Release when a version tag is pushed manually (not via Release Please).
+# Release Please already creates the GitHub Release on release PR merge.
+# Kept separate from publish.yml so reusable publish calls only need contents: read.
+name: GitHub Release on tag
+
+on:
+  push:
+    tags:
+      - "*.*.*"
+
+permissions:
+  contents: write
+
+jobs:
+  github-release:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Verify tag matches package version
+        run: |
+          TAG="${GITHUB_REF_NAME}"
+          PKG=$(node -p "require('./contabo-mcp/package.json').version")
+          if [ "$TAG" != "$PKG" ]; then
+            echo "Tag $TAG does not match contabo-mcp/package.json version $PKG"
+            exit 1
+          fi
+
+      - name: Build release notes from CHANGELOG
+        run: node scripts/changelog-release-notes.mjs "${GITHUB_REF_NAME}" > release-notes.md
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: ${{ github.ref_name }}
+          name: ${{ github.ref_name }}
+          body_path: release-notes.md
+          generate_release_notes: false
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
