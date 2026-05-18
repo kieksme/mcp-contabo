@@ -176,23 +176,34 @@ Releases are published to npm when a Git tag matching the package version is pus
 3. Create and push a tag (no `v` prefix): `git tag 1.0.x && git push origin 1.0.x`
 4. The [publish workflow](https://github.com/kieksme/mcp-contabo/actions/workflows/publish.yml) runs tests, verifies the npm tarball, and publishes with provenance.
 
-### One-time setup (npm Trusted Publishing)
+### First publish (package not on npm yet)
 
-CI publishes via [npm Trusted Publishing](https://docs.npmjs.com/trusted-publishers/) (OIDC from GitHub Actions). **Do not** use a long-lived `NPM_TOKEN` with “Bypass 2FA” for releases.
+npm [Trusted Publishing](https://docs.npmjs.com/trusted-publishers/) only works **after** the package exists on the registry. For the **first** upload, use one of:
 
-1. Create an npm account and publish the package once if it does not exist yet (see [First publish (manual)](#first-publish-manual) below).
-2. On [npmjs.com](https://www.npmjs.com/) → **contabo-mcp** → **Settings** → **Trusted publishing**, add **GitHub Actions**:
+**A — GitHub Actions (one-time bootstrap)**  
+1. Create an npm [granular access token](https://docs.npmjs.com/creating-and-viewing-access-tokens) with **Publish** for `contabo-mcp` (no “Bypass 2FA” needed for a manual workflow run if you use a classic publish token once).
+2. Add it as repository secret **`NPM_TOKEN`**.
+3. Run workflow **[npm bootstrap (first publish)](https://github.com/kieksme/mcp-contabo/actions/workflows/npm-bootstrap.yml)** (`workflow_dispatch`).
+4. Remove **`NPM_TOKEN`** from GitHub secrets after Trusted Publishing is configured.
+
+**B — Local machine**
+
+See [First publish (local)](#first-publish-local) below.
+
+### One-time setup (npm Trusted Publishing for CI)
+
+After the package is on npm, CI publishes via OIDC. **Do not** keep a long-lived `NPM_TOKEN` for routine releases.
+
+1. On [npmjs.com](https://www.npmjs.com/) → **contabo-mcp** → **Settings** → **Trusted publishing**, add **GitHub Actions**:
    - **Repository**: `kieksme/mcp-contabo`
    - **Workflow filename**: `publish.yml` (must match [`.github/workflows/publish.yml`](../../.github/workflows/publish.yml) exactly)
    - **Environment** (optional): leave empty unless you use a GitHub deployment environment
 3. (Recommended) Under **Publishing access**, choose **Require two-factor authentication and disallow tokens**, then revoke old automation tokens you no longer need.
 4. Re-run the [Release workflow](https://github.com/kieksme/mcp-contabo/actions/workflows/publish.yml) or push the version tag again.
 
-Requirements: GitHub-hosted runners, Node **22.14+** (workflow uses Node 22), npm CLI **11.5.1+** (installed in the release job). The package `repository.url` in `package.json` must match this GitHub repo.
+Requirements: GitHub-hosted runners, Node **24** (release job), npm CLI **11.5.1+** via `npx npm@11.5.1`. The package `repository.url` in `package.json` must match this GitHub repo.
 
-### First publish (manual)
-
-If you need to publish before CI is configured:
+### First publish (local)
 
 ```bash
 cd contabo-mcp
@@ -201,7 +212,7 @@ pnpm run build
 pnpm test
 pnpm run pack:check
 npm login
-npm publish --access public --provenance
+npx npm@11.5.1 publish --access public --provenance
 ```
 
 ## License
