@@ -17,7 +17,7 @@ MCP (Model Context Protocol) server for the [Contabo API](https://api.contabo.co
 
 ## Install from npm (recommended)
 
-Published as [`contabo-mcp`](https://www.npmjs.com/package/contabo-mcp) on npm. No clone and no build step required.
+Published as [`@kieksme/contabo-mcp`](https://www.npmjs.com/package/@kieksme/contabo-mcp) on npm under the [kieksme](https://www.npmjs.com/settings/kieksme/packages) account. No clone and no build step required.
 
 ### Cursor / MCP client
 
@@ -28,7 +28,7 @@ Add to `.cursor/mcp.json` (or your global MCP config):
   "mcpServers": {
     "contabo": {
       "command": "npx",
-      "args": ["-y", "contabo-mcp"],
+      "args": ["-y", "@kieksme/contabo-mcp"],
       "env": {
         "CONTABO_CLIENT_ID": "your-client-id",
         "CONTABO_CLIENT_SECRET": "your-client-secret",
@@ -47,7 +47,7 @@ With **pnpm**:
   "mcpServers": {
     "contabo": {
       "command": "pnpm",
-      "args": ["dlx", "contabo-mcp"],
+      "args": ["dlx", "@kieksme/contabo-mcp"],
       "env": {
         "CONTABO_CLIENT_ID": "your-client-id",
         "CONTABO_CLIENT_SECRET": "your-client-secret",
@@ -64,17 +64,17 @@ See [`mcp.json.example`](mcp.json.example) for more variants.
 ### Terminal (stdio)
 
 ```bash
-npx -y contabo-mcp
+npx -y @kieksme/contabo-mcp
 ```
 
 ```bash
-pnpm dlx contabo-mcp
+pnpm dlx @kieksme/contabo-mcp
 ```
 
 ### Global install
 
 ```bash
-npm install -g contabo-mcp
+npm install -g @kieksme/contabo-mcp
 contabo-mcp
 ```
 
@@ -181,7 +181,7 @@ Releases are published to npm when a Git tag matching the package version is pus
 npm [Trusted Publishing](https://docs.npmjs.com/trusted-publishers/) only works **after** the package exists on the registry. For the **first** upload, use one of:
 
 **A — GitHub Actions (one-time bootstrap)**  
-1. Create an npm [granular access token](https://docs.npmjs.com/creating-and-viewing-access-tokens) with **Publish** for `contabo-mcp` (no “Bypass 2FA” needed for a manual workflow run if you use a classic publish token once).
+1. Log in to npm as **[kieksme](https://www.npmjs.com/settings/kieksme/packages)** and create a [granular access token](https://docs.npmjs.com/creating-and-viewing-access-tokens) with **Publish** for `@kieksme/contabo-mcp`.
 2. Add it as repository secret **`NPM_TOKEN`**.
 3. Run workflow **[npm bootstrap (first publish)](https://github.com/kieksme/mcp-contabo/actions/workflows/npm-bootstrap.yml)** (`workflow_dispatch`).
 4. Remove **`NPM_TOKEN`** from GitHub secrets after Trusted Publishing is configured.
@@ -194,7 +194,7 @@ See [First publish (local)](#first-publish-local) below.
 
 After the package is on npm, CI publishes via OIDC. **Do not** keep a long-lived `NPM_TOKEN` for routine releases.
 
-1. On [npmjs.com](https://www.npmjs.com/) → **contabo-mcp** → **Settings** → **Trusted publishing**, add **GitHub Actions**:
+1. On [npmjs.com](https://www.npmjs.com/package/@kieksme/contabo-mcp) → **Settings** → **Trusted publishing**, add **GitHub Actions**:
    - **Repository**: `kieksme/mcp-contabo`
    - **Workflow filename**: `publish.yml` (must match [`.github/workflows/publish.yml`](../../.github/workflows/publish.yml) exactly)
    - **Environment** (optional): leave empty unless you use a GitHub deployment environment

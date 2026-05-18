@@ -7,10 +7,10 @@ MCP server for the [Contabo](https://contabo.com/) cloud API — virtual machine
 ## Quick start
 
 ```bash
-npx -y contabo-mcp
+npx -y @kieksme/contabo-mcp
 ```
 
-GitHub Release: [1.0.1](https://github.com/kieksme/mcp-contabo/releases/tag/1.0.1) · npm: [`contabo-mcp`](https://www.npmjs.com/package/contabo-mcp) — **not published yet** (see [first publish](contabo-mcp/README.md#first-publish-package-not-on-npm-yet) in package README)
+GitHub Release: [1.0.1](https://github.com/kieksme/mcp-contabo/releases/tag/1.0.1) · npm: [`@kieksme/contabo-mcp`](https://www.npmjs.com/package/@kieksme/contabo-mcp) under [kieksme/packages](https://www.npmjs.com/settings/kieksme/packages) — **not published yet** (see [first publish](contabo-mcp/README.md#first-publish-package-not-on-npm-yet))
 
 Set `CONTABO_CLIENT_ID`, `CONTABO_CLIENT_SECRET`, `CONTABO_API_USER`, and `CONTABO_API_PASSWORD` in your environment or MCP client config.
 
@@ -21,7 +21,7 @@ Set `CONTABO_CLIENT_ID`, `CONTABO_CLIENT_SECRET`, `CONTABO_API_USER`, and `CONTA
   "mcpServers": {
     "contabo": {
       "command": "npx",
-      "args": ["-y", "contabo-mcp"],
+      "args": ["-y", "@kieksme/contabo-mcp"],
       "env": {
         "CONTABO_CLIENT_ID": "...",
         "CONTABO_CLIENT_SECRET": "...",
