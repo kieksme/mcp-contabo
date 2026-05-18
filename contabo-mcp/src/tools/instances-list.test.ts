@@ -40,7 +40,7 @@ describe("contabo_instances_list", () => {
       expect.objectContaining({
         method: "GET",
         path: "/v1/compute/instances",
-        query: expect.objectContaining({ page: 1, size: 25 }),
+        query: expect.objectContaining({ page: "1", size: "25" }),
       }),
     );
   });

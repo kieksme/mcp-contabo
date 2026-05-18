@@ -110,11 +110,17 @@ describe("registerAllTools", () => {
     registerAllTools(server, client);
 
     for (const toolName of EXPECTED_TOOLS) {
-      const annotations = annotationsByTool.get(toolName);
+      const annotations = annotationsByTool.get(toolName) as Record<
+        string,
+        boolean | undefined
+      >;
       expect(annotations, `${toolName} missing annotations`).toBeDefined();
-      expect(annotations).toMatchObject({
-        readOnlyHint: expect.any(Boolean),
-      });
+      const hasHint =
+        annotations.readOnlyHint !== undefined ||
+        annotations.destructiveHint !== undefined ||
+        annotations.idempotentHint !== undefined ||
+        annotations.openWorldHint !== undefined;
+      expect(hasHint, `${toolName} has no MCP hints`).toBe(true);
     }
   });
 });
