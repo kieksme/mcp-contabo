@@ -30,11 +30,15 @@ export class ContaboClient {
     const requestId = randomUUID();
     const token = await this.auth.getAccessToken();
 
+    const base = this.config.apiBaseUrl.replace(/\/$/, "");
+    let path = options.path.startsWith("/") ? options.path : `/${options.path}`;
+    if (base.endsWith("/v1") && path.startsWith("/v1")) {
+      path = path.slice(3) || "/";
+    }
+
     const url = new URL(
-      options.path.startsWith("/") ? options.path.slice(1) : options.path,
-      this.config.apiBaseUrl.endsWith("/")
-        ? this.config.apiBaseUrl
-        : `${this.config.apiBaseUrl}/`,
+      path.startsWith("/") ? path.slice(1) : path,
+      `${base}/`,
     );
 
     if (options.query) {

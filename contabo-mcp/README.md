@@ -51,6 +51,8 @@ Alternatively, point `env` to a `.env` file location and load variables with a w
 
 ```bash
 pnpm build
+pnpm test                     # unit tests (vitest)
+pnpm run test:watch           # watch mode
 pnpm start                    # stdio MCP server
 pnpm run fetch-openapi        # refresh openapi/contabo.openapi.json
 pnpm run generate-types       # regenerate src/generated/contabo.d.ts
