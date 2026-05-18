@@ -7,6 +7,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Fixed
+
+- npm publish job: use Node 24 and `npx npm@11.5.1 publish` instead of broken global `npm install -g`
+
+### Added
+
+- `npm-bootstrap.yml` workflow for the first publish when the package is not on npm yet (requires one-time `NPM_TOKEN`)
+
 ## [1.0.1] - 2026-05-18
 
 ### Added

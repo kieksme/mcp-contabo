@@ -1,0 +1,58 @@
+# One-time: publish contabo-mcp to npm when the package does not exist yet.
+# Trusted Publishing (OIDC) only works after the package is on the registry.
+# After this succeeds, configure Trusted Publishing on npm and use publish.yml only.
+name: npm bootstrap (first publish)
+
+on:
+  workflow_dispatch:
+
+defaults:
+  run:
+    working-directory: contabo-mcp
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Require NPM_TOKEN
+        run: |
+          if [ -z "${{ secrets.NPM_TOKEN }}" ]; then
+            echo "::error::Add repository secret NPM_TOKEN (npm granular token with Publish for this package)."
+            echo "Remove NPM_TOKEN after Trusted Publishing is configured on npm."
+            exit 1
+          fi
+
+      - name: Install pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 10.33.3
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "24"
+          registry-url: https://registry.npmjs.org
+          cache: pnpm
+          cache-dependency-path: contabo-mcp/pnpm-lock.yaml
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Build
+        run: pnpm run build
+
+      - name: Test
+        run: pnpm test
+
+      - name: Verify npm pack contents
+        run: pnpm run pack:check
+
+      - name: Publish first version to npm
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+        run: npx --yes npm@11.5.1 publish --access public --provenance

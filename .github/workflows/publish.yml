@@ -70,8 +70,7 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: "22"
-          registry-url: https://registry.npmjs.org
+          node-version: "24"
           cache: pnpm
           cache-dependency-path: contabo-mcp/pnpm-lock.yaml
 
@@ -81,11 +80,10 @@ jobs:
       - name: Build
         run: pnpm run build
 
-      - name: Ensure npm CLI supports trusted publishing
-        run: npm install -g npm@^11.5.1
-
       - name: Publish to npm (trusted publishing)
-        run: npm publish --access public
+        env:
+          NPM_CONFIG_REGISTRY: https://registry.npmjs.org
+        run: npx --yes npm@11.5.1 publish --access public
 
   github-release:
     needs: validate
