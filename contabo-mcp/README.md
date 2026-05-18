@@ -47,6 +47,10 @@ Add to your MCP settings (`.cursor/mcp.json` or global MCP config):
 
 Alternatively, point `env` to a `.env` file location and load variables with a wrapper, or use `dotenv-cli`.
 
+## CI
+
+Tests and build run on every push and pull request to `main` via [GitHub Actions](https://github.com/kieksme/mcp-contabo/actions/workflows/ci.yml).
+
 ## Development
 
 ```bash
