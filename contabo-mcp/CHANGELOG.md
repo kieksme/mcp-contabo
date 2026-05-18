@@ -5,6 +5,13 @@ All notable changes to this project are documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.1.2](https://github.com/kieksme/mcp-contabo/compare/1.1.1...1.1.2) (2026-05-18)
+
+
+### Changed
+
+* **contabo-mcp:** trigger release-please test for patch release ([fa40f58](https://github.com/kieksme/mcp-contabo/commit/fa40f58ce56437c7fe0744d3eb77dbb3ba4a6b53))
+
 ## [1.1.1](https://github.com/kieksme/mcp-contabo/compare/1.1.0...1.1.1) (2026-05-18)
 
 
