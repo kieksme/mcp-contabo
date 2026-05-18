@@ -1,0 +1,157 @@
+# Contributing to Contabo MCP
+
+Thanks for helping improve this MCP server. This guide covers local development, testing, API spec updates, and releases.
+
+The npm package lives in [`contabo-mcp/`](contabo-mcp/). User-facing install docs are in [`contabo-mcp/README.md`](contabo-mcp/README.md).
+
+## Prerequisites
+
+1. [Node.js](https://nodejs.org/) 20 or newer (CI uses Node 22; the release workflow uses Node 24)
+2. [pnpm](https://pnpm.io/) 10.33.3 (see `packageManager` in `contabo-mcp/package.json`)
+3. Contabo API credentials for manual testing:
+   - Enable API access in the [Contabo Customer Control Panel](https://my.contabo.com/api/details)
+   - **Client ID**, **Client Secret**, API user, and password ([help article](https://help.contabo.com/en/support/solutions/articles/103000270527-how-can-i-access-the-contabo-api-))
+
+## Repository setup
+
+```bash
+git clone https://github.com/kieksme/mcp-contabo.git
+cd mcp-contabo/contabo-mcp
+pnpm install
+cp .env.example .env
+# Edit .env with your credentials
+pnpm build
+```
+
+## Development
+
+```bash
+pnpm build
+pnpm test                     # unit tests (vitest)
+pnpm run test:watch           # watch mode
+pnpm start                    # stdio MCP server
+pnpm run fetch-openapi        # refresh openapi/contabo.openapi.json
+pnpm run generate-types       # regenerate src/generated/contabo.d.ts
+npx @modelcontextprotocol/inspector  # interactive testing
+```
+
+Before opening a pull request, run `pnpm test` and `pnpm run pack:check` from `contabo-mcp/`.
+
+### Local MCP config (cloned repo)
+
+Point your MCP client at the built entry file:
+
+```json
+{
+  "mcpServers": {
+    "contabo": {
+      "command": "node",
+      "args": ["/absolute/path/to/contabo-mcp/dist/index.js"],
+      "env": {
+        "CONTABO_CLIENT_ID": "your-client-id",
+        "CONTABO_CLIENT_SECRET": "your-client-secret",
+        "CONTABO_API_USER": "your-api-user@email.com",
+        "CONTABO_API_PASSWORD": "your-api-password"
+      }
+    }
+  }
+}
+```
+
+## Continuous integration
+
+Tests and build run on every push and pull request to `main` via [GitHub Actions](https://github.com/kieksme/mcp-contabo/actions/workflows/ci.yml).
+
+## OpenAPI spec
+
+The spec is vendored at [`contabo-mcp/openapi/contabo.openapi.json`](contabo-mcp/openapi/contabo.openapi.json), extracted from the official Redoc documentation.
+
+To refresh types after API changes:
+
+```bash
+cd contabo-mcp
+pnpm run fetch-openapi
+pnpm run generate-types
+```
+
+Commit the updated spec and generated types when they change.
+
+## Tool inventory
+
+When adding or changing tools, keep the `contabo_*` naming convention and update tests in `contabo-mcp/src/tools/`.
+
+| Area | Tools |
+|------|--------|
+| Instances | `contabo_instances_*` (list, get, create, update, reinstall, cancel, upgrade, start/stop/restart/shutdown/rescue/reset_password, audits) |
+| Snapshots / backups | `contabo_snapshots_*` |
+| Object storage | `contabo_object_storages_*`, `contabo_object_storage_credentials_*` |
+| Secrets | `contabo_secrets_*` |
+| Domains | `contabo_domains_*`, `contabo_domain_handles_*` |
+
+Notes:
+
+- Automated VM backups: use `contabo_instances_upgrade` with body `{ "backup": {} }`.
+- Object storage S3 credentials require `userId` (Contabo user UUID from the control panel).
+
+## Pull requests
+
+1. Fork the repository and create a branch from `main`.
+2. Keep changes focused; match existing TypeScript style and patterns in `contabo-mcp/src/`.
+3. Add or update tests for behavior you change.
+4. Ensure CI passes (`pnpm test`, `pnpm run build` in `contabo-mcp/`).
+5. Open a pull request with a clear description of what changed and why.
+
+## Releasing (maintainers)
+
+Releases are published to npm when a Git tag matching the package version is pushed.
+
+1. Bump `version` in [`contabo-mcp/package.json`](contabo-mcp/package.json) (semver).
+2. Commit and push to `main`.
+3. Create and push a tag (no `v` prefix): `git tag 1.0.x && git push origin 1.0.x`
+4. The [publish workflow](https://github.com/kieksme/mcp-contabo/actions/workflows/publish.yml) runs tests, verifies the npm tarball, and publishes with provenance.
+
+### npm Trusted Publishing (routine releases)
+
+After the package exists on npm, CI publishes via OIDC. **Do not** keep a long-lived `NPM_TOKEN` for routine releases.
+
+1. On [npmjs.com](https://www.npmjs.com/package/@kieksme/contabo-mcp) → **Settings** → **Trusted publishing**, add **GitHub Actions**:
+   - **Repository**: `kieksme/mcp-contabo`
+   - **Workflow filename**: `publish.yml` (must match [`.github/workflows/publish.yml`](.github/workflows/publish.yml) exactly)
+   - **Environment** (optional): leave empty unless you use a GitHub deployment environment
+2. Or use the CLI (requires npm 2FA):
+
+   ```bash
+   npm trust github @kieksme/contabo-mcp --file publish.yml --repository kieksme/mcp-contabo -y
+   ```
+
+3. (Recommended) Under **Publishing access**, choose **Require two-factor authentication and disallow tokens**, then revoke old automation tokens you no longer need.
+4. Re-run the [Release workflow](https://github.com/kieksme/mcp-contabo/actions/workflows/publish.yml) or push the version tag again.
+
+Requirements: GitHub-hosted runners, Node **24** (release job), npm CLI **11.5.1+** via `npx npm@11.5.1`. The package `repository.url` in `package.json` must match this GitHub repo.
+
+### First publish (package not on npm yet)
+
+npm [Trusted Publishing](https://docs.npmjs.com/trusted-publishers/) only works **after** the package exists on the registry. For the **first** upload, use one of:
+
+**A — GitHub Actions (one-time bootstrap)**
+
+1. Log in to npm as **[kieksme](https://www.npmjs.com/settings/kieksme/packages)** and create a [granular access token](https://docs.npmjs.com/creating-and-viewing-access-tokens) with **Publish** for `@kieksme/contabo-mcp`.
+2. Add it as repository secret **`NPM_TOKEN`**.
+3. Run workflow **[npm bootstrap (first publish)](https://github.com/kieksme/mcp-contabo/actions/workflows/npm-bootstrap.yml)** (`workflow_dispatch`).
+4. Remove **`NPM_TOKEN`** from GitHub secrets after Trusted Publishing is configured.
+
+**B — Local machine**
+
+```bash
+cd contabo-mcp
+pnpm install
+pnpm run build
+pnpm test
+pnpm run pack:check
+npm login
+npx npm@11.5.1 publish --access public --provenance
+```
+
+## License
+
+By contributing, you agree that your contributions will be licensed under **GPL-3.0-or-later** (see [LICENSE](LICENSE)).
