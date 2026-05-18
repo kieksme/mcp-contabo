@@ -10,7 +10,7 @@ MCP server for the [Contabo](https://contabo.com/) cloud API — virtual machine
 npx -y contabo-mcp
 ```
 
-GitHub Release: [1.0.0](https://github.com/kieksme/mcp-contabo/releases/tag/1.0.0) · npm: [`contabo-mcp`](https://www.npmjs.com/package/contabo-mcp) (pending `NPM_TOKEN` with 2FA bypass)
+GitHub Release: [1.0.0](https://github.com/kieksme/mcp-contabo/releases/tag/1.0.0) · npm: [`contabo-mcp`](https://www.npmjs.com/package/contabo-mcp) (configure [Trusted Publishing](https://docs.npmjs.com/trusted-publishers/) on npm, then re-run the release workflow)
 
 Set `CONTABO_CLIENT_ID`, `CONTABO_CLIENT_SECRET`, `CONTABO_API_USER`, and `CONTABO_API_PASSWORD` in your environment or MCP client config.
 
