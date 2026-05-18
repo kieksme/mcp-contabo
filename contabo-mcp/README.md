@@ -179,8 +179,9 @@ Releases are published to npm when a Git tag matching the package version is pus
 ### One-time setup
 
 1. Create an npm account and ensure you can publish the [`contabo-mcp`](https://www.npmjs.com/package/contabo-mcp) package name (or use a scoped name and update `name` in `package.json`).
-2. Create an npm **Granular Access Token** with publish rights for this package.
+2. Create an npm **Granular Access Token** with **Publish** permission for this package and enable **Bypass 2FA** (required for CI publishes).
 3. Add the token as repository secret **`NPM_TOKEN`** in GitHub (Settings → Secrets → Actions).
+4. Re-run the [Release workflow](https://github.com/kieksme/mcp-contabo/actions/workflows/publish.yml) or push the tag again after fixing the token.
 
 ### First publish (manual)
 

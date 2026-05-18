@@ -4,6 +4,7 @@ on:
   push:
     tags:
       - "*.*.*"
+  workflow_dispatch:
 
 defaults:
   run:
@@ -29,6 +30,7 @@ jobs:
           cache-dependency-path: contabo-mcp/pnpm-lock.yaml
 
       - name: Verify tag matches package version
+        if: github.event_name == 'push'
         working-directory: .
         run: |
           TAG="${GITHUB_REF_NAME}"
@@ -53,6 +55,7 @@ jobs:
   publish-npm:
     needs: validate
     runs-on: ubuntu-latest
+    continue-on-error: true
     permissions:
       contents: read
       id-token: write
