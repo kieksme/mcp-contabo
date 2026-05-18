@@ -9,7 +9,10 @@ import { fileURLToPath } from "node:url";
 
 const root = join(dirname(fileURLToPath(import.meta.url)), "..");
 const pkg = JSON.parse(readFileSync(join(root, "package.json"), "utf8"));
-const tarballPath = join(root, `${pkg.name}-${pkg.version}.tgz`);
+const tarballBase = pkg.name.startsWith("@")
+  ? pkg.name.slice(1).replace("/", "-")
+  : pkg.name;
+const tarballPath = join(root, `${tarballBase}-${pkg.version}.tgz`);
 
 if (existsSync(tarballPath)) {
   unlinkSync(tarballPath);

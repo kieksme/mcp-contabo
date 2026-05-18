@@ -1,4 +1,4 @@
-# One-time: publish contabo-mcp to npm when the package does not exist yet.
+# One-time: publish @kieksme/contabo-mcp to npm (kieksme account) when not on the registry yet.
 # Trusted Publishing (OIDC) only works after the package is on the registry.
 # After this succeeds, configure Trusted Publishing on npm and use publish.yml only.
 name: npm bootstrap (first publish)

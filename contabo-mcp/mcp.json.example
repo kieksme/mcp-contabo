@@ -2,7 +2,7 @@
   "mcpServers": {
     "contabo": {
       "command": "npx",
-      "args": ["-y", "contabo-mcp"],
+      "args": ["-y", "@kieksme/contabo-mcp"],
       "env": {
         "CONTABO_CLIENT_ID": "",
         "CONTABO_CLIENT_SECRET": "",

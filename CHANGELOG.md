@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.0.2] - 2026-05-18
+
+### Changed
+
+- npm package renamed to `@kieksme/contabo-mcp` (published under the [kieksme](https://www.npmjs.com/settings/kieksme/packages) npm account; CLI command remains `contabo-mcp`)
+
 ### Fixed
 
 - npm publish job: use Node 24 and `npx npm@11.5.1 publish` instead of broken global `npm install -g`
@@ -14,6 +20,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
 - `npm-bootstrap.yml` workflow for the first publish when the package is not on npm yet (requires one-time `NPM_TOKEN`)
+
+[1.0.2]: https://github.com/kieksme/mcp-contabo/releases/tag/1.0.2
 
 ## [1.0.1] - 2026-05-18
 
