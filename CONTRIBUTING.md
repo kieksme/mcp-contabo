@@ -101,12 +101,22 @@ Notes:
 
 ## Releasing (maintainers)
 
-Releases are published to npm when a Git tag matching the package version is pushed.
+Releases are automated with [release-please](https://github.com/googleapis/release-please) and published when a version tag is created.
 
-1. Bump `version` in [`contabo-mcp/package.json`](contabo-mcp/package.json) (semver).
-2. Commit and push to `main`.
-3. Create and push a tag (no `v` prefix): `git tag 1.0.x && git push origin 1.0.x`
-4. The [publish workflow](https://github.com/kieksme/mcp-contabo/actions/workflows/publish.yml) runs tests, verifies the npm tarball, and publishes with provenance.
+### Routine release
+
+1. Merge changes to `main` using [Conventional Commits](https://www.conventionalcommits.org/) (`feat:`, `fix:`, `docs:`, etc.).
+2. The [Release Please workflow](https://github.com/kieksme/mcp-contabo/actions/workflows/release-please.yml) opens or updates a release PR (title like `chore(main): release 1.0.3`).
+3. Review the PR (version bump in [`contabo-mcp/package.json`](contabo-mcp/package.json) and [`CHANGELOG.md`](CHANGELOG.md)).
+4. Merge the release PR. Release Please creates a Git tag **without** a `v` prefix (e.g. `1.0.3`).
+5. The [publish workflow](https://github.com/kieksme/mcp-contabo/actions/workflows/publish.yml) runs on that tag: tests, npm publish (OIDC), and GitHub Release notes from `CHANGELOG.md`.
+
+### Manual release (fallback)
+
+If Release Please is unavailable:
+
+1. Bump `version` in `contabo-mcp/package.json` and update `CHANGELOG.md`.
+2. Push to `main`, then tag: `git tag 1.0.x && git push origin 1.0.x`
 
 ### npm Trusted Publishing (routine releases)
 

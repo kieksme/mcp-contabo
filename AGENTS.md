@@ -33,6 +33,8 @@ Rules:
 - Only create commits when the user explicitly asks.
 - Do not commit secrets (`.env`, API keys, `mcp.json` credentials).
 
+Releases on `main` are handled by [release-please](https://github.com/googleapis/release-please) (see [CONTRIBUTING.md](CONTRIBUTING.md)). Use `feat:` / `fix:` (and other conventional types) so the next release PR gets the right semver bump and changelog entries.
+
 ## Code changes
 
 - Keep diffs minimal and focused.
