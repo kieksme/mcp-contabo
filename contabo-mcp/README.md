@@ -12,8 +12,71 @@ MCP (Model Context Protocol) server for the [Contabo API](https://api.contabo.co
 ## Prerequisites
 
 1. [Node.js](https://nodejs.org/) 20 or newer
-2. Enable API access in the [Contabo Customer Control Panel](https://my.contabo.com/api/details)
-3. Set **Client ID**, **Client Secret**, and API user password ([help article](https://help.contabo.com/en/support/solutions/articles/103000270527-how-can-i-access-the-contabo-api-))
+2. Contabo API credentials (see [Obtaining API credentials](#obtaining-api-credentials) below)
+3. Optional background: [Contabo help — How can I access the Contabo API?](https://help.contabo.com/en/support/solutions/articles/103000270527-how-can-i-access-the-contabo-api-)
+
+## Obtaining API credentials
+
+All values come from the Contabo Customer Control Panel. You need a normal control-panel login (including 2FA if enabled).
+
+### Open the API page
+
+1. Sign in at [my.contabo.com](https://my.contabo.com/).
+2. Open **[API details](https://my.contabo.com/api/details)** (menu path may vary; the direct URL is stable).
+
+The page title is **API**. It states that the data shown there plus the **API password** are required to use the API.
+
+### Fields on the API page
+
+The panel lists four pieces of information (labels may appear in German or English depending on locale):
+
+| Control panel (DE) | Control panel (EN) | Environment variable | Notes |
+|--------------------|--------------------|----------------------|-------|
+| Kunden-ID | Customer ID | `CONTABO_CLIENT_ID` | Format like `DE-8791`. This is the OAuth **client id**, not your VPS name. |
+| Client-Secret | Client secret | `CONTABO_CLIENT_SECRET` | Shown masked (`••••••`). Copy when displayed or regenerate if you no longer have it. |
+| Benutzername | Username | `CONTABO_API_USER` | Your API user email (often the same as your control-panel login). |
+| API-Passwort | API password | `CONTABO_API_PASSWORD` | **Separate** from your control-panel login password (see below). |
+
+### Set the API password (required once)
+
+Until you set an API password, the panel typically asks you to **set a new password** before you can use the API (“Bitte setzen Sie ein neues Passwort, um die API nutzen zu können”).
+
+1. On [API details](https://my.contabo.com/api/details), use the control to set or change the **API password**.
+2. Choose a strong password and store it in a password manager.
+3. Use that value for `CONTABO_API_PASSWORD` — **not** your normal my.contabo.com login password.
+
+You can change the API password anytime in the same place.
+
+### Map credentials to this MCP server
+
+Copy the four values into `.env` (local development) or your MCP client `env` block:
+
+```bash
+CONTABO_CLIENT_ID=DE-XXXX          # Customer ID from the panel
+CONTABO_CLIENT_SECRET=...          # Client secret (full string)
+CONTABO_API_USER=you@example.com   # Username from the panel
+CONTABO_API_PASSWORD=...           # API password you set on the API page
+```
+
+Example `.cursor/mcp.json` fragment:
+
+```json
+"env": {
+  "CONTABO_CLIENT_ID": "DE-XXXX",
+  "CONTABO_CLIENT_SECRET": "your-client-secret",
+  "CONTABO_API_USER": "you@example.com",
+  "CONTABO_API_PASSWORD": "your-api-password"
+}
+```
+
+### Verify credentials
+
+After saving config, restart the MCP client (or reload MCP servers in Cursor). A quick check:
+
+- OAuth errors such as `unauthorized_client` / *Invalid client credentials* usually mean a wrong **Customer ID** or **Client secret**.
+- `invalid_grant` or login-related errors often mean a wrong **API user** or **API password** (e.g. using the control-panel login password instead of the API password).
+
+Do not commit `.env` or paste secrets into chat, issues, or screenshots.
 
 ## Install from npm (recommended)
 

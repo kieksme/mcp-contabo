@@ -12,7 +12,7 @@ npx -y @kieksme/contabo-mcp
 
 npm: [`@kieksme/contabo-mcp`](https://www.npmjs.com/package/@kieksme/contabo-mcp) · [Releases](https://github.com/kieksme/mcp-contabo/releases)
 
-Set `CONTABO_CLIENT_ID`, `CONTABO_CLIENT_SECRET`, `CONTABO_API_USER`, and `CONTABO_API_PASSWORD` in your environment or MCP client config.
+Set `CONTABO_CLIENT_ID`, `CONTABO_CLIENT_SECRET`, `CONTABO_API_USER`, and `CONTABO_API_PASSWORD` in your environment or MCP client config. How to get them from the [Contabo API details page](https://my.contabo.com/api/details): see [Obtaining API credentials](contabo-mcp/README.md#obtaining-api-credentials) in the package README.
 
 **Cursor** (`.cursor/mcp.json`):
 

@@ -8,9 +8,7 @@ The npm package lives in [`contabo-mcp/`](contabo-mcp/). User-facing install doc
 
 1. [Node.js](https://nodejs.org/) 20 or newer (CI uses Node 22; the release workflow uses Node 24)
 2. [pnpm](https://pnpm.io/) 10.33.3 (see `packageManager` in `contabo-mcp/package.json`)
-3. Contabo API credentials for manual testing:
-   - Enable API access in the [Contabo Customer Control Panel](https://my.contabo.com/api/details)
-   - **Client ID**, **Client Secret**, API user, and password ([help article](https://help.contabo.com/en/support/solutions/articles/103000270527-how-can-i-access-the-contabo-api-))
+3. Contabo API credentials for manual testing — see [Obtaining API credentials](contabo-mcp/README.md#obtaining-api-credentials) ([API details](https://my.contabo.com/api/details))
 
 ## Repository setup
 
