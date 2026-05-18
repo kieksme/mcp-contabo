@@ -5,6 +5,43 @@ All notable changes to this project are documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.2.0](https://github.com/kieksme/mcp-contabo/compare/1.1.2...1.2.0) (2026-05-18)
+
+
+### Added
+
+* **annotations:** introduce new annotation utilities for tool configuration ([7d611f1](https://github.com/kieksme/mcp-contabo/commit/7d611f1f4fc3bc0982878a5b0a361d36857b6428))
+* **domains.ts, instances.ts:** replace annotation hints with explicit annotations for better clarity and consistency ([7d611f1](https://github.com/kieksme/mcp-contabo/commit/7d611f1f4fc3bc0982878a5b0a361d36857b6428))
+* **index.ts:** dynamically load package version using loadPackageVersion function ([7d611f1](https://github.com/kieksme/mcp-contabo/commit/7d611f1f4fc3bc0982878a5b0a361d36857b6428))
+* **tool-errors:** add tool error formatting and schema ([7d611f1](https://github.com/kieksme/mcp-contabo/commit/7d611f1f4fc3bc0982878a5b0a361d36857b6428))
+* **tool-registry:** integrate output schema and error formatting ([7d611f1](https://github.com/kieksme/mcp-contabo/commit/7d611f1f4fc3bc0982878a5b0a361d36857b6428))
+* **utils:** add output schema for Contabo API responses ([7d611f1](https://github.com/kieksme/mcp-contabo/commit/7d611f1f4fc3bc0982878a5b0a361d36857b6428))
+* **version.ts:** add utility to load package version from package.json ([7d611f1](https://github.com/kieksme/mcp-contabo/commit/7d611f1f4fc3bc0982878a5b0a361d36857b6428))
+
+
+### Fixed
+
+* **errors.ts:** create ContaboApiError class for better error handling ([7d611f1](https://github.com/kieksme/mcp-contabo/commit/7d611f1f4fc3bc0982878a5b0a361d36857b6428))
+* **pagination:** clarify items per page description ([7d611f1](https://github.com/kieksme/mcp-contabo/commit/7d611f1f4fc3bc0982878a5b0a361d36857b6428))
+* **response:** enhance sensitive data redaction logic ([7d611f1](https://github.com/kieksme/mcp-contabo/commit/7d611f1f4fc3bc0982878a5b0a361d36857b6428))
+
+
+### Changed
+
+* add npm version badge to README files ([b6c67c8](https://github.com/kieksme/mcp-contabo/commit/b6c67c868849e6eb133843d22d065b717132494b))
+* **ci.yml:** add MCP build smoke test to verify version and tool registration ([7d611f1](https://github.com/kieksme/mcp-contabo/commit/7d611f1f4fc3bc0982878a5b0a361d36857b6428))
+* **client.ts:** replace contaboErrorMessage with buildContaboApiError for error handling ([7d611f1](https://github.com/kieksme/mcp-contabo/commit/7d611f1f4fc3bc0982878a5b0a361d36857b6428))
+* **evaluations:** update evaluation questions and answers for MCP tools ([7d611f1](https://github.com/kieksme/mcp-contabo/commit/7d611f1f4fc3bc0982878a5b0a361d36857b6428))
+* **instances-list.test.ts:** add test for listing instances with pagination to ensure correct API call and response handling ([7d611f1](https://github.com/kieksme/mcp-contabo/commit/7d611f1f4fc3bc0982878a5b0a361d36857b6428))
+* **instances-list.test.ts:** update query parameter types to strings for consistency with API expectations ([adeb177](https://github.com/kieksme/mcp-contabo/commit/adeb177eb569c75674f30a741ddeb4f521f9d102))
+* **README.md:** add evaluations section for agent testing scenarios ([7d611f1](https://github.com/kieksme/mcp-contabo/commit/7d611f1f4fc3bc0982878a5b0a361d36857b6428))
+* **README.md:** expand tool annotations and error payloads sections ([7d611f1](https://github.com/kieksme/mcp-contabo/commit/7d611f1f4fc3bc0982878a5b0a361d36857b6428))
+* **response:** add test for redacting S3 credentials ([7d611f1](https://github.com/kieksme/mcp-contabo/commit/7d611f1f4fc3bc0982878a5b0a361d36857b6428))
+* **tool-errors:** add tests for tool error formatting ([7d611f1](https://github.com/kieksme/mcp-contabo/commit/7d611f1f4fc3bc0982878a5b0a361d36857b6428))
+* **tools.test.ts:** add test to verify MCP annotations on tools ([7d611f1](https://github.com/kieksme/mcp-contabo/commit/7d611f1f4fc3bc0982878a5b0a361d36857b6428))
+* **tools.test.ts:** enhance tool annotation checks to ensure presence of at least one MCP hint for better test coverage ([adeb177](https://github.com/kieksme/mcp-contabo/commit/adeb177eb569c75674f30a741ddeb4f521f9d102))
+* **version:** add test for package version loading ([7d611f1](https://github.com/kieksme/mcp-contabo/commit/7d611f1f4fc3bc0982878a5b0a361d36857b6428))
+
 ## [1.1.2](https://github.com/kieksme/mcp-contabo/compare/1.1.1...1.1.2) (2026-05-18)
 
 
