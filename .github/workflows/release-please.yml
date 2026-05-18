@@ -26,7 +26,7 @@ jobs:
   publish:
     needs: release-please
     if: ${{ needs.release-please.outputs.release_created == 'true' && needs.release-please.outputs.tag_name != '' }}
-    uses: ./.github/workflows/publish.yml
+    uses: ./.github/workflows/publish-npm.yml
     with:
       tag: ${{ needs.release-please.outputs.tag_name }}
     permissions:
