@@ -4,6 +4,12 @@ on:
   push:
     tags:
       - "*.*.*"
+  workflow_call:
+    inputs:
+      tag:
+        description: Semver tag to publish (e.g. 1.0.3)
+        required: true
+        type: string
   workflow_dispatch:
 
 defaults:
@@ -16,6 +22,8 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+        with:
+          ref: ${{ inputs.tag && format('refs/tags/{0}', inputs.tag) || github.ref }}
 
       - name: Install pnpm
         uses: pnpm/action-setup@v4
@@ -30,10 +38,10 @@ jobs:
           cache-dependency-path: contabo-mcp/pnpm-lock.yaml
 
       - name: Verify tag matches package version
-        if: github.event_name == 'push'
+        if: github.event_name != 'workflow_dispatch'
         working-directory: .
         run: |
-          TAG="${GITHUB_REF_NAME}"
+          TAG="${{ inputs.tag || github.ref_name }}"
           PKG=$(node -p "require('./contabo-mcp/package.json').version")
           if [ "$TAG" != "$PKG" ]; then
             echo "Tag $TAG does not match contabo-mcp/package.json version $PKG"
@@ -61,6 +69,8 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+        with:
+          ref: ${{ inputs.tag && format('refs/tags/{0}', inputs.tag) || github.ref }}
 
       - name: Install pnpm
         uses: pnpm/action-setup@v4
@@ -94,12 +104,16 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+        with:
+          ref: ${{ inputs.tag && format('refs/tags/{0}', inputs.tag) || github.ref }}
 
       - name: Resolve release version
         id: version
         working-directory: .
         run: |
-          if [ "${{ github.event_name }}" = "push" ]; then
+          if [ -n "${{ inputs.tag }}" ]; then
+            echo "value=${{ inputs.tag }}" >> "$GITHUB_OUTPUT"
+          elif [ "${{ github.event_name }}" = "push" ]; then
             echo "value=${GITHUB_REF_NAME}" >> "$GITHUB_OUTPUT"
           else
             echo "value=$(node -p "require('./contabo-mcp/package.json').version")" >> "$GITHUB_OUTPUT"
