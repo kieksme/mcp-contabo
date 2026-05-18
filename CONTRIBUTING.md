@@ -107,15 +107,15 @@ Releases are automated with [release-please](https://github.com/googleapis/relea
 
 1. Merge changes to `main` using [Conventional Commits](https://www.conventionalcommits.org/) (`feat:`, `fix:`, `docs:`, etc.).
 2. The [Release Please workflow](https://github.com/kieksme/mcp-contabo/actions/workflows/release-please.yml) opens or updates a release PR (title like `chore(main): release 1.0.3`).
-3. Review the PR (version bump in [`contabo-mcp/package.json`](contabo-mcp/package.json) and [`CHANGELOG.md`](CHANGELOG.md)).
+3. Review the PR (version bump in [`contabo-mcp/package.json`](contabo-mcp/package.json) and [`contabo-mcp/CHANGELOG.md`](contabo-mcp/CHANGELOG.md)).
 4. Merge the release PR. Release Please creates a Git tag **without** a `v` prefix (e.g. `1.0.3`).
-5. The [publish workflow](https://github.com/kieksme/mcp-contabo/actions/workflows/publish.yml) runs on that tag: tests, npm publish (OIDC), and GitHub Release notes from `CHANGELOG.md`.
+5. The [publish workflow](https://github.com/kieksme/mcp-contabo/actions/workflows/publish.yml) runs on that tag: tests, npm publish (OIDC), and GitHub Release notes from `contabo-mcp/CHANGELOG.md`.
 
 ### Manual release (fallback)
 
 If Release Please is unavailable:
 
-1. Bump `version` in `contabo-mcp/package.json` and update `CHANGELOG.md`.
+1. Bump `version` in `contabo-mcp/package.json` and update `contabo-mcp/CHANGELOG.md`.
 2. Push to `main`, then tag: `git tag 1.0.x && git push origin 1.0.x`
 
 ### npm Trusted Publishing (routine releases)

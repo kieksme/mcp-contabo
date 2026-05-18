@@ -14,7 +14,10 @@ if (!version) {
 }
 
 const root = join(dirname(fileURLToPath(import.meta.url)), "..");
-const changelog = readFileSync(join(root, "CHANGELOG.md"), "utf8");
+const changelog = readFileSync(
+  join(root, "contabo-mcp", "CHANGELOG.md"),
+  "utf8",
+);
 const header = `## [${version}]`;
 const start = changelog.indexOf(header);
 if (start === -1) {

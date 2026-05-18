@@ -7,7 +7,7 @@
   "bin": {
     "contabo-mcp": "dist/index.js"
   },
-  "files": ["dist", "README.md", "LICENSE"],
+  "files": ["dist", "README.md", "CHANGELOG.md", "LICENSE"],
   "scripts": {
     "build": "tsc",
     "start": "node dist/index.js",
