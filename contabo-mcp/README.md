@@ -173,7 +173,7 @@ Releases are published to npm when a Git tag matching the package version is pus
 
 1. Bump `version` in [`package.json`](package.json) (semver).
 2. Commit and push to `main`.
-3. Create and push a tag: `git tag v1.0.x && git push origin v1.0.x`
+3. Create and push a tag (no `v` prefix): `git tag 1.0.x && git push origin 1.0.x`
 4. The [publish workflow](https://github.com/kieksme/mcp-contabo/actions/workflows/publish.yml) runs tests, verifies the npm tarball, and publishes with provenance.
 
 ### One-time setup
