@@ -77,9 +77,12 @@ describe("registerContaboTool", () => {
     const result = (await handler!()) as {
       isError?: boolean;
       content: Array<{ text: string }>;
+      structuredContent?: { error: { code: string; message: string } };
     };
 
     expect(result.isError).toBe(true);
-    expect(result.content[0]?.text).toBe("boom");
+    expect(result.content[0]?.text).toContain("boom");
+    expect(result.structuredContent?.error.code).toBe("TOOL_ERROR");
+    expect(result.structuredContent?.error.message).toBe("boom");
   });
 });

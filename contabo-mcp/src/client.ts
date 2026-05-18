@@ -1,7 +1,7 @@
 import { randomUUID } from "node:crypto";
 import type { ContaboAuth } from "./auth.js";
 import type { ContaboConfig } from "./config.js";
-import { contaboErrorMessage } from "./utils/errors.js";
+import { buildContaboApiError } from "./utils/errors.js";
 
 export type HttpMethod = "GET" | "POST" | "PUT" | "PATCH" | "DELETE";
 
@@ -75,7 +75,7 @@ export class ContaboClient {
     }
 
     if (!response.ok) {
-      throw new Error(await contaboErrorMessage(response, requestId));
+      throw await buildContaboApiError(response, requestId);
     }
 
     if (response.status === 204) {

@@ -6,6 +6,11 @@ import {
   registerContaboTool,
 } from "../utils/tool-registry.js";
 import {
+  destructiveIdempotent,
+  readOnly,
+  writeSensitive,
+} from "../utils/annotations.js";
+import {
   mergeQuery,
   paginationFields,
   traceIdField,
@@ -25,7 +30,7 @@ export function registerSecretTools(
       name: z.string().optional(),
       type: z.enum(["password", "ssh"]).optional(),
     },
-    annotations: { readOnlyHint: true },
+    annotations: readOnly,
     handler: async (args) =>
       client.request({
         method: "GET",
@@ -43,7 +48,7 @@ export function registerSecretTools(
       secretId: z.number().int(),
       ...traceIdField,
     },
-    annotations: { readOnlyHint: true },
+    annotations: readOnly,
     handler: async (args) =>
       client.request({
         method: "GET",
@@ -57,6 +62,7 @@ export function registerSecretTools(
     description:
       "Create secret. Body: name, type (password|ssh), value (required).",
     inputSchema: { body: bodyField, ...traceIdField },
+    annotations: writeSensitive,
     handler: async (args) =>
       client.request({
         method: "POST",
@@ -74,6 +80,7 @@ export function registerSecretTools(
       body: bodyField,
       ...traceIdField,
     },
+    annotations: writeSensitive,
     handler: async (args) =>
       client.request({
         method: "PATCH",
@@ -90,7 +97,7 @@ export function registerSecretTools(
       secretId: z.number().int(),
       ...traceIdField,
     },
-    annotations: { destructiveHint: true, idempotentHint: true },
+    annotations: destructiveIdempotent,
     handler: async (args) =>
       client.request({
         method: "DELETE",
@@ -103,7 +110,7 @@ export function registerSecretTools(
     name: "contabo_secrets_audits_list",
     description: "List audit history for secret changes.",
     inputSchema: { ...paginationFields, ...traceIdField },
-    annotations: { readOnlyHint: true },
+    annotations: readOnly,
     handler: async (args) =>
       client.request({
         method: "GET",

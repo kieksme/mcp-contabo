@@ -6,6 +6,14 @@ import {
   registerContaboTool,
 } from "../utils/tool-registry.js";
 import {
+  destructive,
+  powerAction,
+  readOnly,
+  readOnlyOpenWorld,
+  writeBilling,
+  writeNonDestructive,
+} from "../utils/annotations.js";
+import {
   mergeQuery,
   paginationFields,
   traceIdField,
@@ -36,7 +44,7 @@ export function registerInstanceTools(
     description:
       "List VPS/VDS compute instances in your Contabo account. Supports pagination and filters.",
     inputSchema: baseListQuery,
-    annotations: { readOnlyHint: true, openWorldHint: true },
+    annotations: readOnlyOpenWorld,
     handler: async (args) =>
       client.request({
         method: "GET",
@@ -61,7 +69,7 @@ export function registerInstanceTools(
       instanceId: z.number().int().describe("Instance ID"),
       ...traceIdField,
     },
-    annotations: { readOnlyHint: true },
+    annotations: readOnly,
     handler: async (args) =>
       client.request({
         method: "GET",
@@ -75,7 +83,7 @@ export function registerInstanceTools(
     description:
       "Create/order a new VPS or VDS. Body must include imageId, productId, and region (e.g. EU). Optional: period, displayName, rootPassword, sshKeys, userData, defaultUser, addOns, applicationId.",
     inputSchema: { body: bodyField, ...traceIdField },
-    annotations: { destructiveHint: false, openWorldHint: true },
+    annotations: writeBilling,
     handler: async (args) =>
       client.request({
         method: "POST",
@@ -94,6 +102,7 @@ export function registerInstanceTools(
       body: bodyField,
       ...traceIdField,
     },
+    annotations: writeNonDestructive,
     handler: async (args) =>
       client.request({
         method: "PATCH",
@@ -112,7 +121,7 @@ export function registerInstanceTools(
       body: bodyField,
       ...traceIdField,
     },
-    annotations: { destructiveHint: true },
+    annotations: destructive,
     handler: async (args) =>
       client.request({
         method: "PUT",
@@ -131,7 +140,7 @@ export function registerInstanceTools(
       body: bodyField,
       ...traceIdField,
     },
-    annotations: { destructiveHint: true },
+    annotations: destructive,
     handler: async (args) =>
       client.request({
         method: "POST",
@@ -150,6 +159,7 @@ export function registerInstanceTools(
       body: bodyField,
       ...traceIdField,
     },
+    annotations: writeBilling,
     handler: async (args) =>
       client.request({
         method: "POST",
@@ -163,7 +173,7 @@ export function registerInstanceTools(
     name: string,
     actionPath: string,
     description: string,
-    destructive: boolean,
+    isDestructive: boolean,
     body = false,
   ) => {
     registerContaboTool(server, client, {
@@ -174,7 +184,7 @@ export function registerInstanceTools(
         ...(body ? { body: bodyField } : {}),
         ...traceIdField,
       },
-      annotations: destructive ? { destructiveHint: true } : {},
+      annotations: isDestructive ? powerAction : writeNonDestructive,
       handler: async (args) =>
         client.request({
           method: "POST",
@@ -201,19 +211,19 @@ export function registerInstanceTools(
     "contabo_instances_restart",
     "restart",
     "Reboot a running instance.",
-    false,
+    true,
   );
   action(
     "contabo_instances_shutdown",
     "shutdown",
     "Graceful ACPI shutdown.",
-    false,
+    true,
   );
   action(
     "contabo_instances_rescue",
     "rescue",
     "Boot into Linux rescue mode. Optional body: rootPassword, sshKeys, userData.",
-    false,
+    true,
     true,
   );
   action(
@@ -236,7 +246,7 @@ export function registerInstanceTools(
       startDate: z.string().optional().describe("ISO date"),
       endDate: z.string().optional(),
     },
-    annotations: { readOnlyHint: true },
+    annotations: readOnly,
     handler: async (args) =>
       client.request({
         method: "GET",
@@ -262,7 +272,7 @@ export function registerInstanceTools(
       instanceId: z.number().int().optional(),
       requestId: z.string().optional(),
     },
-    annotations: { readOnlyHint: true },
+    annotations: readOnly,
     handler: async (args) =>
       client.request({
         method: "GET",

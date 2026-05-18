@@ -34,6 +34,25 @@ describe("formatToolResult", () => {
     expect(parsed.data[0]!.value).toBe("[REDACTED]");
   });
 
+  it("redacts S3 credential access keys", () => {
+    const result = formatToolResult({
+      data: [
+        {
+          credentialId: 42,
+          objectStorageId: "550e8400-e29b-41d4-a716-446655440000",
+          accessKey: "AKIAEXAMPLE",
+          secretKey: "super-secret-key",
+        },
+      ],
+    });
+
+    const parsed = JSON.parse(result.content[0]!.text) as {
+      data: Array<{ accessKey: string; secretKey: string }>;
+    };
+    expect(parsed.data[0]!.accessKey).toBe("[REDACTED]");
+    expect(parsed.data[0]!.secretKey).toBe("[REDACTED]");
+  });
+
   it("does not redact unrelated value fields", () => {
     const result = formatToolResult({
       data: [{ displayName: "vm", value: "visible" }],

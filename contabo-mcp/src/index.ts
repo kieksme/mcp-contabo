@@ -5,6 +5,7 @@ import { ContaboAuth } from "./auth.js";
 import { ContaboClient } from "./client.js";
 import { loadConfig } from "./config.js";
 import { registerAllTools } from "./tools/register-all.js";
+import { loadPackageVersion } from "./version.js";
 
 async function main(): Promise<void> {
   const config = loadConfig();
@@ -13,7 +14,7 @@ async function main(): Promise<void> {
 
   const server = new McpServer({
     name: "contabo-mcp",
-    version: "1.0.0",
+    version: loadPackageVersion(),
   });
 
   registerAllTools(server, client);

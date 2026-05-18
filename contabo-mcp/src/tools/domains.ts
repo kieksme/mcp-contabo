@@ -6,6 +6,14 @@ import {
   registerContaboTool,
 } from "../utils/tool-registry.js";
 import {
+  destructive,
+  destructiveIdempotent,
+  readOnly,
+  writeBilling,
+  writeNonDestructive,
+  writeSensitive,
+} from "../utils/annotations.js";
+import {
   mergeQuery,
   paginationFields,
   traceIdField,
@@ -23,7 +31,7 @@ export function registerDomainTools(
       ...traceIdField,
       domainName: z.string().optional(),
     },
-    annotations: { readOnlyHint: true },
+    annotations: readOnly,
     handler: async (args) =>
       client.request({
         method: "GET",
@@ -40,7 +48,7 @@ export function registerDomainTools(
       domain: z.string().describe("Domain name, e.g. example.com"),
       ...traceIdField,
     },
-    annotations: { readOnlyHint: true },
+    annotations: readOnly,
     handler: async (args) =>
       client.request({
         method: "GET",
@@ -54,6 +62,7 @@ export function registerDomainTools(
     description:
       "Register or transfer a domain. Body fields depend on operation (register vs transfer).",
     inputSchema: { body: bodyField, ...traceIdField },
+    annotations: writeBilling,
     handler: async (args) =>
       client.request({
         method: "POST",
@@ -71,6 +80,7 @@ export function registerDomainTools(
       body: bodyField,
       ...traceIdField,
     },
+    annotations: writeNonDestructive,
     handler: async (args) =>
       client.request({
         method: "PATCH",
@@ -88,7 +98,7 @@ export function registerDomainTools(
       body: bodyField,
       ...traceIdField,
     },
-    annotations: { destructiveHint: true },
+    annotations: destructive,
     handler: async (args) =>
       client.request({
         method: "POST",
@@ -102,6 +112,7 @@ export function registerDomainTools(
     name: "contabo_domains_revoke_cancellation",
     description: "Revoke a pending domain cancellation.",
     inputSchema: { domain: z.string(), ...traceIdField },
+    annotations: writeNonDestructive,
     handler: async (args) =>
       client.request({
         method: "POST",
@@ -114,6 +125,7 @@ export function registerDomainTools(
     name: "contabo_domains_auth_code",
     description: "Generate auth/EPP code for domain transfer out.",
     inputSchema: { domain: z.string(), ...traceIdField },
+    annotations: writeSensitive,
     handler: async (args) =>
       client.request({
         method: "POST",
@@ -130,7 +142,7 @@ export function registerDomainTools(
       body: bodyField,
       ...traceIdField,
     },
-    annotations: { destructiveHint: true },
+    annotations: destructive,
     handler: async (args) =>
       client.request({
         method: "POST",
@@ -144,6 +156,7 @@ export function registerDomainTools(
     name: "contabo_domains_transfer_out_revoke",
     description: "Revoke an in-progress domain transfer out.",
     inputSchema: { domain: z.string(), ...traceIdField },
+    annotations: destructiveIdempotent,
     handler: async (args) =>
       client.request({
         method: "DELETE",
@@ -160,7 +173,7 @@ export function registerDomainTools(
       body: bodyField,
       ...traceIdField,
     },
-    annotations: { readOnlyHint: true },
+    annotations: readOnly,
     handler: async (args) =>
       client.request({
         method: "POST",
@@ -174,7 +187,7 @@ export function registerDomainTools(
     name: "contabo_domains_audits_list",
     description: "List audit history for domain changes.",
     inputSchema: { ...paginationFields, ...traceIdField },
-    annotations: { readOnlyHint: true },
+    annotations: readOnly,
     handler: async (args) =>
       client.request({
         method: "GET",
@@ -188,7 +201,7 @@ export function registerDomainTools(
     name: "contabo_domain_handles_list",
     description: "List domain contact handles.",
     inputSchema: { ...paginationFields, ...traceIdField },
-    annotations: { readOnlyHint: true },
+    annotations: readOnly,
     handler: async (args) =>
       client.request({
         method: "GET",
@@ -205,7 +218,7 @@ export function registerDomainTools(
       handleId: z.number().int(),
       ...traceIdField,
     },
-    annotations: { readOnlyHint: true },
+    annotations: readOnly,
     handler: async (args) =>
       client.request({
         method: "GET",
@@ -218,6 +231,7 @@ export function registerDomainTools(
     name: "contabo_domain_handles_create",
     description: "Create a domain contact handle.",
     inputSchema: { body: bodyField, ...traceIdField },
+    annotations: writeNonDestructive,
     handler: async (args) =>
       client.request({
         method: "POST",
@@ -235,6 +249,7 @@ export function registerDomainTools(
       body: bodyField,
       ...traceIdField,
     },
+    annotations: writeNonDestructive,
     handler: async (args) =>
       client.request({
         method: "PUT",
@@ -251,7 +266,7 @@ export function registerDomainTools(
       handleId: z.number().int(),
       ...traceIdField,
     },
-    annotations: { destructiveHint: true, idempotentHint: true },
+    annotations: destructiveIdempotent,
     handler: async (args) =>
       client.request({
         method: "DELETE",
@@ -268,6 +283,7 @@ export function registerDomainTools(
       body: bodyField,
       ...traceIdField,
     },
+    annotations: writeNonDestructive,
     handler: async (args) =>
       client.request({
         method: "PATCH",
@@ -281,7 +297,7 @@ export function registerDomainTools(
     name: "contabo_domain_handles_audits_list",
     description: "List audit history for domain handle changes.",
     inputSchema: { ...paginationFields, ...traceIdField },
-    annotations: { readOnlyHint: true },
+    annotations: readOnly,
     handler: async (args) =>
       client.request({
         method: "GET",

@@ -6,6 +6,12 @@ import {
   registerContaboTool,
 } from "../utils/tool-registry.js";
 import {
+  destructive,
+  readOnly,
+  writeBilling,
+  writeNonDestructive,
+} from "../utils/annotations.js";
+import {
   mergeQuery,
   paginationFields,
   traceIdField,
@@ -24,7 +30,7 @@ export function registerObjectStorageTools(
       displayName: z.string().optional(),
       region: z.string().optional(),
     },
-    annotations: { readOnlyHint: true },
+    annotations: readOnly,
     handler: async (args) =>
       client.request({
         method: "GET",
@@ -44,7 +50,7 @@ export function registerObjectStorageTools(
       objectStorageId: z.string().uuid(),
       ...traceIdField,
     },
-    annotations: { readOnlyHint: true },
+    annotations: readOnly,
     handler: async (args) =>
       client.request({
         method: "GET",
@@ -58,6 +64,7 @@ export function registerObjectStorageTools(
     description:
       "Purchase/create object storage. Body: region, totalPurchasedSpaceTb; optional displayName, autoScaling.",
     inputSchema: { body: bodyField, ...traceIdField },
+    annotations: writeBilling,
     handler: async (args) =>
       client.request({
         method: "POST",
@@ -75,6 +82,7 @@ export function registerObjectStorageTools(
       body: bodyField,
       ...traceIdField,
     },
+    annotations: writeNonDestructive,
     handler: async (args) =>
       client.request({
         method: "PATCH",
@@ -92,7 +100,7 @@ export function registerObjectStorageTools(
       body: bodyField,
       ...traceIdField,
     },
-    annotations: { destructiveHint: true },
+    annotations: destructive,
     handler: async (args) =>
       client.request({
         method: "PATCH",
@@ -111,6 +119,7 @@ export function registerObjectStorageTools(
       body: bodyField,
       ...traceIdField,
     },
+    annotations: writeBilling,
     handler: async (args) =>
       client.request({
         method: "POST",
@@ -127,7 +136,7 @@ export function registerObjectStorageTools(
       objectStorageId: z.string().uuid(),
       ...traceIdField,
     },
-    annotations: { readOnlyHint: true },
+    annotations: readOnly,
     handler: async (args) =>
       client.request({
         method: "GET",
@@ -140,7 +149,7 @@ export function registerObjectStorageTools(
     name: "contabo_object_storages_audits_list",
     description: "List audit history for object storage changes.",
     inputSchema: { ...paginationFields, ...traceIdField },
-    annotations: { readOnlyHint: true },
+    annotations: readOnly,
     handler: async (args) =>
       client.request({
         method: "GET",
@@ -159,7 +168,7 @@ export function registerObjectStorageTools(
       ...paginationFields,
       ...traceIdField,
     },
-    annotations: { readOnlyHint: true },
+    annotations: readOnly,
     handler: async (args) =>
       client.request({
         method: "GET",
@@ -178,7 +187,7 @@ export function registerObjectStorageTools(
       credentialId: z.number().int(),
       ...traceIdField,
     },
-    annotations: { readOnlyHint: true },
+    annotations: readOnly,
     handler: async (args) =>
       client.request({
         method: "GET",
@@ -196,7 +205,7 @@ export function registerObjectStorageTools(
       credentialId: z.number().int(),
       ...traceIdField,
     },
-    annotations: { destructiveHint: true },
+    annotations: destructive,
     handler: async (args) =>
       client.request({
         method: "PATCH",

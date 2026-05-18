@@ -92,4 +92,29 @@ describe("registerAllTools", () => {
     expect(registered).toHaveLength(EXPECTED_TOOLS.length);
     expect(registered.sort()).toEqual([...EXPECTED_TOOLS].sort());
   });
+
+  it("sets MCP annotations on every tool", () => {
+    const server = new McpServer({ name: "test", version: "0" });
+    const annotationsByTool = new Map<string, unknown>();
+
+    const original = server.registerTool.bind(server);
+    vi.spyOn(server, "registerTool").mockImplementation((name, config, ...rest) => {
+      annotationsByTool.set(
+        name,
+        (config as { annotations?: unknown }).annotations,
+      );
+      return original(name, config, ...rest);
+    });
+
+    const client = new ContaboClient(config, new ContaboAuth(config));
+    registerAllTools(server, client);
+
+    for (const toolName of EXPECTED_TOOLS) {
+      const annotations = annotationsByTool.get(toolName);
+      expect(annotations, `${toolName} missing annotations`).toBeDefined();
+      expect(annotations).toMatchObject({
+        readOnlyHint: expect.any(Boolean),
+      });
+    }
+  });
 });

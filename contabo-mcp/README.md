@@ -9,7 +9,23 @@ MCP (Model Context Protocol) server for the [Contabo API](https://api.contabo.co
 - **57 tools** with `contabo_*` naming
 - OAuth2 password grant (or static bearer token for development)
 - Automatic `x-request-id` per request and token refresh on 401
-- Secret value redaction in tool responses
+- Secret value redaction in tool responses (secrets and S3 credentials)
+- MCP tool annotations (`readOnlyHint`, `destructiveHint`, `idempotentHint`, `openWorldHint`) on all tools
+- Structured error payloads with `x-request-id` and audit-tool hints
+
+## Tool annotations
+
+Every tool sets MCP hints so clients can warn before destructive calls:
+
+| Annotation | Used for |
+|------------|----------|
+| `readOnlyHint` | List, get, stats, availability checks, audits |
+| `destructiveHint: false` | Safe writes (metadata updates, start instance) |
+| `destructiveHint: true` | Deletes, cancels, reinstall, power actions, billing changes |
+| `openWorldHint` | Creates and purchases that affect live account resources |
+| `idempotentHint` | DELETE operations safe to retry with the same id |
+
+Errors return structured JSON (`structuredContent.error`) with `code`, `message`, `status`, and `xRequestId`.
 
 ## Releases
 
@@ -170,6 +186,10 @@ Without npm, install from the repository (first run builds the package; requires
 ```bash
 npx -y --package=git+https://github.com/kieksme/mcp-contabo.git#main contabo-mcp
 ```
+
+## Evaluations
+
+Read-only evaluation scenarios for agent testing live in [`evaluations/contabo.eval.xml`](evaluations/contabo.eval.xml). Regenerate answers against your account when adding live-data questions.
 
 ## Contributing
 

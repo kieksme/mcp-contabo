@@ -6,6 +6,12 @@ import {
   registerContaboTool,
 } from "../utils/tool-registry.js";
 import {
+  destructive,
+  destructiveIdempotent,
+  readOnly,
+  writeNonDestructive,
+} from "../utils/annotations.js";
+import {
   mergeQuery,
   paginationFields,
   traceIdField,
@@ -25,7 +31,7 @@ export function registerSnapshotTools(
       ...traceIdField,
       name: z.string().optional(),
     },
-    annotations: { readOnlyHint: true },
+    annotations: readOnly,
     handler: async (args) =>
       client.request({
         method: "GET",
@@ -43,7 +49,7 @@ export function registerSnapshotTools(
       snapshotId: z.string(),
       ...traceIdField,
     },
-    annotations: { readOnlyHint: true },
+    annotations: readOnly,
     handler: async (args) =>
       client.request({
         method: "GET",
@@ -61,6 +67,7 @@ export function registerSnapshotTools(
       body: bodyField,
       ...traceIdField,
     },
+    annotations: writeNonDestructive,
     handler: async (args) =>
       client.request({
         method: "POST",
@@ -79,6 +86,7 @@ export function registerSnapshotTools(
       body: bodyField,
       ...traceIdField,
     },
+    annotations: writeNonDestructive,
     handler: async (args) =>
       client.request({
         method: "PATCH",
@@ -96,7 +104,7 @@ export function registerSnapshotTools(
       snapshotId: z.string(),
       ...traceIdField,
     },
-    annotations: { destructiveHint: true, idempotentHint: true },
+    annotations: destructiveIdempotent,
     handler: async (args) =>
       client.request({
         method: "DELETE",
@@ -114,7 +122,7 @@ export function registerSnapshotTools(
       snapshotId: z.string(),
       ...traceIdField,
     },
-    annotations: { destructiveHint: true },
+    annotations: destructive,
     handler: async (args) =>
       client.request({
         method: "POST",
@@ -132,7 +140,7 @@ export function registerSnapshotTools(
       instanceId: z.number().int().optional(),
       snapshotId: z.string().optional(),
     },
-    annotations: { readOnlyHint: true },
+    annotations: readOnly,
     handler: async (args) =>
       client.request({
         method: "GET",

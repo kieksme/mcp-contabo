@@ -40,3 +40,6 @@ jobs:
 
       - name: Verify npm pack contents
         run: pnpm run pack:check
+
+      - name: MCP build smoke (version + tool registration)
+        run: node -e "import('./dist/version.js').then(m => { const v = m.loadPackageVersion(); if (!/^\\d+\\.\\d+\\.\\d+/.test(v)) process.exit(1); console.log('version', v); })"

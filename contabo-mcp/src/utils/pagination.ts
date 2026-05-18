@@ -13,7 +13,9 @@ export const paginationFields = {
     .min(1)
     .max(100)
     .optional()
-    .describe("Items per page"),
+    .describe(
+      "Items per page (API default if omitted; use 25 for smaller responses)",
+    ),
   orderBy: z
     .string()
     .optional()

@@ -1,7 +1,28 @@
+export class ContaboApiError extends Error {
+  readonly name = "ContaboApiError";
+
+  constructor(
+    public readonly status: number,
+    public readonly requestId: string,
+    message: string,
+    public readonly hint = "Use audit list tools (e.g. contabo_instances_audits_list) with the x-request-id for more detail.",
+  ) {
+    super(message);
+  }
+}
+
 export async function contaboErrorMessage(
   response: Response,
   requestId: string,
 ): Promise<string> {
+  const error = await buildContaboApiError(response, requestId);
+  return error.message;
+}
+
+export async function buildContaboApiError(
+  response: Response,
+  requestId: string,
+): Promise<ContaboApiError> {
   let body: unknown;
   const text = await response.text();
   try {
@@ -28,5 +49,9 @@ export async function contaboErrorMessage(
     "Tip: use audit list tools (e.g. contabo_instances_audits_list) with the x-request-id for more detail.",
   );
 
-  return parts.join("\n");
+  return new ContaboApiError(
+    response.status,
+    requestId,
+    parts.join("\n"),
+  );
 }
