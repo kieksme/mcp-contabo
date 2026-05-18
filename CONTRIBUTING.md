@@ -112,7 +112,7 @@ Releases are automated with [release-please](https://github.com/googleapis/relea
 4. Merge the release PR. Release Please creates a Git tag **without** a `v` prefix (e.g. `1.0.3`).
 5. The same [Release Please workflow](https://github.com/kieksme/mcp-contabo/actions/workflows/release-please.yml) run then calls the [publish workflow](https://github.com/kieksme/mcp-contabo/actions/workflows/publish.yml): tests, npm publish to [npmjs.com](https://www.npmjs.com/package/@kieksme/contabo-mcp) (OIDC), and a GitHub Release from `contabo-mcp/CHANGELOG.md`.
 
-   Tags pushed by Release Please do not trigger separate workflows (GitHub `GITHUB_TOKEN` limitation), so npm publish is chained explicitly. Manually pushed tags still trigger [publish.yml](.github/workflows/publish.yml) via the `push: tags` event.
+   Release Please creates the Git tag and GitHub Release; npm publish runs in the chained `publish` job in the same [Release Please workflow](.github/workflows/release-please.yml). Manually pushed tags still trigger [publish.yml](.github/workflows/publish.yml) (npm + GitHub Release notes from the changelog script).
 
 ### Manual release (fallback)
 

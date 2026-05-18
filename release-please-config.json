@@ -10,7 +10,8 @@
       "include-component-in-tag": false,
       "component-no-space": true,
       "pull-request-title-pattern": "chore${scope}: release ${version}",
-      "skip-github-release": true,
+      "skip-github-release": false,
+      "force-tag-creation": true,
       "changelog-sections": [
         { "type": "feat", "section": "Added" },
         { "type": "feature", "section": "Added" },
