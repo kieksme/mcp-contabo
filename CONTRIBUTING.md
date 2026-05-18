@@ -105,7 +105,8 @@ Releases are automated with [release-please](https://github.com/googleapis/relea
 
 ### Routine release
 
-1. Merge changes to `main` using [Conventional Commits](https://www.conventionalcommits.org/) (`feat:`, `fix:`, `docs:`, etc.).
+1. Merge changes to `main` using [Conventional Commits](https://www.conventionalcommits.org/). All standard types configured in [`release-please-config.json`](release-please-config.json) (`feat`, `fix`, `docs`, `chore`, `ci`, `test`, `build`, `refactor`, `style`, `perf`, `revert`, `deps`, `security`) update the release PR and changelog.
+   - `feat` → minor bump; `BREAKING CHANGE` in footer → major bump; every other listed type → patch bump.
 2. The [Release Please workflow](https://github.com/kieksme/mcp-contabo/actions/workflows/release-please.yml) opens or updates a release PR (title like `chore(main): release 1.0.3`).
 3. Review the PR (version bump in [`contabo-mcp/package.json`](contabo-mcp/package.json) and [`contabo-mcp/CHANGELOG.md`](contabo-mcp/CHANGELOG.md)).
 4. Merge the release PR. Release Please creates a Git tag **without** a `v` prefix (e.g. `1.0.3`).

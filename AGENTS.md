@@ -33,7 +33,7 @@ Rules:
 - Only create commits when the user explicitly asks.
 - Do not commit secrets (`.env`, API keys, `mcp.json` credentials).
 
-Releases on `main` are handled by [release-please](https://github.com/googleapis/release-please) (see [CONTRIBUTING.md](CONTRIBUTING.md)). Use `feat:` / `fix:` (and other conventional types) so the next release PR gets the right semver bump and changelog entries.
+Releases on `main` are handled by [release-please](https://github.com/googleapis/release-please) (see [CONTRIBUTING.md](CONTRIBUTING.md)). Any listed conventional type (`feat`, `fix`, `docs`, `chore`, `ci`, `test`, etc.) updates the release PR; `feat` bumps minor, breaking changes bump major, all other types bump patch.
 
 ## Code changes
 
