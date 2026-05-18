@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<evaluation>
+  <qa_pair>
+    <question>What query parameter is used to paginate the Contabo instance list endpoint?</question>
+    <answer>page</answer>
+  </qa_pair>
+  <qa_pair>
+    <question>What HTTP method and path roll back a compute instance to a snapshot?</question>
+    <answer>POST /v1/compute/instances/{instanceId}/snapshots/{snapshotId}/rollback</answer>
+  </qa_pair>
+  <qa_pair>
+    <question>Which required request header must be a UUID on every Contabo API call?</question>
+    <answer>x-request-id</answer>
+  </qa_pair>
+  <qa_pair>
+    <question>What OAuth2 grant type does Contabo use for API access tokens?</question>
+    <answer>password</answer>
+  </qa_pair>
+  <qa_pair>
+    <question>Which MCP tool enables the automated backup add-on on an instance?</question>
+    <answer>contabo_instances_upgrade</answer>
+  </qa_pair>
+  <qa_pair>
+    <question>What is the API base path prefix for object storage resources?</question>
+    <answer>/v1/object-storages</answer>
+  </qa_pair>
+  <qa_pair>
+    <question>Which endpoint checks domain name availability?</question>
+    <answer>/v1/registries-domains/{domain}/check-availability</answer>
+  </qa_pair>
+  <qa_pair>
+    <question>What HTTP method reinstalls a Contabo compute instance?</question>
+    <answer>PUT</answer>
+  </qa_pair>
+  <qa_pair>
+    <question>What are the allowed secret types when creating a Contabo secret?</question>
+    <answer>password, ssh</answer>
+  </qa_pair>
+  <qa_pair>
+    <question>Which tool lists S3-compatible credentials for a Contabo user UUID?</question>
+    <answer>contabo_object_storage_credentials_list</answer>
+  </qa_pair>
+</evaluation>

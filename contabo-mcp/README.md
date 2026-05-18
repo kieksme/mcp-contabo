@@ -1,0 +1,80 @@
+# Contabo MCP Server
+
+MCP (Model Context Protocol) server for the [Contabo API](https://api.contabo.com/). Manage virtual machines, snapshots/backups, object storage, secrets, and domains from Cursor or other MCP clients.
+
+## Features
+
+- **52 tools** with `contabo_*` naming
+- OAuth2 password grant (or static bearer token for development)
+- Automatic `x-request-id` per request and token refresh on 401
+- Secret value redaction in tool responses
+
+## Prerequisites
+
+1. Enable API access in the [Contabo Customer Control Panel](https://my.contabo.com/api/details)
+2. Set **Client ID**, **Client Secret**, and API user password ([help article](https://help.contabo.com/en/support/solutions/articles/103000270527-how-can-i-access-the-contabo-api-))
+
+## Setup
+
+```bash
+cd contabo-mcp
+pnpm install
+cp .env.example .env
+# Edit .env with your credentials
+pnpm build
+```
+
+## Cursor configuration
+
+Add to your MCP settings (`.cursor/mcp.json` or global MCP config):
+
+```json
+{
+  "mcpServers": {
+    "contabo": {
+      "command": "node",
+      "args": ["/absolute/path/to/contabo-mcp/dist/index.js"],
+      "env": {
+        "CONTABO_CLIENT_ID": "your-client-id",
+        "CONTABO_CLIENT_SECRET": "your-client-secret",
+        "CONTABO_API_USER": "your-api-user@email.com",
+        "CONTABO_API_PASSWORD": "your-api-password"
+      }
+    }
+  }
+}
+```
+
+Alternatively, point `env` to a `.env` file location and load variables with a wrapper, or use `dotenv-cli`.
+
+## Development
+
+```bash
+pnpm build
+pnpm start                    # stdio MCP server
+pnpm run fetch-openapi        # refresh openapi/contabo.openapi.json
+pnpm run generate-types       # regenerate src/generated/contabo.d.ts
+npx @modelcontextprotocol/inspector  # interactive testing
+```
+
+## Tool inventory
+
+| Area | Tools |
+|------|--------|
+| Instances | `contabo_instances_*` (list, get, create, update, reinstall, cancel, upgrade, start/stop/restart/shutdown/rescue/reset_password, audits) |
+| Snapshots / backups | `contabo_snapshots_*` |
+| Object storage | `contabo_object_storages_*`, `contabo_object_storage_credentials_*` |
+| Secrets | `contabo_secrets_*` |
+| Domains | `contabo_domains_*`, `contabo_domain_handles_*` |
+
+Automated VM backups: use `contabo_instances_upgrade` with body `{ "backup": {} }`.
+
+Object storage S3 credentials require `userId` (Contabo user UUID from the control panel).
+
+## OpenAPI spec
+
+The spec is vendored at [`openapi/contabo.openapi.json`](openapi/contabo.openapi.json), extracted from the official Redoc documentation. Refresh with `pnpm run fetch-openapi`.
+
+## License
+
+GPL-3.0-or-later (see repository root LICENSE).

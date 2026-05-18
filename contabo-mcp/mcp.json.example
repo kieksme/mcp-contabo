@@ -1,0 +1,15 @@
+{
+  "mcpServers": {
+    "contabo": {
+      "command": "node",
+      "args": ["./dist/index.js"],
+      "cwd": "/absolute/path/to/contabo-mcp",
+      "env": {
+        "CONTABO_CLIENT_ID": "",
+        "CONTABO_CLIENT_SECRET": "",
+        "CONTABO_API_USER": "",
+        "CONTABO_API_PASSWORD": ""
+      }
+    }
+  }
+}
