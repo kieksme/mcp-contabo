@@ -1,0 +1,35 @@
+{
+  "name": "contabo-mcp",
+  "version": "1.0.0",
+  "description": "MCP server for the Contabo API (VMs, snapshots, object storage, secrets, domains)",
+  "type": "module",
+  "main": "dist/index.js",
+  "bin": {
+    "contabo-mcp": "dist/index.js"
+  },
+  "scripts": {
+    "build": "tsc",
+    "start": "node dist/index.js",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "fetch-openapi": "tsx scripts/fetch-openapi.ts",
+    "generate-types": "openapi-typescript openapi/contabo.openapi.json -o src/generated/contabo.d.ts"
+  },
+  "keywords": ["mcp", "contabo", "cloud"],
+  "license": "GPL-3.0-or-later",
+  "packageManager": "pnpm@10.33.3",
+  "engines": {
+    "node": ">=20"
+  },
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.29.0",
+    "zod": "^3.24.2"
+  },
+  "devDependencies": {
+    "@types/node": "^22.13.10",
+    "openapi-typescript": "^7.6.1",
+    "tsx": "^4.19.3",
+    "typescript": "^5.8.2",
+    "vitest": "^3.0.9"
+  }
+}
