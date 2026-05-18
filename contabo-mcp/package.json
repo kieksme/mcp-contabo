@@ -7,16 +7,33 @@
   "bin": {
     "contabo-mcp": "dist/index.js"
   },
+  "files": ["dist", "README.md", "LICENSE"],
   "scripts": {
     "build": "tsc",
     "start": "node dist/index.js",
     "test": "vitest run",
     "test:watch": "vitest",
+    "pack:check": "node scripts/pack-check.mjs",
+    "prepublishOnly": "pnpm run build && pnpm test && pnpm run pack:check",
     "fetch-openapi": "tsx scripts/fetch-openapi.ts",
     "generate-types": "openapi-typescript openapi/contabo.openapi.json -o src/generated/contabo.d.ts"
   },
-  "keywords": ["mcp", "contabo", "cloud"],
+  "keywords": ["mcp", "contabo", "cloud", "model-context-protocol"],
+  "author": "kieksme",
   "license": "GPL-3.0-or-later",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/kieksme/mcp-contabo.git",
+    "directory": "contabo-mcp"
+  },
+  "homepage": "https://github.com/kieksme/mcp-contabo#readme",
+  "bugs": {
+    "url": "https://github.com/kieksme/mcp-contabo/issues"
+  },
+  "publishConfig": {
+    "access": "public",
+    "provenance": true
+  },
   "packageManager": "pnpm@10.33.3",
   "engines": {
     "node": ">=20"

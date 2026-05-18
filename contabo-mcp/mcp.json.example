@@ -1,5 +1,15 @@
 {
   "mcpServers": {
+    "contabo": {
+      "command": "npx",
+      "args": ["-y", "contabo-mcp"],
+      "env": {
+        "CONTABO_CLIENT_ID": "",
+        "CONTABO_CLIENT_SECRET": "",
+        "CONTABO_API_USER": "",
+        "CONTABO_API_PASSWORD": ""
+      }
+    },
     "contabo-from-github": {
       "command": "npx",
       "args": [
