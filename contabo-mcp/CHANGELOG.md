@@ -5,6 +5,19 @@ All notable changes to this project are documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.1.0](https://github.com/kieksme/mcp-contabo/compare/1.0.2...1.1.0) (2026-05-18)
+
+
+### Added
+
+* Add CONTRIBUTING.md for development guidelines and update README.md links ([268aa9e](https://github.com/kieksme/mcp-contabo/commit/268aa9ef7a5020aa0bbbddd812c337e0f9209c45))
+
+
+### Changed
+
+* Update API credentials instructions in CONTRIBUTING.md and README.md, and enhance .env.example with detailed field descriptions ([574b01c](https://github.com/kieksme/mcp-contabo/commit/574b01ce50c5d570caf54fc34cbd9412b6451f83))
+* Update changelog path references in documentation and scripts to point to contabo-mcp/CHANGELOG.md ([a292716](https://github.com/kieksme/mcp-contabo/commit/a2927163fe4eafe78b1bbe54c06bafdbe6f9d46f))
+
 ## [Unreleased]
 
 ## [1.0.2] - 2026-05-18
