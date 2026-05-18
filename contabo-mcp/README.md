@@ -9,6 +9,10 @@ MCP (Model Context Protocol) server for the [Contabo API](https://api.contabo.co
 - Automatic `x-request-id` per request and token refresh on 401
 - Secret value redaction in tool responses
 
+## Releases
+
+Versioning and npm publish are automated with [release-please](https://github.com/googleapis/release-please) on `main`. See [CONTRIBUTING.md](../CONTRIBUTING.md#releasing-maintainers) in the repository root.
+
 ## Prerequisites
 
 1. [Node.js](https://nodejs.org/) 20 or newer
