@@ -11,7 +11,7 @@ MCP (Model Context Protocol) server for the [Contabo API](https://api.contabo.co
 
 ## Releases
 
-Versioning and npm publish are automated with [release-please](https://github.com/googleapis/release-please) on `main`. See [CONTRIBUTING.md](../CONTRIBUTING.md#releasing-maintainers) in the repository root.
+Versioning and npm publish are automated with [release-please](https://github.com/googleapis/release-please) on `main`. Any conventional commit under `contabo-mcp/` updates the next release pull request. See [CONTRIBUTING.md](../CONTRIBUTING.md#releasing-maintainers) in the repository root.
 
 ## Prerequisites
 
