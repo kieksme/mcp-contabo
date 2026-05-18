@@ -26,7 +26,8 @@ jobs:
   publish:
     needs: release-please
     if: ${{ needs.release-please.outputs.release_created == 'true' && needs.release-please.outputs.tag_name != '' }}
-    uses: ./.github/workflows/publish-npm.yml
+    # Must call publish.yml (not a separate file): npm Trusted Publishing is configured for publish.yml only.
+    uses: ./.github/workflows/publish.yml
     with:
       tag: ${{ needs.release-please.outputs.tag_name }}
     permissions:

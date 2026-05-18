@@ -1,6 +1,14 @@
+# npm Trusted Publishing on npmjs.com must list this workflow file: publish.yml
+# (not publish-npm.yml). release-please.yml calls this via workflow_call.
 name: Release
 
 on:
+  workflow_call:
+    inputs:
+      tag:
+        description: Semver tag to publish (e.g. 1.2.0)
+        required: true
+        type: string
   push:
     tags:
       - "*.*.*"
@@ -22,7 +30,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
         with:
-          ref: ${{ (inputs.tag || github.event.inputs.tag) && format('refs/tags/{0}', inputs.tag || github.event.inputs.tag) || github.ref }}
+          ref: ${{ format('refs/tags/{0}', inputs.tag || github.event.inputs.tag || github.ref_name) }}
 
       - name: Install pnpm
         uses: pnpm/action-setup@v4
@@ -37,7 +45,6 @@ jobs:
           cache-dependency-path: contabo-mcp/pnpm-lock.yaml
 
       - name: Verify tag matches package version
-        if: github.event_name == 'push'
         working-directory: .
         run: |
           TAG="${{ inputs.tag || github.event.inputs.tag || github.ref_name }}"
@@ -59,6 +66,9 @@ jobs:
       - name: Verify npm pack contents
         run: pnpm run pack:check
 
+      - name: MCP build smoke (version + tool registration)
+        run: node -e "import('./dist/version.js').then(m => { const v = m.loadPackageVersion(); if (!/^\\d+\\.\\d+\\.\\d+/.test(v)) process.exit(1); console.log('version', v); })"
+
   publish-npm:
     needs: validate
     runs-on: ubuntu-latest
@@ -69,7 +79,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
         with:
-          ref: ${{ (inputs.tag || github.event.inputs.tag) && format('refs/tags/{0}', inputs.tag || github.event.inputs.tag) || github.ref }}
+          ref: ${{ format('refs/tags/{0}', inputs.tag || github.event.inputs.tag || github.ref_name) }}
 
       - name: Install pnpm
         uses: pnpm/action-setup@v4
@@ -107,7 +117,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
         with:
-          ref: ${{ (inputs.tag || github.event.inputs.tag) && format('refs/tags/{0}', inputs.tag || github.event.inputs.tag) || github.ref }}
+          ref: ${{ format('refs/tags/{0}', inputs.tag || github.event.inputs.tag || github.ref_name) }}
 
       - name: Resolve release version
         id: version
