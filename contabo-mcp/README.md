@@ -19,13 +19,13 @@ MCP (Model Context Protocol) server for the [Contabo API](https://api.contabo.co
 
 Every tool sets MCP hints so clients can warn before destructive calls:
 
-| Annotation | Used for |
-|------------|----------|
-| `readOnlyHint` | List, get, stats, availability checks, audits |
-| `destructiveHint: false` | Safe writes (metadata updates, start instance) |
-| `destructiveHint: true` | Deletes, cancels, reinstall, power actions, billing changes |
-| `openWorldHint` | Creates and purchases that affect live account resources |
-| `idempotentHint` | DELETE operations safe to retry with the same id |
+| Annotation               | Used for                                                    |
+|--------------------------|-------------------------------------------------------------|
+| `readOnlyHint`           | List, get, stats, availability checks, audits               |
+| `destructiveHint: false` | Safe writes (metadata updates, start instance)              |
+| `destructiveHint: true`  | Deletes, cancels, reinstall, power actions, billing changes |
+| `openWorldHint`          | Creates and purchases that affect live account resources    |
+| `idempotentHint`         | DELETE operations safe to retry with the same id            |
 
 Errors return structured JSON (`structuredContent.error`) with `code`, `message`, `status`, and `xRequestId`.
 
@@ -54,12 +54,12 @@ The page title is **API**. It states that the data shown there plus the **API pa
 
 The panel lists four pieces of information (labels may appear in German or English depending on locale):
 
-| Control panel (DE) | Control panel (EN) | Environment variable | Notes |
-|--------------------|--------------------|----------------------|-------|
-| Kunden-ID | Customer ID | `CONTABO_CLIENT_ID` | Format like `DE-8791`. This is the OAuth **client id**, not your VPS name. |
-| Client-Secret | Client secret | `CONTABO_CLIENT_SECRET` | Shown masked (`••••••`). Copy when displayed or regenerate if you no longer have it. |
-| Benutzername | Username | `CONTABO_API_USER` | Your API user email (often the same as your control-panel login). |
-| API-Passwort | API password | `CONTABO_API_PASSWORD` | **Separate** from your control-panel login password (see below). |
+| Control panel (DE) | Control panel (EN) | Environment variable    | Notes                                                                                |
+|--------------------|--------------------|-------------------------|--------------------------------------------------------------------------------------|
+| Kunden-ID          | Customer ID        | `CONTABO_CLIENT_ID`     | Format like `DE-8791`. This is the OAuth **client id**, not your VPS name.           |
+| Client-Secret      | Client secret      | `CONTABO_CLIENT_SECRET` | Shown masked (`••••••`). Copy when displayed or regenerate if you no longer have it. |
+| Benutzername       | Username           | `CONTABO_API_USER`      | Your API user email (often the same as your control-panel login).                    |
+| API-Passwort       | API password       | `CONTABO_API_PASSWORD`  | **Separate** from your control-panel login password (see below).                     |
 
 ### Set the API password (required once)
 
@@ -199,13 +199,13 @@ Development setup, testing, OpenAPI refresh, and release process: see [CONTRIBUT
 
 ## Tool inventory
 
-| Area | Tools |
-|------|--------|
-| Instances | `contabo_instances_*` (list, get, create, update, reinstall, cancel, upgrade, start/stop/restart/shutdown/rescue/reset_password, audits) |
-| Snapshots / backups | `contabo_snapshots_*` |
-| Object storage | `contabo_object_storages_*`, `contabo_object_storage_credentials_*` |
-| Secrets | `contabo_secrets_*` |
-| Domains | `contabo_domains_*`, `contabo_domain_handles_*` |
+| Area                | Tools                                                                                                                                    |
+|---------------------|------------------------------------------------------------------------------------------------------------------------------------------|
+| Instances           | `contabo_instances_*` (list, get, create, update, reinstall, cancel, upgrade, start/stop/restart/shutdown/rescue/reset_password, audits) |
+| Snapshots / backups | `contabo_snapshots_*`                                                                                                                    |
+| Object storage      | `contabo_object_storages_*`, `contabo_object_storage_credentials_*`                                                                      |
+| Secrets             | `contabo_secrets_*`                                                                                                                      |
+| Domains             | `contabo_domains_*`, `contabo_domain_handles_*`                                                                                          |
 
 Automated VM backups: use `contabo_instances_upgrade` with body `{ "backup": {} }`.
 

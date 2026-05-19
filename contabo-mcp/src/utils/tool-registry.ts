@@ -40,6 +40,6 @@ export function registerContaboTool(
 }
 
 export const bodyField = z
-  .record(z.unknown())
+  .record(z.string(), z.unknown())
   .optional()
   .describe("JSON request body (Contabo API fields)");
