@@ -1,15 +1,8 @@
 import { afterEach, beforeEach, describe, expect, it } from "vitest";
+import { CONTABO_ENV_KEYS } from "./config/env.js";
 import { loadConfig } from "./config.js";
 
-const ENV_KEYS = [
-  "CONTABO_CLIENT_ID",
-  "CONTABO_CLIENT_SECRET",
-  "CONTABO_API_USER",
-  "CONTABO_API_PASSWORD",
-  "CONTABO_ACCESS_TOKEN",
-  "CONTABO_API_BASE_URL",
-  "CONTABO_AUTH_URL",
-] as const;
+const ENV_KEYS = [...CONTABO_ENV_KEYS] as const;
 
 function clearEnv(): void {
   for (const key of ENV_KEYS) {
@@ -46,8 +39,23 @@ describe("loadConfig", () => {
     expect(config.clientId).toBe("");
   });
 
-  it("applies custom base and auth URLs", () => {
+  it("applies custom base and auth URLs on Contabo hosts", () => {
     process.env.CONTABO_ACCESS_TOKEN = "t";
+    process.env.CONTABO_API_BASE_URL = "https://staging.api.contabo.com/v1";
+    process.env.CONTABO_AUTH_URL =
+      "https://staging.auth.contabo.com/auth/realms/contabo/protocol/openid-connect/token";
+
+    const config = loadConfig();
+
+    expect(config.apiBaseUrl).toBe("https://staging.api.contabo.com/v1");
+    expect(config.authUrl).toBe(
+      "https://staging.auth.contabo.com/auth/realms/contabo/protocol/openid-connect/token",
+    );
+  });
+
+  it("allows non-Contabo URLs when CONTABO_ALLOW_CUSTOM_HOSTS=true", () => {
+    process.env.CONTABO_ACCESS_TOKEN = "t";
+    process.env.CONTABO_ALLOW_CUSTOM_HOSTS = "true";
     process.env.CONTABO_API_BASE_URL = "https://api.example.test/v1";
     process.env.CONTABO_AUTH_URL = "https://auth.example.test/token";
 
@@ -55,6 +63,13 @@ describe("loadConfig", () => {
 
     expect(config.apiBaseUrl).toBe("https://api.example.test/v1");
     expect(config.authUrl).toBe("https://auth.example.test/token");
+  });
+
+  it("rejects custom non-Contabo URLs without CONTABO_ALLOW_CUSTOM_HOSTS", () => {
+    process.env.CONTABO_ACCESS_TOKEN = "t";
+    process.env.CONTABO_API_BASE_URL = "https://api.example.test/v1";
+
+    expect(() => loadConfig()).toThrow(/not allowed/);
   });
 
   it("throws when required OAuth variables are missing", () => {

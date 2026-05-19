@@ -1,0 +1,6 @@
+version: 2
+
+# Only run PR alerts when the published package manifest changes.
+triggerPaths:
+  - "contabo-mcp/package.json"
+  - "contabo-mcp/pnpm-lock.yaml"

@@ -1,6 +1,7 @@
 import { randomUUID } from "node:crypto";
 import type { ContaboAuth } from "./auth.js";
 import type { ContaboConfig } from "./config.js";
+import { assertAllowedContaboUrl } from "./config/hosts.js";
 import { buildContaboApiError } from "./utils/errors.js";
 
 export type HttpMethod = "GET" | "POST" | "PUT" | "PATCH" | "DELETE";
@@ -40,6 +41,7 @@ export class ContaboClient {
       path.startsWith("/") ? path.slice(1) : path,
       `${base}/`,
     );
+    assertAllowedContaboUrl(url.toString(), "api");
 
     if (options.query) {
       for (const [key, value] of Object.entries(options.query)) {

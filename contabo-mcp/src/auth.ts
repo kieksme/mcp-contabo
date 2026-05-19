@@ -1,4 +1,5 @@
 import type { ContaboConfig } from "./config.js";
+import { assertAllowedContaboUrl } from "./config/hosts.js";
 
 interface TokenResponse {
   access_token: string;
@@ -30,6 +31,7 @@ export class ContaboAuth {
       password: this.config.apiPassword,
     });
 
+    assertAllowedContaboUrl(this.config.authUrl, "auth");
     const response = await fetch(this.config.authUrl, {
       method: "POST",
       headers: { "Content-Type": "application/x-www-form-urlencoded" },

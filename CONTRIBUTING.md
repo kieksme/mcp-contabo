@@ -169,6 +169,18 @@ npm login
 npx npm@11.5.1 publish --access public --provenance
 ```
 
+## Socket.dev (supply chain alerts)
+
+The package page on [Socket](https://socket.dev/npm/package/@kieksme/contabo-mcp) may flag **network access**, **environment variable access**, **URL strings**, and **GPL license** alerts. These are expected for an API MCP server under GPL; see [`contabo-mcp/SECURITY.md`](contabo-mcp/SECURITY.md).
+
+Repository config: [`socket.yml`](socket.yml) limits PR scans to `contabo-mcp/package.json` and `contabo-mcp/pnpm-lock.yaml`.
+
+On the Socket organization dashboard, link `kieksme/mcp-contabo` and set these alert types to **Monitor** (not Block) so pull requests are not blocked on intentional behavior:
+
+- `networkAccess`, `envVars`, `externalUrls`, `copyleftLicense`, `nonPermissiveLicense`
+
+Use [repository labels / security policies](https://docs.socket.dev/docs/socket-yml) on Socket (preferred over deprecated `issueRules` in `socket.yml`).
+
 ## License
 
 By contributing, you agree that your contributions will be licensed under **GPL-3.0-or-later** (see [LICENSE](LICENSE)).

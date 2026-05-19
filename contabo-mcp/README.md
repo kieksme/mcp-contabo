@@ -14,6 +14,12 @@ MCP (Model Context Protocol) server for the [Contabo API](https://api.contabo.co
 - MCP tool annotations (`readOnlyHint`, `destructiveHint`, `idempotentHint`, `openWorldHint`) on all tools
 - Structured error payloads with `x-request-id` and audit-tool hints
 
+## Security and Socket
+
+This package is an API client: it reads `CONTABO_*` environment variables and calls Contabo over HTTPS only. Outbound hosts are restricted to `*.contabo.com` unless `CONTABO_ALLOW_CUSTOM_HOSTS=true` (staging). See [SECURITY.md](SECURITY.md) for the full allowlist and reporting process.
+
+The [Socket.dev](https://socket.dev/npm/package/@kieksme/contabo-mcp) badge may show **network access**, **environment variable access**, **URL strings**, and **GPL license** alerts — these are intentional for this package type, not indicators of malware. Dependency CVEs are tracked via `pnpm audit` in CI.
+
 ## Tool annotations
 
 Every tool sets MCP hints so clients can warn before destructive calls:
