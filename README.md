@@ -2,6 +2,7 @@
 
 [![CI](https://github.com/kieksme/mcp-contabo/actions/workflows/ci.yml/badge.svg)](https://github.com/kieksme/mcp-contabo/actions/workflows/ci.yml)
 [![npm version](https://img.shields.io/npm/v/@kieksme/contabo-mcp.svg)](https://www.npmjs.com/package/@kieksme/contabo-mcp)
+[![Socket Badge](https://badge.socket.dev/npm/package/@kieksme/contabo-mcp)](https://socket.dev/npm/package/@kieksme/contabo-mcp)
 
 MCP server for the [Contabo](https://contabo.com/) cloud API — virtual machines, snapshots, object storage, secrets, and domains.
 
