@@ -5,6 +5,14 @@ All notable changes to this project are documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.2.1](https://github.com/kieksme/mcp-contabo/compare/1.2.0...1.2.1) (2026-05-19)
+
+
+### Changed
+
+* **dependencies:** update package versions and improve README formatting ([73e315e](https://github.com/kieksme/mcp-contabo/commit/73e315e74c95387ff63da50058cf5a0656af7b0b))
+* **README.md:** add Socket Badge to README for enhanced visibility of package status ([f115c06](https://github.com/kieksme/mcp-contabo/commit/f115c06c871a16964f887c0891da4c1aecea7d19))
+
 ## [1.2.0](https://github.com/kieksme/mcp-contabo/compare/1.1.2...1.2.0) (2026-05-18)
 
 
