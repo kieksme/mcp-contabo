@@ -5,6 +5,27 @@ All notable changes to this project are documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.3.0](https://github.com/kieksme/mcp-contabo/compare/1.2.1...1.3.0) (2026-05-19)
+
+
+### Added
+
+* **auth.ts, client.ts:** enforce allowed Contabo URLs with assertAllowedContaboUrl ([8085ef6](https://github.com/kieksme/mcp-contabo/commit/8085ef6a2990a4b9b476a6b544cf9971282b0342))
+* **config:** introduce environment variable management for Contabo ([8085ef6](https://github.com/kieksme/mcp-contabo/commit/8085ef6a2990a4b9b476a6b544cf9971282b0342))
+
+
+### Changed
+
+* **config.test.ts:** add tests for custom URL handling and CONTABO_ALLOW_CUSTOM_HOSTS environment variable ([8085ef6](https://github.com/kieksme/mcp-contabo/commit/8085ef6a2990a4b9b476a6b544cf9971282b0342))
+* **config:** add tests for URL validation and environment variable handling ([8085ef6](https://github.com/kieksme/mcp-contabo/commit/8085ef6a2990a4b9b476a6b544cf9971282b0342))
+* **CONTRIBUTING.md:** add section on Socket.dev supply chain alerts ([8085ef6](https://github.com/kieksme/mcp-contabo/commit/8085ef6a2990a4b9b476a6b544cf9971282b0342))
+* **package.json:** include SECURITY.md in package files ([8085ef6](https://github.com/kieksme/mcp-contabo/commit/8085ef6a2990a4b9b476a6b544cf9971282b0342))
+* **README.md:** include security and Socket.dev alert information ([8085ef6](https://github.com/kieksme/mcp-contabo/commit/8085ef6a2990a4b9b476a6b544cf9971282b0342))
+* **README.md:** remove unnecessary newline for improved formatting ([0cbbc14](https://github.com/kieksme/mcp-contabo/commit/0cbbc147980f5297a68bec4bcf9e6b63d778763b))
+* **README.md:** update Socket Badge link to use new domain for improved accuracy ([0a0c95a](https://github.com/kieksme/mcp-contabo/commit/0a0c95a69971ce66b32a845d7ede85d899c86ecc))
+* **SECURITY.md:** create security policy document detailing expected capabilities, environment variables, network endpoints, secret handling, and reporting vulnerabilities ([8085ef6](https://github.com/kieksme/mcp-contabo/commit/8085ef6a2990a4b9b476a6b544cf9971282b0342))
+* **socket.yml:** configure PR alerts for package manifest changes ([8085ef6](https://github.com/kieksme/mcp-contabo/commit/8085ef6a2990a4b9b476a6b544cf9971282b0342))
+
 ## [1.2.1](https://github.com/kieksme/mcp-contabo/compare/1.2.0...1.2.1) (2026-05-19)
 
 
