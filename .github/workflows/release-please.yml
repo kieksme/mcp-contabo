@@ -9,6 +9,7 @@ on:
 permissions:
   contents: write
   pull-requests: write
+  actions: write # dispatch publish.yml after a release (OIDC requires the publish workflow, not workflow_call)
 
 jobs:
   release-please:
@@ -23,14 +24,21 @@ jobs:
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
 
-  publish:
+  # npm Trusted Publishing validates the workflow that *runs* publish (OIDC `workflow` claim).
+  # workflow_call would attribute the run to release-please.yml and fail with 404 on npm.
+  # Dispatch publish.yml so OIDC matches the trusted publisher (see CONTRIBUTING.md).
+  trigger-publish:
     needs: release-please
     if: ${{ needs.release-please.outputs.release_created == 'true' && needs.release-please.outputs.tag_name != '' }}
-    # Must call publish.yml (not a separate file): npm Trusted Publishing is configured for publish.yml only.
-    uses: ./.github/workflows/publish.yml
-    with:
-      tag: ${{ needs.release-please.outputs.tag_name }}
-    permissions:
-      contents: read
-      id-token: write
-    secrets: inherit
+    runs-on: ubuntu-latest
+    steps:
+      - name: Dispatch Release (publish.yml)
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          TAG: ${{ needs.release-please.outputs.tag_name }}
+        run: |
+          gh workflow run publish.yml \
+            --repo "${{ github.repository }}" \
+            --ref main \
+            -f "tag=${TAG}"
+          echo "Dispatched publish.yml for tag ${TAG}"

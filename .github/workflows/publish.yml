@@ -1,5 +1,6 @@
 # npm Trusted Publishing on npmjs.com must list this workflow file: publish.yml
-# (not publish-npm.yml). release-please.yml calls this via workflow_call.
+# (not publish-npm.yml). release-please.yml dispatches this via workflow_dispatch
+# (workflow_call breaks OIDC: npm validates the caller workflow name).
 name: Release
 
 on:
