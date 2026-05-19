@@ -2,6 +2,8 @@
 
 [![npm version](https://img.shields.io/npm/v/@kieksme/contabo-mcp.svg)](https://www.npmjs.com/package/@kieksme/contabo-mcp)
 
+[![Socket Badge](https://badge.socket.dev/npm/package/@kieksme/contabo-mcp)](https://badge.socket.dev/npm/package/@kieksme/contabo-mcp)
+
 MCP (Model Context Protocol) server for the [Contabo API](https://api.contabo.com/). Manage virtual machines, snapshots/backups, object storage, secrets, and domains from Cursor or other MCP clients.
 
 ## Features
