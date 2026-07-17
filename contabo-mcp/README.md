@@ -3,11 +3,11 @@
 [![npm version](https://img.shields.io/npm/v/@kieksme/contabo-mcp.svg)](https://www.npmjs.com/package/@kieksme/contabo-mcp)
 [![Socket Badge](https://badge.socket.dev/npm/package/@kieksme/contabo-mcp)](https://socket.dev/npm/package/@kieksme/contabo-mcp)
 
-MCP (Model Context Protocol) server for the [Contabo API](https://api.contabo.com/). Manage virtual machines, snapshots/backups, object storage, secrets, and domains from Cursor or other MCP clients.
+MCP (Model Context Protocol) server for the [Contabo API](https://api.contabo.com/). Manage virtual machines, images, snapshots/backups, networking, DNS, object storage, secrets, domains, and tags from Cursor or other MCP clients.
 
 ## Features
 
-- **57 tools** with `contabo_*` naming
+- **115 tools** with `contabo_*` naming
 - OAuth2 password grant (or static bearer token for development)
 - Automatic `x-request-id` per request and token refresh on 401
 - Secret value redaction in tool responses (secrets and S3 credentials)
@@ -208,9 +208,16 @@ Development setup, testing, OpenAPI refresh, and release process: see [CONTRIBUT
 |---------------------|------------------------------------------------------------------------------------------------------------------------------------------|
 | Instances           | `contabo_instances_*` (list, get, create, update, reinstall, cancel, upgrade, start/stop/restart/shutdown/rescue/reset_password, audits) |
 | Snapshots / backups | `contabo_snapshots_*`                                                                                                                    |
+| Images              | `contabo_images_*` (list, get, create, update, delete, stats, audits)                                                                    |
+| Data centers        | `contabo_data_centers_list`                                                                                                              |
 | Object storage      | `contabo_object_storages_*`, `contabo_object_storage_credentials_*`                                                                      |
 | Secrets             | `contabo_secrets_*`                                                                                                                      |
 | Domains             | `contabo_domains_*`, `contabo_domain_handles_*`                                                                                          |
+| DNS                 | `contabo_dns_zones_*`, `contabo_dns_zone_records_*`, `contabo_dns_ptrs_*`, DNS audits                                                     |
+| Firewalls           | `contabo_firewalls_*` (CRUD, rules, attach/detach instance, preset rules, audits)                                                        |
+| Private networks    | `contabo_private_networks_*` (CRUD, attach/detach instance, audits)                                                                      |
+| VIPs                | `contabo_vips_*` (list, get, assign, unassign, audits)                                                                                   |
+| Tags                | `contabo_tags_*`, `contabo_tag_assignments_*`                                                                                            |
 
 Automated VM backups: use `contabo_instances_upgrade` with body `{ "backup": {} }`.
 
