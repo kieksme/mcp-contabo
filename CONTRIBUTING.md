@@ -82,9 +82,16 @@ When adding or changing tools, keep the `contabo_*` naming convention and update
 |------|--------|
 | Instances | `contabo_instances_*` (list, get, create, update, reinstall, cancel, upgrade, start/stop/restart/shutdown/rescue/reset_password, audits) |
 | Snapshots / backups | `contabo_snapshots_*` |
+| Images | `contabo_images_*` |
+| Data centers | `contabo_data_centers_list` |
 | Object storage | `contabo_object_storages_*`, `contabo_object_storage_credentials_*` |
 | Secrets | `contabo_secrets_*` |
 | Domains | `contabo_domains_*`, `contabo_domain_handles_*` |
+| DNS | `contabo_dns_zones_*`, `contabo_dns_zone_records_*`, `contabo_dns_ptrs_*` |
+| Firewalls | `contabo_firewalls_*` |
+| Private networks | `contabo_private_networks_*` |
+| VIPs | `contabo_vips_*` |
+| Tags | `contabo_tags_*`, `contabo_tag_assignments_*` |
 
 Notes:
 

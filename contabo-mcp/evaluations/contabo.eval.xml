@@ -18,7 +18,7 @@
   </qa_pair>
   <qa_pair>
     <question>How many tools does this MCP server register in total?</question>
-    <answer>57</answer>
+    <answer>115</answer>
   </qa_pair>
   <qa_pair>
     <question>What is the pagination query parameter name for page number on list endpoints (1-based)?</question>

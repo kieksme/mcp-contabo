@@ -4,9 +4,9 @@
 [![npm version](https://img.shields.io/npm/v/@kieksme/contabo-mcp.svg)](https://www.npmjs.com/package/@kieksme/contabo-mcp)
 [![Socket Badge](https://badge.socket.dev/npm/package/@kieksme/contabo-mcp)](https://socket.dev/npm/package/@kieksme/contabo-mcp)
 
-MCP server for the [Contabo](https://contabo.com/) cloud API — virtual machines, snapshots, object storage, secrets, and domains.
+MCP server for the [Contabo](https://contabo.com/) cloud API — virtual machines, images, snapshots, networking, DNS, object storage, secrets, domains, and tags.
 
-Manage Contabo VPS/VDS instances, snapshots, S3-compatible object storage, secrets, and domains from Cursor, Claude Desktop, or any MCP client. Published on npm as [`@kieksme/contabo-mcp`](https://www.npmjs.com/package/@kieksme/contabo-mcp).
+Manage Contabo VPS/VDS instances, images, snapshots, firewalls, private networks, VIPs, DNS, S3-compatible object storage, secrets, domains, and tags from Cursor, Claude Desktop, or any MCP client. Published on npm as [`@kieksme/contabo-mcp`](https://www.npmjs.com/package/@kieksme/contabo-mcp).
 
 ## Quick start
 

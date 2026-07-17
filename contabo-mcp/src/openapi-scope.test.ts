@@ -14,6 +14,9 @@ const REQUIRED_PATHS = [
   "/v1/compute/instances/{instanceId}/actions/start",
   "/v1/compute/instances/{instanceId}/snapshots",
   "/v1/compute/instances/{instanceId}/snapshots/{snapshotId}/rollback",
+  "/v1/compute/images",
+  "/v1/compute/images/{imageId}",
+  "/v1/data-centers",
   "/v1/object-storages",
   "/v1/object-storages/{objectStorageId}/resize",
   "/v1/secrets",
@@ -22,6 +25,17 @@ const REQUIRED_PATHS = [
   "/v1/domains/{domain}",
   "/v1/registries-domains/{domain}/check-availability",
   "/v1/domains/handles",
+  "/v1/dns/zones",
+  "/v1/dns/zones/{zoneName}/records",
+  "/v1/dns/ptrs",
+  "/v1/firewalls",
+  "/v1/firewalls/{firewallId}/instances/{instanceId}",
+  "/v1/private-networks",
+  "/v1/private-networks/{privateNetworkId}/instances/{instanceId}",
+  "/v1/vips",
+  "/v1/vips/{ip}/{resourceType}/{resourceId}",
+  "/v1/tags",
+  "/v1/tags/{tagId}/assignments/{resourceType}/{resourceId}",
 ];
 
 describe("vendored OpenAPI spec", () => {
