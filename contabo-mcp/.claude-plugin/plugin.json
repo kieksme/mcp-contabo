@@ -1,0 +1,51 @@
+{
+  "name": "contabo-mcp",
+  "displayName": "Contabo MCP",
+  "description": "Manage Contabo VPS/VDS instances, images, snapshots, networking, DNS, S3 object storage, secrets, domains, and tags from Claude Code.",
+  "version": "1.4.0",
+  "author": {
+    "name": "kieksme"
+  },
+  "homepage": "https://github.com/kieksme/mcp-contabo#readme",
+  "repository": "https://github.com/kieksme/mcp-contabo",
+  "license": "GPL-3.0-or-later",
+  "keywords": [
+    "mcp",
+    "contabo",
+    "cloud",
+    "vps",
+    "hosting",
+    "dns",
+    "object-storage"
+  ],
+  "userConfig": {
+    "client_id": {
+      "type": "string",
+      "title": "Contabo OAuth2 Client ID",
+      "description": "From https://my.contabo.com/api/details",
+      "sensitive": true,
+      "required": true
+    },
+    "client_secret": {
+      "type": "string",
+      "title": "Contabo OAuth2 Client Secret",
+      "description": "From https://my.contabo.com/api/details",
+      "sensitive": true,
+      "required": true
+    },
+    "api_user": {
+      "type": "string",
+      "title": "Contabo API Username",
+      "description": "Your Contabo Customer Control Panel login email",
+      "sensitive": true,
+      "required": true
+    },
+    "api_password": {
+      "type": "string",
+      "title": "Contabo API Password",
+      "description": "Your Contabo Customer Control Panel password",
+      "sensitive": true,
+      "required": true
+    }
+  }
+}
