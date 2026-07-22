@@ -1,0 +1,87 @@
+diff --git a/dist/cjs/server/index.js b/dist/cjs/server/index.js
+index e183dd4df87dab70f89d3ef677614e895356350b..67394b3a9bd2b88f7bf6496024684cb4c90d8407 100644
+--- a/dist/cjs/server/index.js
++++ b/dist/cjs/server/index.js
+@@ -3,8 +3,11 @@ Object.defineProperty(exports, "__esModule", { value: true });
+ exports.Server = void 0;
+ const protocol_js_1 = require("../shared/protocol.js");
+ const types_js_1 = require("../types.js");
+-const ajv_provider_js_1 = require("../validation/ajv-provider.js");
+ const zod_compat_js_1 = require("./zod-compat.js");
++function createDefaultAjvJsonSchemaValidator() {
++    const { AjvJsonSchemaValidator } = require("../validation/ajv-provider.js");
++    return new AjvJsonSchemaValidator();
++}
+ const server_js_1 = require("../experimental/tasks/server.js");
+ const helpers_js_1 = require("../experimental/tasks/helpers.js");
+ /**
+@@ -51,7 +54,7 @@ class Server extends protocol_js_1.Protocol {
+         };
+         this._capabilities = options?.capabilities ?? {};
+         this._instructions = options?.instructions;
+-        this._jsonSchemaValidator = options?.jsonSchemaValidator ?? new ajv_provider_js_1.AjvJsonSchemaValidator();
++        this._jsonSchemaValidator = options?.jsonSchemaValidator ?? createDefaultAjvJsonSchemaValidator();
+         this.setRequestHandler(types_js_1.InitializeRequestSchema, request => this._oninitialize(request));
+         this.setNotificationHandler(types_js_1.InitializedNotificationSchema, () => this.oninitialized?.());
+         if (this._capabilities.logging) {
+diff --git a/dist/esm/server/index.js b/dist/esm/server/index.js
+index 51d060e59a33efad8cd85c97d74f5c0f4d1e1ba2..9cd393c40595913e8197f5b9be89af36e0d223aa 100644
+--- a/dist/esm/server/index.js
++++ b/dist/esm/server/index.js
+@@ -1,7 +1,12 @@
++import { createRequire } from 'node:module';
+ import { mergeCapabilities, Protocol } from '../shared/protocol.js';
+ import { CreateMessageResultSchema, CreateMessageResultWithToolsSchema, ElicitResultSchema, EmptyResultSchema, ErrorCode, InitializedNotificationSchema, InitializeRequestSchema, LATEST_PROTOCOL_VERSION, ListRootsResultSchema, LoggingLevelSchema, McpError, SetLevelRequestSchema, SUPPORTED_PROTOCOL_VERSIONS, CallToolRequestSchema, CallToolResultSchema, CreateTaskResultSchema } from '../types.js';
+-import { AjvJsonSchemaValidator } from '../validation/ajv-provider.js';
+ import { getObjectShape, isZ4Schema, safeParse } from './zod-compat.js';
++const require = createRequire(import.meta.url);
++function createDefaultAjvJsonSchemaValidator() {
++    const { AjvJsonSchemaValidator } = require('../validation/ajv-provider.js');
++    return new AjvJsonSchemaValidator();
++}
+ import { ExperimentalServerTasks } from '../experimental/tasks/server.js';
+ import { assertToolsCallTaskCapability, assertClientRequestTaskCapability } from '../experimental/tasks/helpers.js';
+ /**
+@@ -48,7 +53,7 @@ export class Server extends Protocol {
+         };
+         this._capabilities = options?.capabilities ?? {};
+         this._instructions = options?.instructions;
+-        this._jsonSchemaValidator = options?.jsonSchemaValidator ?? new AjvJsonSchemaValidator();
++        this._jsonSchemaValidator = options?.jsonSchemaValidator ?? createDefaultAjvJsonSchemaValidator();
+         this.setRequestHandler(InitializeRequestSchema, request => this._oninitialize(request));
+         this.setNotificationHandler(InitializedNotificationSchema, () => this.oninitialized?.());
+         if (this._capabilities.logging) {
+diff --git a/package.json b/package.json
+index 22d26ca56e0d3611f8865c476b604791967de173..a1fdc310f6409eef111f7dea57f2b7fea57718d2 100644
+--- a/package.json
++++ b/package.json
+@@ -101,8 +101,6 @@
+     },
+     "dependencies": {
+         "@hono/node-server": "^1.19.9",
+-        "ajv": "^8.17.1",
+-        "ajv-formats": "^3.0.1",
+         "content-type": "^1.0.5",
+         "cors": "^2.8.5",
+         "cross-spawn": "^7.0.5",
+@@ -120,12 +118,20 @@
+     },
+     "peerDependencies": {
+         "@cfworker/json-schema": "^4.1.1",
++        "ajv": "^8.17.1",
++        "ajv-formats": "^3.0.1",
+         "zod": "^3.25 || ^4.0"
+     },
+     "peerDependenciesMeta": {
+         "@cfworker/json-schema": {
+             "optional": true
+         },
++        "ajv": {
++            "optional": true
++        },
++        "ajv-formats": {
++            "optional": true
++        },
+         "zod": {
+             "optional": false
+         }

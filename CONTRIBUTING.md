@@ -177,7 +177,7 @@ Repository config: [`socket.yml`](socket.yml) limits PR scans to `contabo-mcp/pa
 
 On the Socket organization dashboard, link `kieksme/mcp-contabo` and set these alert types to **Monitor** (not Block) so pull requests are not blocked on intentional behavior:
 
-- `networkAccess`, `envVars`, `externalUrls`, `copyleftLicense`, `nonPermissiveLicense`
+- `networkAccess`, `envVars`, `externalUrls`, `copyleftLicense`, `nonPermissiveLicense`, `unstableOwnership`, and any legacy `ajv` / dynamic-code dependency alerts
 
 Use [repository labels / security policies](https://docs.socket.dev/docs/socket-yml) on Socket (preferred over deprecated `issueRules` in `socket.yml`).
 

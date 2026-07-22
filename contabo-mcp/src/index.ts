@@ -1,6 +1,7 @@
 #!/usr/bin/env node
 import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { StdioServerTransport } from "@modelcontextprotocol/sdk/server/stdio.js";
+import { CfWorkerJsonSchemaValidator } from "@modelcontextprotocol/sdk/validation/cfworker";
 import { ContaboAuth } from "./auth.js";
 import { ContaboClient } from "./client.js";
 import { loadConfig } from "./config.js";
@@ -12,10 +13,16 @@ async function main(): Promise<void> {
   const auth = new ContaboAuth(config);
   const client = new ContaboClient(config, auth);
 
-  const server = new McpServer({
-    name: "contabo-mcp",
-    version: loadPackageVersion(),
-  });
+  const server = new McpServer(
+    {
+      name: "contabo-mcp",
+      version: loadPackageVersion(),
+    },
+    {
+      // JSON Schema validation via @cfworker/json-schema (no AJV compile step).
+      jsonSchemaValidator: new CfWorkerJsonSchemaValidator(),
+    },
+  );
 
   registerAllTools(server, client);
 

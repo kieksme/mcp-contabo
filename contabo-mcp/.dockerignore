@@ -1,0 +1,13 @@
+node_modules
+.pnpm-store
+dist
+evaluations
+openapi
+.env
+.env.*
+*.md
+.vscode
+.cursor
+.git
+Dockerfile
+.dockerignore

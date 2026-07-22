@@ -41,6 +41,14 @@ Custom `CONTABO_API_BASE_URL` / `CONTABO_AUTH_URL` values must use Contabo hostn
 - API credentials are never written to tool responses.
 - Secret and S3 credential values are redacted in MCP tool output (see `src/utils/response.ts`).
 
+## JSON Schema validation (no AJV / eval)
+
+The published `dist/index.js` is an **esbuild bundle** that uses the MCP SDK’s **`CfWorkerJsonSchemaValidator`** ([`@cfworker/json-schema`](https://www.npmjs.com/package/@cfworker/json-schema)), which does not compile schemas with `new Function` / `eval`.
+
+**`ajv` is not a runtime dependency** of the published package. Older versions pulled `ajv@8` from `@modelcontextprotocol/sdk` (Socket flagged `dist/compile/index.js` as dynamic code execution). That path is not shipped in current builds.
+
+Development uses a **pnpm patch** on `@modelcontextprotocol/sdk` (lazy AJV load + AJV moved to optional peers) for contributors running from source.
+
 ## Socket.dev alerts
 
 [Socket](https://socket.dev/npm/package/@kieksme/contabo-mcp) may flag this package for:
@@ -52,7 +60,21 @@ Custom `CONTABO_API_BASE_URL` / `CONTABO_AUTH_URL` values must use Contabo hostn
 | URL strings                       | Default Contabo API/auth URLs in code |
 | Copyleft / non-permissive license | Package is **GPL-3.0-or-later**       |
 
-These are **expected** for an API client under GPL. Dependency alerts: only `@modelcontextprotocol/sdk` and `zod`; no known malware in the tree at publish time.
+These are **expected** for an API client under GPL. Published runtime dependencies are `@cfworker/json-schema` and `zod` only.
+
+### Unstable ownership (`type-is`, `content-type`, author `blakeembrey`)
+
+Socket may flag **unstable ownership** / **new author** on [`type-is@2.1.0`](https://www.npmjs.com/package/type-is) and [`content-type@2.0.0`](https://www.npmjs.com/package/content-type) because new maintainers published those major versions in May 2026. That is a Socket supply-chain heuristic, not proof of malware. Both packages are maintained Express.js ecosystem utilities.
+
+Typical chain when `@modelcontextprotocol/sdk` is a production dependency:
+
+```text
+@modelcontextprotocol/sdk → express → body-parser / type-is → content-type@2.0.0
+```
+
+**On releases after the esbuild bundle change:** neither package is installed with `@kieksme/contabo-mcp` (no `express` / MCP SDK in `package.json` `dependencies`). Older npm versions (e.g. `1.3.0`) still list `@modelcontextprotocol/sdk`, which pulls the chain above.
+
+**In this repo (dev only):** `type-is@2.1.0` and `content-type@2.0.0` may still appear in `pnpm-lock.yaml` via `@modelcontextprotocol/sdk` (devDependency). Set Socket alert `unstableOwnership` to **Monitor** for the repo if needed.
 
 ## Reporting vulnerabilities
 

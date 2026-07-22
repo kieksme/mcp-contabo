@@ -18,7 +18,11 @@ MCP (Model Context Protocol) server for the [Contabo API](https://api.contabo.co
 
 This package is an API client: it reads `CONTABO_*` environment variables and calls Contabo over HTTPS only. Outbound hosts are restricted to `*.contabo.com` unless `CONTABO_ALLOW_CUSTOM_HOSTS=true` (staging). See [SECURITY.md](SECURITY.md) for the full allowlist and reporting process.
 
-The [Socket.dev](https://socket.dev/npm/package/@kieksme/contabo-mcp) badge may show **network access**, **environment variable access**, **URL strings**, and **GPL license** alerts — these are intentional for this package type, not indicators of malware. Dependency CVEs are tracked via `pnpm audit` in CI.
+The [Socket.dev](https://socket.dev/npm/package/@kieksme/contabo-mcp) badge may show **network access**, **environment variable access**, **URL strings**, and **GPL license** alerts — these are intentional for this package type, not indicators of malware.
+
+Published builds bundle the MCP server with **`@cfworker/json-schema`** for protocol validation (no **`ajv`** / no schema compile via `new Function`). A previous Socket **“uses eval”** alert came from transitive `ajv@8` on older releases.
+
+Socket **unstable ownership** on `type-is@2.1.0` / `content-type@2.0.0` applies to older npm releases that still depended on `@modelcontextprotocol/sdk` (and thus `express`). Current builds only declare `@cfworker/json-schema` and `zod`. Dependency CVEs are tracked via `pnpm audit` in CI.
 
 ## Tool annotations
 
@@ -197,6 +201,29 @@ npx -y --package=git+https://github.com/kieksme/mcp-contabo.git#main contabo-mcp
 ## Evaluations
 
 Read-only evaluation scenarios for agent testing live in [`evaluations/contabo.eval.xml`](evaluations/contabo.eval.xml). Regenerate answers against your account when adding live-data questions.
+
+## Remote deployment (HTTP)
+
+The published npm CLI is stdio-only. For a hosted, multi-client setup the Docker image runs the
+same server over the MCP **Streamable HTTP** transport (`dist/http.js`) instead of stdio.
+
+- Endpoint: `POST https://<host>/mcp` (Streamable HTTP); unauthenticated `GET /health` for probes.
+- Auth: a bearer token is **required** — set `MCP_HTTP_AUTH_TOKEN` and send
+  `Authorization: Bearer <token>`. The server refuses to start without it (fail-closed).
+- Config: the same `CONTABO_*` environment variables as the stdio server (see `.env.example`).
+- Image: built and pushed to `ghcr.io/kieksme/contabo-mcp` by the `Docker image (GHCR)` workflow
+  (on version tags or manual dispatch). Container listens on port `3000` (`PORT` overridable).
+
+Run locally:
+
+```bash
+docker build -t contabo-mcp .
+docker run --rm -p 3000:3000 \
+  -e MCP_HTTP_AUTH_TOKEN=<strong-random-token> \
+  -e CONTABO_CLIENT_ID=... -e CONTABO_CLIENT_SECRET=... \
+  -e CONTABO_API_USER=... -e CONTABO_API_PASSWORD=... \
+  contabo-mcp
+```
 
 ## Contributing
 
