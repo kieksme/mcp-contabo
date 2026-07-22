@@ -171,6 +171,25 @@ npm install -g @kieksme/contabo-mcp
 contabo-mcp
 ```
 
+## Install from GitHub Packages (alternative)
+
+The same package is also mirrored to [GitHub Packages](https://github.com/orgs/kieksme/packages?repo_name=mcp-contabo). npm remains the recommended source — GitHub Packages requires authentication **even for public packages**, so it is only worth using if your organization already standardizes on GitHub Packages.
+
+1. Create a GitHub [personal access token (classic)](https://github.com/settings/tokens) with the `read:packages` scope.
+2. Point the `@kieksme` scope at GitHub Packages in your `~/.npmrc`:
+
+   ```ini
+   @kieksme:registry=https://npm.pkg.github.com
+   //npm.pkg.github.com/:_authToken=${GITHUB_TOKEN}
+   ```
+
+   (Set `GITHUB_TOKEN` in your environment, or inline the token value.)
+3. Install as usual:
+
+   ```bash
+   npm install @kieksme/contabo-mcp     # or: npm install -g @kieksme/contabo-mcp
+   ```
+
 ## Install from GitHub (alternative)
 
 Without npm, install from the repository (first run builds the package; requires pnpm via Corepack on Node 20+):

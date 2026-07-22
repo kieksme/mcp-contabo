@@ -117,7 +117,7 @@ Releases are automated with [release-please](https://github.com/googleapis/relea
 2. The [Release Please workflow](https://github.com/kieksme/mcp-contabo/actions/workflows/release-please.yml) opens or updates a release PR (title like `chore(main): release 1.0.3`).
 3. Review the PR (version bump in [`contabo-mcp/package.json`](contabo-mcp/package.json) and [`contabo-mcp/CHANGELOG.md`](contabo-mcp/CHANGELOG.md)).
 4. Merge the release PR. Release Please creates a Git tag **without** a `v` prefix (e.g. `1.0.3`).
-5. The same [Release Please workflow](https://github.com/kieksme/mcp-contabo/actions/workflows/release-please.yml) run then calls the [publish workflow](https://github.com/kieksme/mcp-contabo/actions/workflows/publish.yml): tests, npm publish to [npmjs.com](https://www.npmjs.com/package/@kieksme/contabo-mcp) (OIDC), and a GitHub Release from `contabo-mcp/CHANGELOG.md`.
+5. The same [Release Please workflow](https://github.com/kieksme/mcp-contabo/actions/workflows/release-please.yml) run then calls the [publish workflow](https://github.com/kieksme/mcp-contabo/actions/workflows/publish.yml): tests, npm publish to [npmjs.com](https://www.npmjs.com/package/@kieksme/contabo-mcp) (OIDC), publish to [GitHub Packages](https://github.com/orgs/kieksme/packages?repo_name=mcp-contabo), and a GitHub Release from `contabo-mcp/CHANGELOG.md`.
 
    Release Please creates the Git tag and GitHub Release, then dispatches [`publish.yml`](.github/workflows/publish.yml) via `workflow_dispatch` (outputs `contabo-mcp--release_created` / `contabo-mcp--tag_name`). Tags created by GitHub Actions do not trigger separate workflows; do not rely on `push: tags` alone.
 
@@ -152,6 +152,14 @@ After the package exists on npm, CI publishes via OIDC. **Do not** keep a long-l
 4. Re-run the [Release workflow](https://github.com/kieksme/mcp-contabo/actions/workflows/publish.yml) or push the version tag again.
 
 Requirements: GitHub-hosted runners, Node **24** (release job), npm CLI **11.5.1+** via `npx npm@11.5.1`. The package `repository.url` in `package.json` must match this GitHub repo.
+
+### GitHub Packages (secondary registry)
+
+Every release also publishes the package to [GitHub Packages](https://github.com/orgs/kieksme/packages?repo_name=mcp-contabo) via the `publish-github` job in [`publish.yml`](.github/workflows/publish.yml). This is a **secondary mirror** — [npmjs.com](https://www.npmjs.com/package/@kieksme/contabo-mcp) stays the recommended install path (frictionless `npx`, no auth). GitHub Packages requires consumers to authenticate even for public packages (see [`contabo-mcp/README.md`](contabo-mcp/README.md#install-from-github-packages-alternative)).
+
+- No extra secrets are needed: the job authenticates with the built-in `GITHUB_TOKEN` and `packages: write` permission (same pattern as the GHCR Docker publish).
+- The job runs in parallel with `publish-npm` (both `needs: validate`), so a GitHub Packages failure never blocks the npmjs.org release. It is **not** best-effort — a failure marks the workflow run as failed for visibility.
+- npm [provenance](https://docs.npmjs.com/generating-provenance-statements) is disabled for this target (`NPM_CONFIG_PROVENANCE=false`) because GitHub Packages does not support it, while `contabo-mcp/package.json` sets `publishConfig.provenance: true` for the npmjs.org publish.
 
 ### First publish (package not on npm yet)
 

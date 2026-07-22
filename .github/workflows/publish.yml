@@ -105,3 +105,47 @@ jobs:
         env:
           NPM_CONFIG_REGISTRY: https://registry.npmjs.org
         run: npx --yes npm@11.5.1 publish --access public --provenance
+
+  # Second, independent target: publish the same package to GitHub Packages
+  # (npm.pkg.github.com). Runs in parallel with publish-npm (both `needs: validate`),
+  # so a GitHub Packages failure never blocks the npmjs.org release.
+  # npmjs.org stays the primary/recommended install path; GitHub Packages is a mirror.
+  publish-github:
+    needs: validate
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write # publish npm package to GitHub Packages
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ format('refs/tags/{0}', inputs.tag || github.event.inputs.tag || github.ref_name) }}
+
+      - name: Install pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 10.33.3
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "24"
+          registry-url: https://npm.pkg.github.com
+          scope: "@kieksme"
+          cache: pnpm
+          cache-dependency-path: contabo-mcp/pnpm-lock.yaml
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Build
+        run: pnpm run build
+
+      - name: Publish to GitHub Packages
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          # GitHub Packages does not support npm provenance (Sigstore); package.json
+          # sets publishConfig.provenance:true, so it must be disabled explicitly here.
+          NPM_CONFIG_PROVENANCE: "false"
+        run: npx --yes npm@11.5.1 publish --registry https://npm.pkg.github.com
