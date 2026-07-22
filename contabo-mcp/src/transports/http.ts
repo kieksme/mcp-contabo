@@ -132,10 +132,13 @@ export function createHttpRequestHandler(
     req: IncomingMessage,
     res: ServerResponse,
   ): Promise<void> {
-    const url = new URL(
-      req.url ?? "/",
-      `http://${req.headers.host ?? "localhost"}`,
-    );
+    let url: URL;
+    try {
+      url = new URL(req.url ?? "/", "http://localhost");
+    } catch {
+      jsonRpcError(res, 400, -32000, "Bad Request: invalid URL");
+      return;
+    }
 
     // Unauthenticated liveness/health probe — checked before the path/auth gates.
     if (req.method === "GET" && url.pathname === "/health") {
