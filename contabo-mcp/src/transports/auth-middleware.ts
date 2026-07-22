@@ -19,6 +19,9 @@ export function isAuthorized(
   if (typeof header !== "string" || !header.startsWith(BEARER_PREFIX)) {
     return false;
   }
+  if (!expectedToken) {
+    return false;
+  }
 
   const presented = Buffer.from(header.slice(BEARER_PREFIX.length));
   const expected = Buffer.from(expectedToken);
