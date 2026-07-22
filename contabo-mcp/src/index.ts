@@ -1,24 +1,23 @@
 #!/usr/bin/env node
-import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { StdioServerTransport } from "@modelcontextprotocol/sdk/server/stdio.js";
-import { ContaboAuth } from "./auth.js";
-import { ContaboClient } from "./client.js";
 import { loadConfig } from "./config.js";
-import { registerAllTools } from "./tools/register-all.js";
-import { loadPackageVersion } from "./version.js";
+import { loadServerConfig } from "./config/server-config.js";
+import { createContaboServer } from "./server.js";
+import { startHttpServer } from "./transports/http.js";
 
 async function main(): Promise<void> {
-  const config = loadConfig();
-  const auth = new ContaboAuth(config);
-  const client = new ContaboClient(config, auth);
+  const serverConfig = loadServerConfig();
 
-  const server = new McpServer({
-    name: "contabo-mcp",
-    version: loadPackageVersion(),
-  });
+  if (serverConfig.transport === "http") {
+    // Fail fast: validate Contabo credentials at startup rather than on the
+    // first request, so a misconfigured deployment never starts listening.
+    loadConfig();
+    await startHttpServer(serverConfig);
+    return;
+  }
 
-  registerAllTools(server, client);
-
+  // Default: stdio — unchanged behavior.
+  const server = createContaboServer();
   const transport = new StdioServerTransport();
   await server.connect(transport);
 }
