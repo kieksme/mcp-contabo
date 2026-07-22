@@ -68,7 +68,11 @@ export function createHttpRequestHandler(
     let body: unknown;
     try {
       body = await readJsonBody(req);
-    } catch {
+    } catch (error) {
+      if (error instanceof Error && error.message === "payload too large") {
+        jsonRpcError(res, 413, -32000, "Payload Too Large");
+        return;
+      }
       jsonRpcError(res, 400, -32700, "Parse error");
       return;
     }
