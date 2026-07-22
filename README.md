@@ -37,4 +37,43 @@ Set `CONTABO_CLIENT_ID`, `CONTABO_CLIENT_SECRET`, `CONTABO_API_USER`, and `CONTA
 }
 ```
 
+## Remote MCP (HTTP)
+
+Besides stdio, the server runs as a **remote MCP over Streamable HTTP** with Bearer-token auth — the mode used in Docker. Select it via `MCP_TRANSPORT=http` (default is `stdio`, fully backward compatible).
+
+Run the published image from GHCR:
+
+```bash
+docker run --rm -p 3000:3000 \
+  -e MCP_TRANSPORT=http \
+  -e MCP_AUTH_TOKEN="$(openssl rand -hex 32)" \
+  -e CONTABO_CLIENT_ID=... -e CONTABO_CLIENT_SECRET=... \
+  -e CONTABO_API_USER=... -e CONTABO_API_PASSWORD=... \
+  ghcr.io/kieksme/contabo-mcp:latest
+```
+
+The server listens on `http://localhost:3000/`; `GET /health` returns `{"status":"ok"}` (unauthenticated) for orchestrator probes. The `CONTABO_*` credentials are still required — the HTTP transport only changes how clients reach the server, not how it authenticates to Contabo.
+
+Connect an MCP client (present the `MCP_AUTH_TOKEN` as a Bearer token):
+
+```json
+{
+  "mcpServers": {
+    "contabo-remote": {
+      "type": "streamable-http",
+      "url": "https://your-host:3000/",
+      "headers": { "Authorization": "Bearer <MCP_AUTH_TOKEN>" }
+    }
+  }
+}
+```
+
+For stdio-only clients, bridge with [`mcp-remote`](https://www.npmjs.com/package/mcp-remote):
+
+```bash
+npx -y mcp-remote https://your-host:3000/ --header "Authorization: Bearer <MCP_AUTH_TOKEN>"
+```
+
+**Security:** the server speaks plain HTTP — terminate TLS at a reverse proxy / ingress and never expose the raw port unencrypted. Beyond localhost, enable `MCP_HTTP_DNS_REBINDING_PROTECTION=true` with `MCP_HTTP_ALLOWED_HOSTS`. See [Remote HTTP transport (Docker)](contabo-mcp/README.md#remote-http-transport-docker) in the package README for all `MCP_*` variables, Docker Compose, and scaling notes.
+
 See [`contabo-mcp/README.md`](contabo-mcp/README.md) for the full tool list and install options. To develop or release, see [CONTRIBUTING.md](CONTRIBUTING.md). Releases on `main` are proposed by [release-please](https://github.com/googleapis/release-please) via pull request.
