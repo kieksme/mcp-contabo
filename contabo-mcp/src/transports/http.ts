@@ -85,23 +85,24 @@ export function createHttpRequestHandler(
     } else if (!sessionId && isInitializeRequest(body)) {
       // New session: create a dedicated transport + server pair.
       const server = createContaboServer();
-      transport = new StreamableHTTPServerTransport({
+      const newTransport = new StreamableHTTPServerTransport({
         sessionIdGenerator: () => randomUUID(),
         enableDnsRebindingProtection: config.dnsRebindingProtection,
         allowedHosts: config.allowedHosts,
         allowedOrigins: config.allowedOrigins,
         onsessioninitialized: (sid) => {
-          transports.set(sid, transport as StreamableHTTPServerTransport);
+          transports.set(sid, newTransport);
         },
       });
-      transport.onclose = () => {
-        const sid = transport?.sessionId;
+      newTransport.onclose = () => {
+        const sid = newTransport.sessionId;
         if (sid) {
           transports.delete(sid);
         }
         void server.close();
       };
-      await server.connect(transport);
+      await server.connect(newTransport);
+      transport = newTransport;
     } else {
       jsonRpcError(
         res,
