@@ -8,6 +8,7 @@ MCP (Model Context Protocol) server for the [Contabo API](https://api.contabo.co
 ## Features
 
 - **115 tools** with `contabo_*` naming
+- Two transports: **stdio** (default) and **remote Streamable HTTP** with Bearer-token auth (Docker-ready — see [Remote HTTP transport](#remote-http-transport-docker))
 - OAuth2 password grant (or static bearer token for development)
 - Automatic `x-request-id` per request and token refresh on 401
 - Secret value redaction in tool responses (secrets and S3 credentials)
@@ -193,6 +194,76 @@ Without npm, install from the repository (first run builds the package; requires
 ```bash
 npx -y --package=git+https://github.com/kieksme/mcp-contabo.git#main contabo-mcp
 ```
+
+## Remote HTTP transport (Docker)
+
+Besides stdio, the server can run as a **remote MCP over Streamable HTTP**, authenticated with a Bearer token. This is the mode used in Docker. Behavior is selected via `MCP_TRANSPORT` (default `stdio`, fully backward compatible).
+
+### Configuration
+
+| Variable | Default | Description |
+|---|---|---|
+| `MCP_TRANSPORT` | `stdio` | `stdio` or `http`. |
+| `MCP_AUTH_TOKEN` | — | **Required** in `http` mode. Bearer token clients must present. Generate with `openssl rand -hex 32`. |
+| `MCP_HTTP_HOST` | `0.0.0.0` | Bind address. `0.0.0.0` inside containers; use `127.0.0.1` for local-only. |
+| `MCP_HTTP_PORT` | `3000` | Listen port. |
+| `MCP_HTTP_PATH` | `/` | MCP endpoint path. |
+| `MCP_HTTP_DNS_REBINDING_PROTECTION` | `false` | Enable `Host`/`Origin` validation (recommended beyond localhost). |
+| `MCP_HTTP_ALLOWED_HOSTS` | — | Comma-separated allowed `Host` values (used when protection is on). |
+| `MCP_HTTP_ALLOWED_ORIGINS` | — | Comma-separated allowed `Origin` values. |
+
+The Contabo API credentials (`CONTABO_*`) are still required — the HTTP transport only changes how MCP clients reach the server, not how it authenticates to Contabo.
+
+### Run with Docker Compose
+
+```bash
+cp .env.example .env      # fill in CONTABO_* and set MCP_AUTH_TOKEN
+docker compose up --build
+```
+
+The server listens on `http://localhost:3000/`. An unauthenticated `GET /health` returns `{"status":"ok"}` for container/orchestrator probes.
+
+### Pull the published image (GHCR)
+
+Released versions are published to the GitHub Container Registry as public images, tagged with the version number (and `latest` for the newest release):
+
+```bash
+docker run --rm -p 3000:3000 \
+  -e MCP_AUTH_TOKEN=... \
+  -e CONTABO_CLIENT_ID=... -e CONTABO_CLIENT_SECRET=... \
+  -e CONTABO_API_USER=... -e CONTABO_API_PASSWORD=... \
+  ghcr.io/kieksme/contabo-mcp:latest        # or :1.4.0
+```
+
+> **Maintainers:** a GHCR package is private on first publish. Set its visibility to **public** once under the package settings (`https://github.com/users/kieksme/packages/container/contabo-mcp/settings`).
+
+### Connect an MCP client
+
+```json
+{
+  "mcpServers": {
+    "contabo-remote": {
+      "type": "streamable-http",
+      "url": "https://your-host:3000/",
+      "headers": { "Authorization": "Bearer <MCP_AUTH_TOKEN>" }
+    }
+  }
+}
+```
+
+For stdio-only clients, bridge with [`mcp-remote`](https://www.npmjs.com/package/mcp-remote):
+
+```bash
+npx -y mcp-remote https://your-host:3000/ --header "Authorization: Bearer <MCP_AUTH_TOKEN>"
+```
+
+Clients must send `Accept: application/json, text/event-stream`; a plain `curl` without it gets `406`.
+
+### Security notes
+
+- **TLS:** the server speaks plain HTTP. Terminate TLS at a reverse proxy / ingress and never expose the raw port to the internet unencrypted.
+- **Scaling:** sessions are held in-memory (stateful). Behind multiple replicas, enable **sticky sessions** at the load balancer so a client stays on the instance that holds its `Mcp-Session-Id`.
+- Enable `MCP_HTTP_DNS_REBINDING_PROTECTION` with `MCP_HTTP_ALLOWED_HOSTS` for any deployment reachable beyond localhost.
 
 ## Evaluations
 

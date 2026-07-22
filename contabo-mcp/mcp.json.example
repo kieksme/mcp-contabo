@@ -33,6 +33,23 @@
         "CONTABO_API_USER": "",
         "CONTABO_API_PASSWORD": ""
       }
+    },
+    "contabo-remote": {
+      "type": "streamable-http",
+      "url": "https://your-host:3000/",
+      "headers": {
+        "Authorization": "Bearer <MCP_AUTH_TOKEN>"
+      }
+    },
+    "contabo-remote-bridge": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "mcp-remote",
+        "https://your-host:3000/",
+        "--header",
+        "Authorization: Bearer <MCP_AUTH_TOKEN>"
+      ]
     }
   }
 }

@@ -42,3 +42,21 @@ jobs:
             --ref main \
             -f "tag=${TAG}"
           echo "Dispatched publish.yml for tag ${TAG}"
+
+  # Same rationale as trigger-publish: a GITHUB_TOKEN-pushed tag does not fire
+  # push-triggered workflows, so dispatch the GHCR build explicitly.
+  trigger-docker:
+    needs: release-please
+    if: ${{ needs.release-please.outputs.release_created == 'true' && needs.release-please.outputs.tag_name != '' }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Dispatch Docker Publish (docker-publish.yml)
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          TAG: ${{ needs.release-please.outputs.tag_name }}
+        run: |
+          gh workflow run docker-publish.yml \
+            --repo "${{ github.repository }}" \
+            --ref main \
+            -f "tag=${TAG}"
+          echo "Dispatched docker-publish.yml for tag ${TAG}"

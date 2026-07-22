@@ -1,0 +1,32 @@
+# Remote Contabo MCP server over Streamable HTTP.
+#
+# Secrets are read from the host environment or a sibling .env file (git-ignored) —
+# never hardcode them here. The ${VAR:?} form fails fast if a required value is missing.
+#
+#   cp .env.example .env   # fill in CONTABO_* and set MCP_AUTH_TOKEN
+#   docker compose up --build
+
+services:
+  contabo-mcp:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: ghcr.io/kieksme/contabo-mcp:latest
+    ports:
+      - "3000:3000"
+    environment:
+      MCP_TRANSPORT: http
+      MCP_HTTP_HOST: 0.0.0.0
+      MCP_HTTP_PORT: "3000"
+      MCP_HTTP_PATH: /
+      # Bearer token clients must present as `Authorization: Bearer <token>`.
+      MCP_AUTH_TOKEN: ${MCP_AUTH_TOKEN:?set MCP_AUTH_TOKEN (e.g. openssl rand -hex 32)}
+      # Contabo API credentials (see README#obtaining-api-credentials).
+      CONTABO_CLIENT_ID: ${CONTABO_CLIENT_ID:?}
+      CONTABO_CLIENT_SECRET: ${CONTABO_CLIENT_SECRET:?}
+      CONTABO_API_USER: ${CONTABO_API_USER:?}
+      CONTABO_API_PASSWORD: ${CONTABO_API_PASSWORD:?}
+      # Optional hardening for deployments reachable beyond localhost:
+      # MCP_HTTP_DNS_REBINDING_PROTECTION: "true"
+      # MCP_HTTP_ALLOWED_HOSTS: mcp.example.com
+    restart: unless-stopped
