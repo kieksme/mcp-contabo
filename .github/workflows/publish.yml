@@ -148,4 +148,4 @@ jobs:
           # GitHub Packages does not support npm provenance (Sigstore); package.json
           # sets publishConfig.provenance:true, so it must be disabled explicitly here.
           NPM_CONFIG_PROVENANCE: "false"
-        run: npx --yes npm@11.5.1 publish --registry https://npm.pkg.github.com
+        run: npx --yes npm@11.5.1 publish --registry https://npm.pkg.github.com --provenance=false
