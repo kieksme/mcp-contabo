@@ -5,6 +5,13 @@ All notable changes to this project are documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.5.0](https://github.com/kieksme/mcp-contabo/compare/1.4.0...1.5.0) (2026-07-22)
+
+
+### Added
+
+* add remote Streamable HTTP transport with bearer auth and Docker/GHCR publishing ([b8f3e0e](https://github.com/kieksme/mcp-contabo/commit/b8f3e0e3ed4ecb4246f426ccdd476da76ed53adc))
+
 ## [1.4.0](https://github.com/kieksme/mcp-contabo/compare/1.3.0...1.4.0) (2026-07-17)
 
 
