@@ -5,6 +5,18 @@ All notable changes to this project are documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.5.1](https://github.com/kieksme/mcp-contabo/compare/1.5.0...1.5.1) (2026-07-22)
+
+
+### Fixed
+
+* **deps:** patch transitive CVEs to raise Socket.dev score ([713f24d](https://github.com/kieksme/mcp-contabo/commit/713f24da13ee208fb980ba64a92c075d226b1213))
+
+
+### Changed
+
+* also publish npm package to GitHub Packages ([cfb9b8e](https://github.com/kieksme/mcp-contabo/commit/cfb9b8ec49e747e29f7a733d0f3a92a1dc056de0))
+
 ## [1.5.0](https://github.com/kieksme/mcp-contabo/compare/1.4.0...1.5.0) (2026-07-22)
 
 
