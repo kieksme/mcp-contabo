@@ -9,6 +9,10 @@ function reqWith(authorization?: string): IncomingMessage {
 describe("isAuthorized", () => {
   const token = "s3cr3t-token";
 
+  it("returns false when the expected token is empty", () => {
+    expect(isAuthorized(reqWith("Bearer "), "")).toBe(false);
+  });
+
   it("returns false when the Authorization header is missing", () => {
     expect(isAuthorized(reqWith(), token)).toBe(false);
   });
