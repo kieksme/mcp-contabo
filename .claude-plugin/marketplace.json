@@ -1,0 +1,14 @@
+{
+  "name": "mcp-contabo",
+  "owner": {
+    "name": "kieksme"
+  },
+  "description": "Contabo cloud API MCP server",
+  "plugins": [
+    {
+      "name": "contabo-mcp",
+      "source": "./contabo-mcp",
+      "description": "Manage Contabo VPS/VDS instances, images, snapshots, networking, DNS, object storage, secrets, domains, and tags."
+    }
+  ]
+}

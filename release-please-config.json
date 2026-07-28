@@ -12,6 +12,13 @@
       "pull-request-title-pattern": "chore${scope}: release ${version}",
       "skip-github-release": false,
       "force-tag-creation": true,
+      "extra-files": [
+        {
+          "type": "json",
+          "path": "contabo-mcp/.claude-plugin/plugin.json",
+          "jsonpath": "$.version"
+        }
+      ],
       "changelog-sections": [
         { "type": "feat", "section": "Added" },
         { "type": "feature", "section": "Added" },

@@ -77,3 +77,23 @@ npx -y mcp-remote https://your-host:3000/ --header "Authorization: Bearer <MCP_A
 **Security:** the server speaks plain HTTP — terminate TLS at a reverse proxy / ingress and never expose the raw port unencrypted. Beyond localhost, enable `MCP_HTTP_DNS_REBINDING_PROTECTION=true` with `MCP_HTTP_ALLOWED_HOSTS`. See [Remote HTTP transport (Docker)](contabo-mcp/README.md#remote-http-transport-docker) in the package README for all `MCP_*` variables, Docker Compose, and scaling notes.
 
 See [`contabo-mcp/README.md`](contabo-mcp/README.md) for the full tool list and install options. To develop or release, see [CONTRIBUTING.md](CONTRIBUTING.md). Releases on `main` are proposed by [release-please](https://github.com/googleapis/release-please) via pull request.
+
+## Install as a Claude Code plugin
+
+```shell
+/plugin marketplace add kieksme/mcp-contabo
+/plugin install contabo-mcp@mcp-contabo
+```
+
+Claude Code prompts you for the four Contabo API credentials when you enable the plugin and stores them in the OS credential store rather than in plaintext config files — no manual `.mcp.json` editing needed.
+
+## MCP Market
+
+List this server on [MCP Market](https://mcpmarket.com) so others can discover it when searching for Contabo or cloud hosting tools.
+
+1. Open **[Submit an MCP Server](https://mcpmarket.com/submit)**.
+2. Choose **MCP Server** (not Agent Skill).
+3. Paste the repository URL: `https://github.com/kieksme/mcp-contabo`
+4. Submit and wait for review.
+
+After approval, the listing appears in [MCP Market search](https://mcpmarket.com/search?q=contabo).

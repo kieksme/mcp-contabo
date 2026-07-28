@@ -108,6 +108,15 @@ After saving config, restart the MCP client (or reload MCP servers in Cursor). A
 
 Do not commit `.env` or paste secrets into chat, issues, or screenshots.
 
+## Install as a Claude Code plugin
+
+```shell
+/plugin marketplace add kieksme/mcp-contabo
+/plugin install contabo-mcp@mcp-contabo
+```
+
+Claude Code prompts you for the four credentials from [Obtaining API credentials](#obtaining-api-credentials) above when you enable the plugin and stores them in the OS credential store (or a Claude-managed fallback on platforms without one) rather than in a plaintext `.mcp.json` or settings file. Runs the same published npm package under the hood via `npx`.
+
 ## Install from npm (recommended)
 
 Published as [`@kieksme/contabo-mcp`](https://www.npmjs.com/package/@kieksme/contabo-mcp) on npm under the [kieksme](https://www.npmjs.com/settings/kieksme/packages) account. No clone and no build step required.
