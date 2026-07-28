@@ -5,6 +5,13 @@ All notable changes to this project are documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.5.2](https://github.com/kieksme/mcp-contabo/compare/1.5.1...1.5.2) (2026-07-28)
+
+
+### Changed
+
+* fix inaccurate credential storage claim in plugin install docs ([d36a9cb](https://github.com/kieksme/mcp-contabo/commit/d36a9cbac6e1ee9b89a97d296f69c3254fd385f4))
+
 ## [1.5.1](https://github.com/kieksme/mcp-contabo/compare/1.5.0...1.5.1) (2026-07-22)
 
 
