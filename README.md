@@ -85,7 +85,7 @@ See [`contabo-mcp/README.md`](contabo-mcp/README.md) for the full tool list and 
 /plugin install contabo-mcp@mcp-contabo
 ```
 
-Claude Code prompts you for the four Contabo API credentials when you enable the plugin and stores them encrypted (not in plaintext config files) — no manual `.mcp.json` editing needed.
+Claude Code prompts you for the four Contabo API credentials when you enable the plugin and stores them in the OS credential store rather than in plaintext config files — no manual `.mcp.json` editing needed.
 
 ## MCP Market
 

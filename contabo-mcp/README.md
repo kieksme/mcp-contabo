@@ -115,7 +115,7 @@ Do not commit `.env` or paste secrets into chat, issues, or screenshots.
 /plugin install contabo-mcp@mcp-contabo
 ```
 
-Claude Code prompts you for the four credentials from [Obtaining API credentials](#obtaining-api-credentials) above when you enable the plugin and stores them encrypted (macOS Keychain or `~/.claude/.credentials.json`) instead of plaintext in a config file. Runs the same published npm package under the hood via `npx`.
+Claude Code prompts you for the four credentials from [Obtaining API credentials](#obtaining-api-credentials) above when you enable the plugin and stores them in the OS credential store (or a Claude-managed fallback on platforms without one) rather than in a plaintext `.mcp.json` or settings file. Runs the same published npm package under the hood via `npx`.
 
 ## Install from npm (recommended)
 
