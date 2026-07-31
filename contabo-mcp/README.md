@@ -265,6 +265,42 @@ docker run --rm -p 3000:3000 \
 
 > **Maintainers:** a GHCR package is private on first publish. Set its visibility to **public** once under the package settings (`https://github.com/users/kieksme/packages/container/contabo-mcp/settings`).
 
+### Deploy on Railway
+
+`railway.json` in this directory carries the [Config as Code](https://docs.railway.com/config-as-code/reference) settings (Dockerfile builder, `/health` healthcheck, restart policy) so [Railway](https://railway.com) picks up the same image the Docker Compose and GHCR flows above use.
+
+Manual deploy:
+
+1. On [railway.com/new](https://railway.com/new), choose **Deploy from GitHub repo** and pick `kieksme/mcp-contabo`.
+2. Service **Settings**:
+   - **Root Directory**: `contabo-mcp` — this repo is a pnpm monorepo, so Railway must build from the package directory, not the repo root.
+   - **Config File Path**: `/contabo-mcp/railway.json` — this path is always relative to the repo root and ignores Root Directory (see [monorepo config-as-code](https://docs.railway.com/deployments/monorepo#deploying-an-isolated-monorepo)).
+   - **Networking → Public Networking**: Generate Domain, target port `3000`.
+3. Service **Variables** — the four `CONTABO_*` credentials (see [Obtaining API credentials](#obtaining-api-credentials)) plus:
+   ```
+   MCP_TRANSPORT=http
+   MCP_HTTP_HOST=0.0.0.0
+   MCP_HTTP_PORT=3000
+   MCP_AUTH_TOKEN=<random value, e.g. `openssl rand -hex 32`>
+   ```
+4. Deploy, then point an MCP client at `https://<your-domain>.up.railway.app/` with `Authorization: Bearer <MCP_AUTH_TOKEN>` — see [Connect an MCP client](#connect-an-mcp-client) below.
+
+**Scaling:** keep replicas at `1`. Sessions are held in-memory (see [Security notes](#security-notes)) and Railway does not provide sticky sessions across replicas for Streamable HTTP.
+
+#### Publishing this as a Railway template (maintainers)
+
+Turning the manual deploy above into a one-click marketplace template is a dashboard-only action — Railway's CLI/API does not expose template creation, so it can't be scripted:
+
+1. Deploy manually once (steps above) and confirm `/health` responds and an MCP client can connect through the generated domain.
+2. On that project: **Settings → Generate Template from Project** (or start fresh under [Templates → New Template](https://railway.com/workspace/templates)).
+3. In the template composer, on the `contabo-mcp` service:
+   - Keep **Root Directory** = `contabo-mcp` and **Config File Path** = `/contabo-mcp/railway.json`.
+   - Replace the four `CONTABO_*` values with empty, marked-**required** template variables — never bake real credentials into a published template.
+   - Set `MCP_AUTH_TOKEN` to the template variable function `${{secret(64, "abcdef0123456789")}}` so each deploy gets its own random token instead of a shared default.
+   - Confirm **Public Networking** (HTTP, port `3000`) and **Healthcheck Path** (`/health`) are set.
+4. **Create Template**, then **Publish** it from the [Templates page](https://railway.com/workspace/templates) to list it on the marketplace.
+5. Copy the resulting template URL/code and use it to build the [`Deploy on Railway` button](https://docs.railway.com/templates/publish-and-share#deploy-on-railway-button) in this README and the [root README](../README.md).
+
 ### Connect an MCP client
 
 ```json

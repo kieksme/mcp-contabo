@@ -76,6 +76,8 @@ npx -y mcp-remote https://your-host:3000/ --header "Authorization: Bearer <MCP_A
 
 **Security:** the server speaks plain HTTP — terminate TLS at a reverse proxy / ingress and never expose the raw port unencrypted. Beyond localhost, enable `MCP_HTTP_DNS_REBINDING_PROTECTION=true` with `MCP_HTTP_ALLOWED_HOSTS`. See [Remote HTTP transport (Docker)](contabo-mcp/README.md#remote-http-transport-docker) in the package README for all `MCP_*` variables, Docker Compose, and scaling notes.
 
+Deploying to [Railway](https://railway.com) instead of Docker? See [Deploy on Railway](contabo-mcp/README.md#deploy-on-railway) in the package README — the Dockerfile and a committed `railway.json` already carry the build/healthcheck config, so it's a Root Directory + variables setup away from a running instance (and, once a maintainer publishes it, a one-click marketplace template).
+
 See [`contabo-mcp/README.md`](contabo-mcp/README.md) for the full tool list and install options. To develop or release, see [CONTRIBUTING.md](CONTRIBUTING.md). Releases on `main` are proposed by [release-please](https://github.com/googleapis/release-please) via pull request.
 
 ## Install as a Claude Code plugin
