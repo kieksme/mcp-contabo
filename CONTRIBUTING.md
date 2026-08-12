@@ -196,6 +196,10 @@ On the Socket organization dashboard, link `kieksme/mcp-contabo` and set these a
 
 Use [repository labels / security policies](https://docs.socket.dev/docs/socket-yml) on Socket (preferred over deprecated `issueRules` in `socket.yml`).
 
+### Package "Quality" score on testing devDependencies
+
+Socket scores each dependency's **Quality** separately from its Vulnerability/Supply Chain/Maintenance/License scores. `vitest` and `@vitest/coverage-v8` typically land around 75–80 on Quality — this reflects Socket's heuristics on the upstream package itself (docs/test signals in the *published* package), not anything in this repo, and it is unrelated to the Vulnerability/Supply Chain scores (which are near-perfect for both). There is no code change here that raises it. If it shows up as a blocking alert, treat it the same as the alert types above: set it to **Monitor** on the Socket dashboard rather than pinning to a different version to chase the score.
+
 ## License
 
 By contributing, you agree that your contributions will be licensed under **GPL-3.0-or-later** (see [LICENSE](LICENSE)).
