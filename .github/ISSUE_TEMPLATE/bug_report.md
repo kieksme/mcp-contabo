@@ -1,38 +1,31 @@
 ---
 name: Bug report
-about: Create a report to help us improve
-title: ''
-labels: ''
+about: Report a problem with the Contabo MCP server
+title: '[bug]: '
+labels: bug
 assignees: ''
-
 ---
 
 **Describe the bug**
-A clear and concise description of what the bug is.
+A clear and concise description of what went wrong.
 
-**To Reproduce**
-Steps to reproduce the behavior:
-1. Go to '...'
-2. Click on '....'
-3. Scroll down to '....'
-4. See error
+**To reproduce**
+Steps to reproduce the behavior, including the exact tool call (name + arguments) if applicable:
+1. ...
+2. ...
 
 **Expected behavior**
-A clear and concise description of what you expected to happen.
+A clear and concise description of what you expected to happen instead.
 
-**Screenshots**
-If applicable, add screenshots to help explain your problem.
+**Error output / logs**
+Paste any error messages, stack traces, or relevant log output. Redact API credentials (`CONTABO_CLIENT_SECRET`, `CONTABO_API_PASSWORD`, etc.) and other secrets.
 
-**Desktop (please complete the following information):**
- - OS: [e.g. iOS]
- - Browser [e.g. chrome, safari]
- - Version [e.g. 22]
-
-**Smartphone (please complete the following information):**
- - Device: [e.g. iPhone6]
- - OS: [e.g. iOS8.1]
- - Browser [e.g. stock browser, safari]
- - Version [e.g. 22]
+**Environment**
+- `@kieksme/contabo-mcp` version: [e.g. 1.5.2]
+- MCP client: [e.g. Claude Desktop, Cursor, Claude Code]
+- Transport: [stdio / HTTP]
+- Node.js version: [e.g. 22.1.0]
+- OS: [e.g. macOS 14, Ubuntu 22.04, Windows 11]
 
 **Additional context**
 Add any other context about the problem here.
