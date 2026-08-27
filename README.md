@@ -1,6 +1,6 @@
 # Contabo MCP
 
-![kieks.me Header](https://raw.githubusercontent.com/kieksme/kieks.me.cicd/main/assets/readme-header.svg)
+![Contabo MCP](assets/readme-header.svg)
 
 [![CI](https://github.com/kieksme/mcp-contabo/actions/workflows/ci.yml/badge.svg)](https://github.com/kieksme/mcp-contabo/actions/workflows/ci.yml)
 [![npm version](https://img.shields.io/npm/v/@kieksme/contabo-mcp.svg)](https://www.npmjs.com/package/@kieksme/contabo-mcp)
