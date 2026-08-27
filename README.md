@@ -7,6 +7,8 @@
 [![Socket Badge](https://badge.socket.dev/npm/package/@kieksme/contabo-mcp)](https://socket.dev/npm/package/@kieksme/contabo-mcp)
 [![SkillAudit](https://skillaudit.dev/badge/kieksme/mcp-contabo.svg)](https://skillaudit.dev/report/kieksme/mcp-contabo)
 
+[![Install in Cursor](https://cursor.com/deeplink/mcp-install-dark.svg)](cursor://anysphere.cursor-deeplink/mcp/install?name=contabo&config=eyJjb21tYW5kIjogIm5weCIsICJhcmdzIjogWyIteSIsICJAa2lla3NtZS9jb250YWJvLW1jcCJdLCAiZW52IjogeyJDT05UQUJPX0NMSUVOVF9JRCI6ICJ5b3VyLWNsaWVudC1pZCIsICJDT05UQUJPX0NMSUVOVF9TRUNSRVQiOiAieW91ci1jbGllbnQtc2VjcmV0IiwgIkNPTlRBQk9fQVBJX1VTRVIiOiAieW91ci1hcGktdXNlckBlbWFpbC5jb20iLCAiQ09OVEFCT19BUElfUEFTU1dPUkQiOiAieW91ci1hcGktcGFzc3dvcmQifX0%3D) [![Install in VS Code](https://img.shields.io/badge/VS_Code-Install_Server-0098FF?style=flat-square&logo=visualstudiocode&logoColor=white)](vscode:mcp/install?%7B%22name%22%3A%20%22contabo%22%2C%20%22command%22%3A%20%22npx%22%2C%20%22args%22%3A%20%5B%22-y%22%2C%20%22%40kieksme%2Fcontabo-mcp%22%5D%2C%20%22env%22%3A%20%7B%22CONTABO_CLIENT_ID%22%3A%20%22your-client-id%22%2C%20%22CONTABO_CLIENT_SECRET%22%3A%20%22your-client-secret%22%2C%20%22CONTABO_API_USER%22%3A%20%22your-api-user%40email.com%22%2C%20%22CONTABO_API_PASSWORD%22%3A%20%22your-api-password%22%7D%7D)
+
 MCP server for the [Contabo](https://contabo.com/) cloud API — virtual machines, images, snapshots, networking, DNS, object storage, secrets, domains, and tags.
 
 Manage Contabo VPS/VDS instances, images, snapshots, firewalls, private networks, VIPs, DNS, S3-compatible object storage, secrets, domains, and tags from Cursor, Claude Desktop, or any MCP client. Published on npm as [`@kieksme/contabo-mcp`](https://www.npmjs.com/package/@kieksme/contabo-mcp).
