@@ -5,6 +5,16 @@ All notable changes to this project are documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.5.3](https://github.com/kieksme/mcp-contabo/compare/1.5.2...1.5.3) (2026-08-28)
+
+
+### Changed
+
+* add Cursor and VS Code install buttons to README ([a2a1f68](https://github.com/kieksme/mcp-contabo/commit/a2a1f68cc600ad2ffe7fed533087828768a21b48))
+* **contabo-mcp:** add handler coverage for tool modules ([6f78a32](https://github.com/kieksme/mcp-contabo/commit/6f78a32deb156b0202574f6213adc386eb3d8296))
+* **contabo-mcp:** add handler coverage for tool modules ([2d2f7ab](https://github.com/kieksme/mcp-contabo/commit/2d2f7ab4736acba30439d54b547ea4a689b9189b))
+* **contabo-mcp:** add Railway deploy config and template guide ([1da2f2a](https://github.com/kieksme/mcp-contabo/commit/1da2f2a62e5ef567daed56a28a503e5ab31b07d3))
+
 ## [1.5.2](https://github.com/kieksme/mcp-contabo/compare/1.5.1...1.5.2) (2026-07-28)
 
 
