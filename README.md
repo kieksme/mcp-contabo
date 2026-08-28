@@ -93,14 +93,3 @@ See [`contabo-mcp/README.md`](contabo-mcp/README.md) for the full tool list and 
 ```
 
 Claude Code prompts you for the four Contabo API credentials when you enable the plugin and stores them in the OS credential store rather than in plaintext config files — no manual `.mcp.json` editing needed.
-
-## MCP Market
-
-List this server on [MCP Market](https://mcpmarket.com) so others can discover it when searching for Contabo or cloud hosting tools.
-
-1. Open **[Submit an MCP Server](https://mcpmarket.com/submit)**.
-2. Choose **MCP Server** (not Agent Skill).
-3. Paste the repository URL: `https://github.com/kieksme/mcp-contabo`
-4. Submit and wait for review.
-
-After approval, the listing appears in [MCP Market search](https://mcpmarket.com/search?q=contabo).
