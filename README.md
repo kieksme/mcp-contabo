@@ -3,6 +3,8 @@
 [![CI](https://github.com/kieksme/mcp-contabo/actions/workflows/ci.yml/badge.svg)](https://github.com/kieksme/mcp-contabo/actions/workflows/ci.yml)
 [![npm version](https://img.shields.io/npm/v/@kieksme/contabo-mcp.svg)](https://www.npmjs.com/package/@kieksme/contabo-mcp)
 [![Socket Badge](https://badge.socket.dev/npm/package/@kieksme/contabo-mcp)](https://socket.dev/npm/package/@kieksme/contabo-mcp)
+[![AgentAvow](https://agentavow.com/api/v1/public/scan/kieksme/mcp-contabo/badge)](https://agentavow.com/check/kieksme/mcp-contabo)
+[![MCP Trust Score](https://mcptrustchecker.com/scan/github/kieksme/mcp-contabo/badge.svg)](https://mcptrustchecker.com/scan/github/kieksme/mcp-contabo)
 
 MCP server for the [Contabo](https://contabo.com/) cloud API — virtual machines, images, snapshots, networking, DNS, object storage, secrets, domains, and tags.
 
