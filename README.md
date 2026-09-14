@@ -73,6 +73,19 @@ Connect an MCP client (present the `MCP_AUTH_TOKEN` as a Bearer token):
 }
 ```
 
+### ChatGPT, Codex, and GitHub Copilot
+
+ChatGPT needs the public HTTPS endpoint as a custom MCP app/connector and the bearer token during setup; it cannot reach `localhost`.
+
+Codex:
+
+```bash
+codex mcp add contabo --url https://<your-host>/ \
+  --bearer-token-env-var CONTABO_MCP_AUTH_TOKEN
+```
+
+For GitHub Copilot, use `.vscode/mcp.json` for local VS Code and `.github/mcp.json` for Copilot Cloud Agent/Copilot CLI. Configure `COPILOT_MCP_CONTABO_URL` and `COPILOT_MCP_CONTABO_TOKEN` as Copilot secrets or variables.
+
 For stdio-only clients, bridge with [`mcp-remote`](https://www.npmjs.com/package/mcp-remote):
 
 ```bash

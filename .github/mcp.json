@@ -1,0 +1,12 @@
+{
+  "mcpServers": {
+    "contabo": {
+      "type": "http",
+      "url": "${COPILOT_MCP_CONTABO_URL}",
+      "headers": {
+        "Authorization": "Bearer ${COPILOT_MCP_CONTABO_TOKEN}"
+      },
+      "tools": ["*"]
+    }
+  }
+}

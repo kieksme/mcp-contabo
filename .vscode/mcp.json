@@ -1,0 +1,21 @@
+{
+  "inputs": [
+    { "type": "promptString", "id": "contabo_client_id", "description": "Contabo OAuth2 client ID", "password": true },
+    { "type": "promptString", "id": "contabo_client_secret", "description": "Contabo OAuth2 client secret", "password": true },
+    { "type": "promptString", "id": "contabo_api_user", "description": "Contabo API username", "password": true },
+    { "type": "promptString", "id": "contabo_api_password", "description": "Contabo API password", "password": true }
+  ],
+  "servers": {
+    "contabo": {
+      "type": "stdio",
+      "command": "npx",
+      "args": ["-y", "@kieksme/contabo-mcp"],
+      "env": {
+        "CONTABO_CLIENT_ID": "${input:contabo_client_id}",
+        "CONTABO_CLIENT_SECRET": "${input:contabo_client_secret}",
+        "CONTABO_API_USER": "${input:contabo_api_user}",
+        "CONTABO_API_PASSWORD": "${input:contabo_api_password}"
+      }
+    }
+  }
+}

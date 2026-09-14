@@ -1,0 +1,22 @@
+{
+  "name": "contabo-mcp",
+  "version": "1.5.2",
+  "description": "Manage Contabo VPS, networking, DNS, object storage, secrets, domains, and tags via MCP.",
+  "author": {
+    "name": "kieksme",
+    "url": "https://github.com/kieksme"
+  },
+  "homepage": "https://github.com/kieksme/mcp-contabo#readme",
+  "repository": "https://github.com/kieksme/mcp-contabo",
+  "license": "GPL-3.0-or-later",
+  "keywords": ["mcp", "contabo", "cloud", "vps", "hosting", "dns"],
+  "mcpServers": "./mcp.json",
+  "interface": {
+    "displayName": "Contabo MCP",
+    "shortDescription": "Manage Contabo cloud infrastructure",
+    "longDescription": "Manage Contabo VPS/VDS instances, images, snapshots, networking, DNS, object storage, secrets, domains, and tags.",
+    "developerName": "kieksme",
+    "category": "Developer Tools",
+    "capabilities": ["Read", "Write"]
+  }
+}
