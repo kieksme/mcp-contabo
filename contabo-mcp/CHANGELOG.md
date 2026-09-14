@@ -5,6 +5,24 @@ All notable changes to this project are documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.6.0](https://github.com/kieksme/mcp-contabo/compare/1.5.2...1.6.0) (2026-09-14)
+
+
+### Added
+
+* **config:** add Codex and Copilot MCP configs ([9426698](https://github.com/kieksme/mcp-contabo/commit/9426698eb0bc7d2e63e5b36ec6a1931d20285199))
+* **config:** add Codex and Copilot MCP configs ([e50370d](https://github.com/kieksme/mcp-contabo/commit/e50370dbe421d4e554ee1ecad3667f45380c3db2))
+
+
+### Changed
+
+* add Cursor and VS Code install buttons to README ([a2a1f68](https://github.com/kieksme/mcp-contabo/commit/a2a1f68cc600ad2ffe7fed533087828768a21b48))
+* **contabo-mcp:** add handler coverage for tool modules ([6f78a32](https://github.com/kieksme/mcp-contabo/commit/6f78a32deb156b0202574f6213adc386eb3d8296))
+* **contabo-mcp:** add handler coverage for tool modules ([2d2f7ab](https://github.com/kieksme/mcp-contabo/commit/2d2f7ab4736acba30439d54b547ea4a689b9189b))
+* **contabo-mcp:** add Railway deploy config and template guide ([1da2f2a](https://github.com/kieksme/mcp-contabo/commit/1da2f2a62e5ef567daed56a28a503e5ab31b07d3))
+* **deps:** bump the npm_and_yarn group across 0 directory with 2 updates ([9d161df](https://github.com/kieksme/mcp-contabo/commit/9d161df4e5109917a1b70f1ae918d97b07f377d7))
+* **deps:** bump the npm_and_yarn group across 0 directory with 2 updates ([5c748bf](https://github.com/kieksme/mcp-contabo/commit/5c748bf7c0b588ddfca1d44cf92f11b982bcbf2f))
+
 ## [1.5.2](https://github.com/kieksme/mcp-contabo/compare/1.5.1...1.5.2) (2026-07-28)
 
 
