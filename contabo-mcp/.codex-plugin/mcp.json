@@ -1,0 +1,8 @@
+{
+  "mcpServers": {
+    "contabo": {
+      "command": "npx",
+      "args": ["-y", "@kieksme/contabo-mcp"]
+    }
+  }
+}
