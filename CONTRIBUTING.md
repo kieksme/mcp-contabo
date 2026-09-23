@@ -1,29 +1,43 @@
 # Contributing to Contabo MCP
 
-Thanks for helping improve this MCP server. This guide covers local development, testing, API spec updates, and releases.
+Thanks for helping improve this project. This guide covers local development, testing, API spec updates, and releases.
 
-The npm package lives in [`contabo-mcp/`](contabo-mcp/). User-facing install docs are in [`contabo-mcp/README.md`](contabo-mcp/README.md).
+This is a pnpm workspace with two packages:
+
+- [`contabo-mcp/`](contabo-mcp/) — the published MCP server (`@kieksme/contabo-mcp`). User-facing install docs are in [`contabo-mcp/README.md`](contabo-mcp/README.md).
+- [`dashboard/`](dashboard/) — an internal, unpublished web dashboard + chat agent built on top of `contabo-mcp`. See [`dashboard/README.md`](dashboard/README.md) for setup.
 
 ## Prerequisites
 
 1. [Node.js](https://nodejs.org/) 20 or newer (CI uses Node 22; the release workflow uses Node 24)
-2. [pnpm](https://pnpm.io/) 10.33.3 (see `packageManager` in `contabo-mcp/package.json`)
+2. [pnpm](https://pnpm.io/) 10.33.3 (see `packageManager` in the root `package.json`)
 3. Contabo API credentials for manual testing — see [Obtaining API credentials](contabo-mcp/README.md#obtaining-api-credentials) ([API details](https://my.contabo.com/api/details))
+4. For `dashboard/` only: an [Anthropic API key](https://console.anthropic.com/) (chat agent)
 
 ## Repository setup
 
+Install once from the workspace root — there is a single lockfile (`pnpm-lock.yaml`) covering both packages:
+
 ```bash
 git clone https://github.com/kieksme/mcp-contabo.git
-cd mcp-contabo/contabo-mcp
+cd mcp-contabo
 pnpm install
-cp .env.example .env
-# Edit .env with your credentials
+```
+
+Then, per package:
+
+```bash
+cd contabo-mcp
+cp .env.example .env   # fill in your Contabo credentials
 pnpm build
 ```
 
 ## Development
 
+Run package scripts either from inside the package directory, or from the repo root with `pnpm --filter <package> run <script>` (`@kieksme/contabo-mcp` / `@kieksme/contabo-dashboard`).
+
 ```bash
+# contabo-mcp/
 pnpm build
 pnpm test                     # unit tests (vitest)
 pnpm run test:watch           # watch mode
@@ -33,7 +47,7 @@ pnpm run generate-types       # regenerate src/generated/contabo.d.ts
 npx @modelcontextprotocol/inspector  # interactive testing
 ```
 
-Before opening a pull request, run `pnpm test` and `pnpm run pack:check` from `contabo-mcp/`.
+Before opening a pull request touching `contabo-mcp/`, run `pnpm test` and `pnpm run pack:check` from `contabo-mcp/`. Before opening one touching `dashboard/`, run `pnpm build` (contabo-mcp first, then dashboard) and `pnpm test` from `dashboard/`.
 
 ### Local MCP config (cloned repo)
 

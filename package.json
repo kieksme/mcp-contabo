@@ -1,10 +1,22 @@
 {
   "name": "mcp-contabo",
   "private": true,
-  "description": "Monorepo for the Contabo MCP server (npm package in contabo-mcp/)",
+  "description": "Monorepo for the Contabo MCP server (contabo-mcp/) and its web dashboard (dashboard/)",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/kieksme/mcp-contabo.git"
   },
-  "license": "GPL-3.0-or-later"
+  "license": "GPL-3.0-or-later",
+  "packageManager": "pnpm@10.33.3",
+  "pnpm": {
+    "overrides": {
+      "hono@<4.12.25": ">=4.12.25",
+      "@hono/node-server@<2.0.5": ">=2.0.5",
+      "fast-uri@<3.1.4": "^3.1.4",
+      "body-parser@<2.3.0": ">=2.3.0"
+    },
+    "onlyBuiltDependencies": [
+      "esbuild"
+    ]
+  }
 }

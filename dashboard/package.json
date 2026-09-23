@@ -1,0 +1,51 @@
+{
+  "name": "@kieksme/contabo-dashboard",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Web dashboard + chat agent for the Contabo MCP server: VM status table with start/stop/restart, and a Claude-powered chat agent over a curated set of Contabo MCP tools.",
+  "type": "module",
+  "license": "GPL-3.0-or-later",
+  "engines": {
+    "node": ">=20"
+  },
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "dev": "concurrently -n web,server -c auto \"pnpm run dev:web\" \"pnpm run dev:server\"",
+    "dev:web": "vite",
+    "dev:server": "tsx watch src/server/index.ts",
+    "build": "pnpm run build:web && pnpm run build:server",
+    "build:web": "vite build",
+    "build:server": "tsc -p tsconfig.server.json",
+    "start": "node dist/server/index.js",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "typecheck": "tsc -p tsconfig.server.json --noEmit && tsc -p tsconfig.web.json --noEmit"
+  },
+  "dependencies": {
+    "@anthropic-ai/sdk": "^0.128.0",
+    "@kieksme/contabo-mcp": "workspace:*",
+    "@modelcontextprotocol/sdk": "^1.29.0",
+    "cookie-parser": "^1.4.7",
+    "express": "^4",
+    "express-rate-limit": "^7"
+  },
+  "devDependencies": {
+    "@types/cookie-parser": "^1",
+    "@types/express": "^4",
+    "@types/node": "^26.1.1",
+    "@types/react": "^18",
+    "@types/react-dom": "^18",
+    "@types/supertest": "^6",
+    "@vitejs/plugin-react": "^4",
+    "concurrently": "^9",
+    "react": "^18",
+    "react-dom": "^18",
+    "supertest": "^7",
+    "tsx": "^4.23.1",
+    "typescript": "^7.0.2",
+    "vite": "^6",
+    "vitest": "^5.0.0"
+  }
+}

@@ -1,6 +1,8 @@
 version: 2
 
-# Only run PR alerts when the published package manifest changes.
+# Only run PR alerts when a package manifest changes. The lockfile now lives
+# at the workspace root (pnpm workspace covering contabo-mcp/ + dashboard/).
 triggerPaths:
   - "contabo-mcp/package.json"
-  - "contabo-mcp/pnpm-lock.yaml"
+  - "dashboard/package.json"
+  - "pnpm-lock.yaml"
