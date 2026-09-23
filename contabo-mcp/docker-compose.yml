@@ -9,8 +9,8 @@
 services:
   contabo-mcp:
     build:
-      context: .
-      dockerfile: Dockerfile
+      context: ..
+      dockerfile: contabo-mcp/Dockerfile
     image: ghcr.io/kieksme/contabo-mcp:latest
     ports:
       - "3000:3000"
