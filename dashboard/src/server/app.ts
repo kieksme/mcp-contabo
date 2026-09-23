@@ -2,6 +2,7 @@ import path from "node:path";
 import { fileURLToPath } from "node:url";
 import express, { type Express } from "express";
 import cookieParser from "cookie-parser";
+import rateLimit from "express-rate-limit";
 import Anthropic from "@anthropic-ai/sdk";
 import type { Client } from "@modelcontextprotocol/sdk/client/index.js";
 import type { DashboardConfig } from "./config.js";
@@ -42,6 +43,17 @@ export async function createApp(
   app.use(cookieParser(config.sessionSecret));
 
   app.use("/health", createHealthRouter());
+
+  // The login endpoint is unauthenticated by nature (it's how a session is
+  // obtained) and guards a single shared secret, so it gets a stricter
+  // limit than the rest of the app to blunt brute-force guessing.
+  const loginLimiter = rateLimit({
+    windowMs: 15 * 60 * 1000,
+    limit: 20,
+    standardHeaders: true,
+    legacyHeaders: false,
+  });
+  app.use("/api/auth/login", loginLimiter);
   app.use("/api/auth", createAuthRouter(sessionStore, config.authToken));
 
   app.use("/api", requireSession(sessionStore));
@@ -50,8 +62,17 @@ export async function createApp(
 
   // Static SPA shell — public. It carries no secrets; the frontend decides
   // whether to show the login form or the dashboard via GET /api/auth/session.
-  app.use(express.static(STATIC_DIR));
-  app.get("*", (_req, res) => {
+  // Rate-limited since these handlers hit the filesystem on every request
+  // (express.static, and the sendFile() fallback below) and sit before the
+  // session gate.
+  const staticLimiter = rateLimit({
+    windowMs: 60 * 1000,
+    limit: 300,
+    standardHeaders: true,
+    legacyHeaders: false,
+  });
+  app.use(staticLimiter, express.static(STATIC_DIR));
+  app.get("*", staticLimiter, (_req, res) => {
     res.sendFile(path.join(STATIC_DIR, "index.html"));
   });
 

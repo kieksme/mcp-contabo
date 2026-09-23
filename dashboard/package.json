@@ -28,7 +28,8 @@
     "@kieksme/contabo-mcp": "workspace:*",
     "@modelcontextprotocol/sdk": "^1.29.0",
     "cookie-parser": "^1.4.7",
-    "express": "^4"
+    "express": "^4",
+    "express-rate-limit": "^7"
   },
   "devDependencies": {
     "@types/cookie-parser": "^1",
