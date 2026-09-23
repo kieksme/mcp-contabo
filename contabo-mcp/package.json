@@ -4,6 +4,13 @@
   "description": "MCP server for the Contabo API (VMs, snapshots, object storage, secrets, domains)",
   "type": "module",
   "main": "dist/index.js",
+  "exports": {
+    ".": "./dist/index.js",
+    "./server": {
+      "types": "./dist/server.d.ts",
+      "default": "./dist/server.js"
+    }
+  },
   "bin": {
     "contabo-mcp": "dist/index.js"
   },
