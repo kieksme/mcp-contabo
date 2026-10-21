@@ -5,6 +5,13 @@ All notable changes to this project are documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.6.1](https://github.com/kieksme/mcp-contabo/compare/1.6.0...1.6.1) (2026-10-21)
+
+
+### Changed
+
+* **deps:** bump the npm_and_yarn group across 1 directory with 6 updates ([#40](https://github.com/kieksme/mcp-contabo/issues/40)) ([f4496d4](https://github.com/kieksme/mcp-contabo/commit/f4496d402d460e9f824760b82583c95d9d4204cb))
+
 ## [1.6.0](https://github.com/kieksme/mcp-contabo/compare/1.5.2...1.6.0) (2026-09-14)
 
 
