@@ -52,12 +52,13 @@ Run the published image from GHCR:
 docker run --rm -p 3000:3000 \
   -e MCP_TRANSPORT=http \
   -e MCP_AUTH_TOKEN="$(openssl rand -hex 32)" \
+  -e MCP_ALLOWED_HOSTS=localhost,127.0.0.1 \
   -e CONTABO_CLIENT_ID=... -e CONTABO_CLIENT_SECRET=... \
   -e CONTABO_API_USER=... -e CONTABO_API_PASSWORD=... \
   ghcr.io/kieksme/contabo-mcp:latest
 ```
 
-The server listens on `http://localhost:3000/`; `GET /health` returns `{"status":"ok"}` (unauthenticated) for orchestrator probes. The `CONTABO_*` credentials are still required — the HTTP transport only changes how clients reach the server, not how it authenticates to Contabo.
+The server listens on `http://localhost:3000/mcp`; `GET /health` returns `{"status":"ok","version":"<version>"}` (unauthenticated) for orchestrator probes. The `CONTABO_*` credentials are still required — the HTTP transport only changes how clients reach the server, not how it authenticates to Contabo.
 
 Connect an MCP client (present the `MCP_AUTH_TOKEN` as a Bearer token):
 
@@ -66,7 +67,7 @@ Connect an MCP client (present the `MCP_AUTH_TOKEN` as a Bearer token):
   "mcpServers": {
     "contabo-remote": {
       "type": "streamable-http",
-      "url": "https://your-host:3000/",
+      "url": "https://your-host:3000/mcp",
       "headers": { "Authorization": "Bearer <MCP_AUTH_TOKEN>" }
     }
   }
@@ -80,7 +81,7 @@ ChatGPT needs the public HTTPS endpoint as a custom MCP app/connector and the be
 Codex:
 
 ```bash
-codex mcp add contabo --url https://<your-host>/ \
+codex mcp add contabo --url https://<your-host>/mcp \
   --bearer-token-env-var CONTABO_MCP_AUTH_TOKEN
 ```
 
@@ -89,10 +90,10 @@ For GitHub Copilot, use `.vscode/mcp.json` for local VS Code and `.github/mcp.js
 For stdio-only clients, bridge with [`mcp-remote`](https://www.npmjs.com/package/mcp-remote):
 
 ```bash
-npx -y mcp-remote https://your-host:3000/ --header "Authorization: Bearer <MCP_AUTH_TOKEN>"
+npx -y mcp-remote https://your-host:3000/mcp --header "Authorization: Bearer <MCP_AUTH_TOKEN>"
 ```
 
-**Security:** the server speaks plain HTTP — terminate TLS at a reverse proxy / ingress and never expose the raw port unencrypted. Beyond localhost, enable `MCP_HTTP_DNS_REBINDING_PROTECTION=true` with `MCP_HTTP_ALLOWED_HOSTS`. See [Remote HTTP transport (Docker)](contabo-mcp/README.md#remote-http-transport-docker) in the package README for all `MCP_*` variables, Docker Compose, and scaling notes.
+**Security:** the server speaks plain HTTP — terminate TLS at a reverse proxy / ingress and never expose the raw port unencrypted. Beyond localhost, set `MCP_ALLOWED_HOSTS` to the hostname(s) clients use (required). See [Remote HTTP transport (Docker)](contabo-mcp/README.md#remote-http-transport-docker) in the package README for all `MCP_*` variables, Docker Compose, and scaling notes.
 
 Deploying to [Railway](https://railway.com) instead of Docker? See [Deploy on Railway](contabo-mcp/README.md#deploy-on-railway) in the package README — the Dockerfile and a committed `railway.json` already carry the build/healthcheck config, so it's a Root Directory + variables setup away from a running instance (and, once a maintainer publishes it, a one-click marketplace template).
 

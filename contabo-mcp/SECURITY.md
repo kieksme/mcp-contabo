@@ -52,7 +52,7 @@ Custom `CONTABO_API_BASE_URL` / `CONTABO_AUTH_URL` values must use Contabo hostn
 | URL strings                       | Default Contabo API/auth URLs in code |
 | Copyleft / non-permissive license | Package is **GPL-3.0-or-later**       |
 
-These are **expected** for an API client under GPL. Dependency alerts: only `@modelcontextprotocol/sdk` and `zod`; no known malware in the tree at publish time.
+These are **expected** for an API client under GPL. Dependency alerts: only `@modelcontextprotocol/server`, `@modelcontextprotocol/node`, `@kieksme/mcp-http-kit` and `zod`; no known malware in the tree at publish time.
 
 ## Reporting vulnerabilities
 
