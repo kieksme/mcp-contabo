@@ -15,8 +15,8 @@ importers:
   .:
     dependencies:
       '@kieksme/mcp-http-kit':
-        specifier: 0.2.0
-        version: 0.2.0(@modelcontextprotocol/node@2.1.1(@modelcontextprotocol/server@2.3.1))(@modelcontextprotocol/server@2.3.1)
+        specifier: 0.3.0
+        version: 0.3.0(@modelcontextprotocol/node@2.1.1(@modelcontextprotocol/server@2.3.1))(@modelcontextprotocol/server@2.3.1)
       '@modelcontextprotocol/node':
         specifier: 2.1.1
         version: 2.1.1(@modelcontextprotocol/server@2.3.1)
@@ -405,12 +405,16 @@ packages:
   '@jridgewell/trace-mapping@0.3.31':
     resolution: {integrity: sha512-zzNR+SdQSDJzc8joaeP8QQoCQr8NuYx2dIIytl1QeBEZHJ9uW6hebsrYgbz8hJwUQao3TWCMtmfV8Nu1twOLAw==}
 
-  '@kieksme/mcp-http-kit@0.2.0':
-    resolution: {integrity: sha512-O8+qzdM5WcDRpMA6OvDy4+LSKfG6Lhi+M67K2tFhLEOuDgpl5QFH0gbyiels4CmVT02fomqkH9JLazQKF+oYsQ==}
+  '@kieksme/mcp-http-kit@0.3.0':
+    resolution: {integrity: sha512-rWAvDinGyJzrrS0+SsBE1XY9WvxeY16qboOAmatm5Daw/YWnLnk4WhBfEdXzK16fBBfmRak1pAbRW2smFsrb1A==}
     engines: {node: '>=22.14.0'}
     peerDependencies:
       '@modelcontextprotocol/node': ^2.1.0
       '@modelcontextprotocol/server': ^2.3.0
+      '@opentelemetry/api': ^1.9.0
+    peerDependenciesMeta:
+      '@opentelemetry/api':
+        optional: true
 
   '@modelcontextprotocol/core@2.3.1':
     resolution: {integrity: sha512-laVmIhPGpWi7rG9q+0UigblRN0Hws/Yjlb6qLFtVqryXVLkc4h+yN8z731POD2LnAGQlFe7/tXhUm7Bi0YB91g==}
@@ -1298,7 +1302,7 @@ snapshots:
       '@jridgewell/resolve-uri': 3.1.2
       '@jridgewell/sourcemap-codec': 1.6.0
 
-  '@kieksme/mcp-http-kit@0.2.0(@modelcontextprotocol/node@2.1.1(@modelcontextprotocol/server@2.3.1))(@modelcontextprotocol/server@2.3.1)':
+  '@kieksme/mcp-http-kit@0.3.0(@modelcontextprotocol/node@2.1.1(@modelcontextprotocol/server@2.3.1))(@modelcontextprotocol/server@2.3.1)':
     dependencies:
       '@modelcontextprotocol/node': 2.1.1(@modelcontextprotocol/server@2.3.1)
       '@modelcontextprotocol/server': 2.3.1
