@@ -1,4 +1,4 @@
-import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
+import type { McpServer } from "@modelcontextprotocol/server";
 import type { ContaboClient } from "../client.js";
 import { registerDataCenterTools } from "./data-centers.js";
 import { registerDnsTools } from "./dns.js";

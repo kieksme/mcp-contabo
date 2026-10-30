@@ -1,5 +1,7 @@
-import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
+import { McpServer } from "@modelcontextprotocol/server";
 import { afterEach, beforeEach, describe, expect, it } from "vitest";
+import { ContaboAuth } from "./auth.js";
+import { ContaboClient } from "./client.js";
 import { CONTABO_ENV_KEYS } from "./config/env.js";
 import { createContaboServer } from "./server.js";
 
@@ -24,5 +26,26 @@ describe("createContaboServer", () => {
 
   it("throws when required credentials are missing", () => {
     expect(() => createContaboServer()).toThrow(/Missing required environment variable/);
+  });
+});
+
+describe("createContaboServer with a shared client", () => {
+  beforeEach(() => clearEnv());
+  afterEach(() => clearEnv());
+
+  it("does not read the environment when a client is passed in", () => {
+    const config = {
+      clientId: "",
+      clientSecret: "",
+      apiUser: "",
+      apiPassword: "",
+      apiBaseUrl: "https://api.contabo.com/v1",
+      authUrl: "https://auth.contabo.com/token",
+      accessToken: "test-token",
+    };
+
+    const server = createContaboServer(new ContaboClient(config, new ContaboAuth(config)));
+
+    expect(server).toBeInstanceOf(McpServer);
   });
 });

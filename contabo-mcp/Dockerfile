@@ -32,8 +32,8 @@ LABEL org.opencontainers.image.title="contabo-mcp" \
 ENV NODE_ENV=production \
     MCP_TRANSPORT=http \
     MCP_HTTP_HOST=0.0.0.0 \
-    MCP_HTTP_PORT=3000 \
-    MCP_HTTP_PATH=/
+    PORT=3000 \
+    MCP_ALLOWED_HOSTS=localhost,127.0.0.1
 
 WORKDIR /app
 COPY --from=build /app/node_modules ./node_modules
@@ -48,6 +48,6 @@ EXPOSE 3000
 
 # Container healthcheck against the unauthenticated /health endpoint.
 HEALTHCHECK --interval=30s --timeout=3s --start-period=5s --retries=3 \
-  CMD node -e "fetch('http://127.0.0.1:'+(process.env.MCP_HTTP_PORT||3000)+'/health').then(r=>process.exit(r.ok?0:1)).catch(()=>process.exit(1))"
+  CMD node -e "fetch('http://127.0.0.1:'+(process.env.PORT||process.env.MCP_HTTP_PORT||3000)+'/health').then(r=>process.exit(r.ok?0:1)).catch(()=>process.exit(1))"
 
 CMD ["node", "dist/index.js"]

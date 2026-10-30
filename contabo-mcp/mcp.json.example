@@ -36,7 +36,7 @@
     },
     "contabo-remote": {
       "type": "streamable-http",
-      "url": "https://your-host:3000/",
+      "url": "https://your-host:3000/mcp",
       "headers": {
         "Authorization": "Bearer <MCP_AUTH_TOKEN>"
       }
@@ -46,7 +46,7 @@
       "args": [
         "-y",
         "mcp-remote",
-        "https://your-host:3000/",
+        "https://your-host:3000/mcp",
         "--header",
         "Authorization: Bearer <MCP_AUTH_TOKEN>"
       ]

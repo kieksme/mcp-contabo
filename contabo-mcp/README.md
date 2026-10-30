@@ -234,13 +234,24 @@ Besides stdio, the server can run as a **remote MCP over Streamable HTTP**, auth
 | Variable | Default | Description |
 |---|---|---|
 | `MCP_TRANSPORT` | `stdio` | `stdio` or `http`. |
-| `MCP_AUTH_TOKEN` | — | **Required** in `http` mode. Bearer token clients must present. Generate with `openssl rand -hex 32`. |
-| `MCP_HTTP_HOST` | `0.0.0.0` | Bind address. `0.0.0.0` inside containers; use `127.0.0.1` for local-only. |
-| `MCP_HTTP_PORT` | `3000` | Listen port. |
-| `MCP_HTTP_PATH` | `/` | MCP endpoint path. |
-| `MCP_HTTP_DNS_REBINDING_PROTECTION` | `false` | Enable `Host`/`Origin` validation (recommended beyond localhost). |
-| `MCP_HTTP_ALLOWED_HOSTS` | — | Comma-separated allowed `Host` values (used when protection is on). |
-| `MCP_HTTP_ALLOWED_ORIGINS` | — | Comma-separated allowed `Origin` values. |
+| `MCP_AUTH_TOKEN` | — | **Required** in `http` mode. Bearer token(s) clients must present (comma-separated for rotation). Generate with `openssl rand -hex 32`. |
+| `MCP_HTTP_HOST` | `127.0.0.1` | Bind address. The Docker image sets `0.0.0.0`. |
+| `PORT` | `3000` | Listen port (fallback: `MCP_HTTP_PORT`). |
+| `MCP_HTTP_PATH` | `/mcp` | MCP endpoint path. |
+| `MCP_ALLOWED_HOSTS` | `localhost,127.0.0.1,[::1]` | Allowed `Host` values. **Required** when binding beyond localhost; the Docker image defaults to `localhost,127.0.0.1`, so set your public hostname. |
+| `MCP_ALLOWED_ORIGINS` | — | Comma-separated allowed `Origin` values. |
+
+Transport, auth and Host/Origin checks are provided by [`@kieksme/mcp-http-kit`](https://github.com/kieksme/mcp-http-kit), shared with the other kieksme MCP servers. Legacy names (`MCP_HTTP_ALLOWED_HOSTS`, `MCP_HTTP_ALLOWED_ORIGINS`, `MCP_HTTP_PORT`) still work and log a deprecation warning.
+
+### Upgrading from 1.x
+
+The HTTP transport moved to MCP SDK v2 and the shared kit. Behavior changes for remote deployments:
+
+- The MCP endpoint is now **`/mcp`** (was `/`). Set `MCP_HTTP_PATH=/` to keep the old path.
+- The transport is **stateless**: no `Mcp-Session-Id`, no sticky sessions, replicas can scale freely. `GET`/`DELETE` on the MCP path return `405`.
+- `MCP_HTTP_DNS_REBINDING_PROTECTION` is gone: the `Host` allowlist is always enforced. Beyond localhost, `MCP_ALLOWED_HOSTS` is **required** (the server refuses to start without it).
+- `GET /health` additionally returns the server `version`.
+- Node.js `>=22.14` is required (was `>=20`).
 
 The Contabo API credentials (`CONTABO_*`) are still required — the HTTP transport only changes how MCP clients reach the server, not how it authenticates to Contabo.
 
@@ -251,7 +262,7 @@ cp .env.example .env      # fill in CONTABO_* and set MCP_AUTH_TOKEN
 docker compose up --build
 ```
 
-The server listens on `http://localhost:3000/`. An unauthenticated `GET /health` returns `{"status":"ok"}` for container/orchestrator probes.
+The server listens on `http://localhost:3000/mcp`. An unauthenticated `GET /health` returns `{"status":"ok","version":"<version>"}` for container/orchestrator probes.
 
 ### Pull the published image (GHCR)
 
@@ -260,6 +271,7 @@ Released versions are published to the GitHub Container Registry as public image
 ```bash
 docker run --rm -p 3000:3000 \
   -e MCP_AUTH_TOKEN=... \
+  -e MCP_ALLOWED_HOSTS=localhost,127.0.0.1 \
   -e CONTABO_CLIENT_ID=... -e CONTABO_CLIENT_SECRET=... \
   -e CONTABO_API_USER=... -e CONTABO_API_PASSWORD=... \
   ghcr.io/kieksme/contabo-mcp:latest        # or :1.4.0
@@ -282,12 +294,12 @@ Manual deploy:
    ```
    MCP_TRANSPORT=http
    MCP_HTTP_HOST=0.0.0.0
-   MCP_HTTP_PORT=3000
+   MCP_ALLOWED_HOSTS=<your-domain>.up.railway.app
    MCP_AUTH_TOKEN=<random value, e.g. `openssl rand -hex 32`>
    ```
-4. Deploy, then point an MCP client at `https://<your-domain>.up.railway.app/` with `Authorization: Bearer <MCP_AUTH_TOKEN>` — see [Connect an MCP client](#connect-an-mcp-client) below.
+4. Deploy, then point an MCP client at `https://<your-domain>.up.railway.app/mcp` with `Authorization: Bearer <MCP_AUTH_TOKEN>` — see [Connect an MCP client](#connect-an-mcp-client) below.
 
-**Scaling:** keep replicas at `1`. Sessions are held in-memory (see [Security notes](#security-notes)) and Railway does not provide sticky sessions across replicas for Streamable HTTP.
+**Scaling:** the HTTP transport is stateless, so replicas can be scaled without sticky sessions. Railway sets `PORT` itself.
 
 #### Publishing this as a Railway template (maintainers)
 
@@ -310,7 +322,7 @@ Turning the manual deploy above into a one-click marketplace template is a dashb
   "mcpServers": {
     "contabo-remote": {
       "type": "streamable-http",
-      "url": "https://your-host:3000/",
+      "url": "https://your-host:3000/mcp",
       "headers": { "Authorization": "Bearer <MCP_AUTH_TOKEN>" }
     }
   }
@@ -320,7 +332,7 @@ Turning the manual deploy above into a one-click marketplace template is a dashb
 For stdio-only clients, bridge with [`mcp-remote`](https://www.npmjs.com/package/mcp-remote):
 
 ```bash
-npx -y mcp-remote https://your-host:3000/ --header "Authorization: Bearer <MCP_AUTH_TOKEN>"
+npx -y mcp-remote https://your-host:3000/mcp --header "Authorization: Bearer <MCP_AUTH_TOKEN>"
 ```
 
 Clients must send `Accept: application/json, text/event-stream`; a plain `curl` without it gets `406`.
@@ -328,8 +340,8 @@ Clients must send `Accept: application/json, text/event-stream`; a plain `curl` 
 ### Security notes
 
 - **TLS:** the server speaks plain HTTP. Terminate TLS at a reverse proxy / ingress and never expose the raw port to the internet unencrypted.
-- **Scaling:** sessions are held in-memory (stateful). Behind multiple replicas, enable **sticky sessions** at the load balancer so a client stays on the instance that holds its `Mcp-Session-Id`.
-- Enable `MCP_HTTP_DNS_REBINDING_PROTECTION` with `MCP_HTTP_ALLOWED_HOSTS` for any deployment reachable beyond localhost.
+- **Scaling:** stateless transport, no sticky sessions needed.
+- Set `MCP_ALLOWED_HOSTS` to the hostname(s) clients use for any deployment reachable beyond localhost; requests with another `Host` get `403` (`/health` is exempt for load-balancer probes).
 
 ## Evaluations
 

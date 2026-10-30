@@ -3,7 +3,7 @@ import { ContaboAuth } from "../auth.js";
 import { ContaboClient } from "../client.js";
 import type { ContaboConfig } from "../config.js";
 import { registerVipTools } from "./vips.js";
-import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
+import { McpServer } from "@modelcontextprotocol/server";
 
 const config: ContaboConfig = {
   clientId: "",
