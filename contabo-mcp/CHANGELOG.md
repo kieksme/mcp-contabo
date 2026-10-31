@@ -5,6 +5,13 @@ All notable changes to this project are documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2.1.0](https://github.com/kieksme/mcp-contabo/compare/2.0.0...2.1.0) (2026-10-31)
+
+
+### Added
+
+* opt-in OpenTelemetry tracing via mcp-http-kit 0.4.1 ([50a37cc](https://github.com/kieksme/mcp-contabo/commit/50a37cc9b0b40f225f8fec4d03324ba7e4806048))
+
 ## [2.0.0](https://github.com/kieksme/mcp-contabo/compare/1.6.0...2.0.0) (2026-10-30)
 
 
