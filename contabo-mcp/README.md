@@ -343,6 +343,33 @@ Clients must send `Accept: application/json, text/event-stream`; a plain `curl` 
 - **Scaling:** stateless transport, no sticky sessions needed.
 - Set `MCP_ALLOWED_HOSTS` to the hostname(s) clients use for any deployment reachable beyond localhost; requests with another `Host` get `403` (`/health` is exempt for load-balancer probes).
 
+### Tracing (OpenTelemetry, opt-in)
+
+Off by default. Set an OTLP endpoint and one tool call becomes one trace: MCP client → this server → Contabo REST API. The trace context comes from `params._meta` (`traceparent` / `tracestate`), so it also works over stdio. It is trusted only with `MCP_AUTH_MODE` `bearer` / `oauth`, or on stdio.
+
+```bash
+OTEL_EXPORTER_OTLP_ENDPOINT=http://localhost:4318 \
+OTEL_SERVICE_NAME=contabo-mcp \
+MCP_TRANSPORT=http MCP_AUTH_TOKEN=… CONTABO_ACCESS_TOKEN=… \
+node dist/index.js
+```
+
+Try it locally with Jaeger (UI on <http://localhost:16686>):
+
+```bash
+docker run --rm -p 16686:16686 -p 4318:4318 jaegertracing/all-in-one
+```
+
+| Variable | Notes |
+|---|---|
+| `OTEL_EXPORTER_OTLP_ENDPOINT` | Switches tracing on (traces are posted to `<endpoint>/v1/traces`). Use `OTEL_EXPORTER_OTLP_TRACES_ENDPOINT` for a full URL. |
+| `OTEL_EXPORTER_OTLP_HEADERS` | Auth headers for the collector (never logged) |
+| `OTEL_SERVICE_NAME` | Service name, default `contabo-mcp` |
+| `OTEL_SDK_DISABLED=true` | Kill switch |
+| `MCP_OTEL_RECORD_PAYLOADS=true` | Also record tool arguments, results and full URLs. **Off by default** because they can contain instance names, user data and query strings. |
+
+Privacy by default: no tool arguments or results, no `Authorization` header, query strings and credentials removed from URL attributes, only `traceparent` / `tracestate` sent to Contabo (never baggage), and only calls made inside a tool call are traced. The OAuth token request to Contabo's auth server is not part of a trace unless it happens inside a tool call, and its form body is never recorded. Details: [`@kieksme/mcp-http-kit` README](https://github.com/kieksme/mcp-http-kit#tracing-opentelemetry-opt-in).
+
 ## Evaluations
 
 Read-only evaluation scenarios for agent testing live in [`evaluations/contabo.eval.xml`](evaluations/contabo.eval.xml). Regenerate answers against your account when adding live-data questions.
