@@ -1,6 +1,5 @@
 import { createContaboServer } from "@kieksme/contabo-mcp/server";
-import { Client } from "@modelcontextprotocol/sdk/client/index.js";
-import { InMemoryTransport } from "@modelcontextprotocol/sdk/inMemory.js";
+import { Client, InMemoryTransport } from "@modelcontextprotocol/client";
 import { loadPackageVersion } from "./version.js";
 
 /**

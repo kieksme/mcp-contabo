@@ -1,30 +1,34 @@
 #!/usr/bin/env node
-import { StdioServerTransport } from "@modelcontextprotocol/sdk/server/stdio.js";
-import { loadConfig } from "./config.js";
-import { loadServerConfig } from "./config/server-config.js";
-import { createContaboServer } from "./server.js";
-import { startHttpServer } from "./transports/http.js";
+import { loadConfig, startMcpServer } from "@kieksme/mcp-http-kit";
+import { createContaboClient, createContaboServer } from "./server.js";
+import { loadPackageVersion } from "./version.js";
 
 async function main(): Promise<void> {
-  const serverConfig = loadServerConfig();
+  // Transport, HTTP binding and auth come from `@kieksme/mcp-http-kit`
+  // (`MCP_TRANSPORT`, `MCP_AUTH_TOKEN`, `MCP_ALLOWED_HOSTS`, ...).
+  const config = loadConfig(process.env, { realm: "contabo-mcp" });
 
-  if (serverConfig.transport === "http") {
-    // Fail fast: validate Contabo credentials at startup rather than on the
-    // first request, so a misconfigured deployment never starts listening.
-    loadConfig();
-    await startHttpServer(serverConfig);
-    return;
-  }
+  // Fail fast: validate Contabo credentials at startup rather than on the
+  // first request, so a misconfigured deployment never starts serving.
+  // The client (and its OAuth token cache) is shared across requests.
+  const client = createContaboClient();
+  const version = loadPackageVersion();
 
-  // Default: stdio — unchanged behavior.
-  const server = createContaboServer();
-  const transport = new StdioServerTransport();
-  await server.connect(transport);
+  await startMcpServer({
+    config,
+    createServer: () => createContaboServer(client),
+    getHealthInfo: () => ({ version }),
+    onListening: ({ host, port, url }) => {
+      console.error(
+        `contabo-mcp v${version} listening on ${host}:${port} ` +
+          `(POST ${config.http.path}, GET ${config.http.healthPath}; auth=${config.auth.mode})`,
+      );
+      console.error(`MCP URL: ${url}`);
+    },
+  });
 }
 
 main().catch((error) => {
-  console.error(
-    error instanceof Error ? error.message : String(error),
-  );
+  console.error(error instanceof Error ? error.message : String(error));
   process.exit(1);
 });

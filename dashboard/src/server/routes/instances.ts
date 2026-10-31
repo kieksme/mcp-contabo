@@ -1,5 +1,5 @@
 import { Router } from "express";
-import type { Client } from "@modelcontextprotocol/sdk/client/index.js";
+import type { Client } from "@modelcontextprotocol/client";
 import type { ToolCatalog } from "../mcp/tool-catalog.js";
 
 /** Raw shape of one item in Contabo's ListInstancesResponse (openapi/contabo.openapi.json). */

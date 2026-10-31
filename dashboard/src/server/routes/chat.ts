@@ -1,5 +1,5 @@
 import { Router, type Response } from "express";
-import type { Client } from "@modelcontextprotocol/sdk/client/index.js";
+import type { Client } from "@modelcontextprotocol/client";
 import {
   AgentLoop,
   findPendingToolUse,

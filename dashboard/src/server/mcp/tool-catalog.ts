@@ -1,4 +1,4 @@
-import type { Client } from "@modelcontextprotocol/sdk/client/index.js";
+import type { Client } from "@modelcontextprotocol/client";
 import type Anthropic from "@anthropic-ai/sdk";
 
 export interface McpToolInfo {

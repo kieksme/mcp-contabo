@@ -1,6 +1,6 @@
 import { describe, expect, it, vi } from "vitest";
 import type Anthropic from "@anthropic-ai/sdk";
-import type { Client } from "@modelcontextprotocol/sdk/client/index.js";
+import type { Client } from "@modelcontextprotocol/client";
 import { ToolCatalog } from "../mcp/tool-catalog.js";
 import { AgentLoop, type AgentEvent } from "./loop.js";
 import { AgentSessionStore } from "./state.js";

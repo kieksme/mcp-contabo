@@ -1,5 +1,5 @@
 import Anthropic from "@anthropic-ai/sdk";
-import type { Client } from "@modelcontextprotocol/sdk/client/index.js";
+import type { Client } from "@modelcontextprotocol/client";
 import { toClaudeTools, type ToolCatalog } from "../mcp/tool-catalog.js";
 import type { AgentSessionStore, PendingTurn } from "./state.js";
 

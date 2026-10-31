@@ -13,7 +13,9 @@
       "hono@<4.12.25": ">=4.12.25",
       "@hono/node-server@<2.0.5": ">=2.0.5",
       "fast-uri@<3.1.4": "^3.1.4",
-      "body-parser@<2.3.0": ">=2.3.0"
+      "body-parser@<2.3.0": ">=2.3.0",
+      "@opentelemetry/semantic-conventions": "1.43.0",
+      "import-in-the-middle": "3.5.2"
     },
     "onlyBuiltDependencies": [
       "esbuild"

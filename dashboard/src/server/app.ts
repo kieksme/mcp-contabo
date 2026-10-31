@@ -4,7 +4,7 @@ import express, { type Express } from "express";
 import cookieParser from "cookie-parser";
 import rateLimit from "express-rate-limit";
 import Anthropic from "@anthropic-ai/sdk";
-import type { Client } from "@modelcontextprotocol/sdk/client/index.js";
+import type { Client } from "@modelcontextprotocol/client";
 import type { DashboardConfig } from "./config.js";
 import { SessionStore } from "./auth/session-store.js";
 import { requireSession } from "./auth/auth-middleware.js";

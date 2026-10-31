@@ -6,7 +6,7 @@
   "type": "module",
   "license": "GPL-3.0-or-later",
   "engines": {
-    "node": ">=20"
+    "node": ">=22.14.0"
   },
   "files": [
     "dist"
@@ -26,7 +26,8 @@
   "dependencies": {
     "@anthropic-ai/sdk": "^0.128.0",
     "@kieksme/contabo-mcp": "workspace:*",
-    "@modelcontextprotocol/sdk": "^1.29.0",
+    "@modelcontextprotocol/client": "2.3.1",
+    "@modelcontextprotocol/server": "2.3.1",
     "cookie-parser": "^1.4.7",
     "express": "^4",
     "express-rate-limit": "^7"

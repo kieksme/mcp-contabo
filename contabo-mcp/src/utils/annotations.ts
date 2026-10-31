@@ -1,4 +1,4 @@
-import type { ToolAnnotations } from "@modelcontextprotocol/sdk/types.js";
+import type { ToolAnnotations } from "@modelcontextprotocol/server";
 
 /** Read-only list/get/stats/audit tools. */
 export const readOnly: ToolAnnotations = { readOnlyHint: true };

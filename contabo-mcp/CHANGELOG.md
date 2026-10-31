@@ -5,6 +5,29 @@ All notable changes to this project are documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2.0.0](https://github.com/kieksme/mcp-contabo/compare/1.6.0...2.0.0) (2026-10-30)
+
+
+### ⚠ BREAKING CHANGES
+
+* remote HTTP deployments change behavior.
+    - The MCP endpoint is /mcp (was /). Set MCP_HTTP_PATH=/ to keep the old path.
+    - The transport is stateless: no Mcp-Session-Id, GET/DELETE return 405.
+    - MCP_HTTP_DNS_REBINDING_PROTECTION is removed; the Host allowlist is always
+      enforced and MCP_ALLOWED_HOSTS is required beyond localhost.
+    - The default bind host is 127.0.0.1 (the Docker image still sets 0.0.0.0).
+    - Node.js >=22.14 is required (was >=20).
+
+### Added
+
+* migrate to @kieksme/mcp-http-kit and MCP SDK v2 ([#43](https://github.com/kieksme/mcp-contabo/issues/43)) ([f01dcb0](https://github.com/kieksme/mcp-contabo/commit/f01dcb051223c2b5ada83a2f53c55ac99d5e59c9))
+
+
+### Changed
+
+* **deps:** bump @kieksme/mcp-http-kit to 0.3.0 ([#44](https://github.com/kieksme/mcp-contabo/issues/44)) ([b679610](https://github.com/kieksme/mcp-contabo/commit/b67961080c6e0e1b5b741ad804d1282d24d7f989))
+* **deps:** bump the npm_and_yarn group across 1 directory with 6 updates ([#40](https://github.com/kieksme/mcp-contabo/issues/40)) ([f4496d4](https://github.com/kieksme/mcp-contabo/commit/f4496d402d460e9f824760b82583c95d9d4204cb))
+
 ## [1.6.0](https://github.com/kieksme/mcp-contabo/compare/1.5.2...1.6.0) (2026-09-14)
 
 

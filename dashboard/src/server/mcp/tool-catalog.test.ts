@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import type { Client } from "@modelcontextprotocol/sdk/client/index.js";
+import type { Client } from "@modelcontextprotocol/client";
 import { ToolCatalog, toClaudeTools } from "./tool-catalog.js";
 
 const FIXTURE_TOOLS = [
