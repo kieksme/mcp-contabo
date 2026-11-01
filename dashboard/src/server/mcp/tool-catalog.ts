@@ -46,10 +46,19 @@ export class ToolCatalog {
   }
 
   filterByPrefixes(prefixes: string[]): McpToolInfo[] {
-    return this.tools.filter((tool) =>
-      prefixes.some((prefix) => tool.name.startsWith(prefix)),
-    );
+    return this.tools.filter((tool) => isToolNameAllowed(tool.name, prefixes));
   }
+}
+
+/**
+ * Single source of truth for "is this tool name in the curated scope". Used
+ * both to build the tool list advertised to Claude (filterByPrefixes) and to
+ * re-check every tool_use the model actually emits before executing it —
+ * the model is untrusted input, so the advertised list alone is not an
+ * enforcement boundary.
+ */
+export function isToolNameAllowed(name: string, prefixes: string[]): boolean {
+  return prefixes.some((prefix) => name.startsWith(prefix));
 }
 
 /** Converts a curated MCP tool list into Claude Messages API tool definitions. */

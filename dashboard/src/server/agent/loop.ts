@@ -1,6 +1,6 @@
 import Anthropic from "@anthropic-ai/sdk";
 import type { Client } from "@modelcontextprotocol/client";
-import { toClaudeTools, type ToolCatalog } from "../mcp/tool-catalog.js";
+import { isToolNameAllowed, toClaudeTools, type ToolCatalog } from "../mcp/tool-catalog.js";
 import type { AgentSessionStore, PendingTurn } from "./state.js";
 
 export type AgentEvent =
@@ -118,6 +118,18 @@ export class AgentLoop {
       const pendingIds = new Set<string>();
 
       for (const tool of toolUseBlocks) {
+        // The model is untrusted input — re-check scope here, not just at
+        // the advertised-tools step above, before executing anything.
+        if (!isToolNameAllowed(tool.name, toolPrefixes)) {
+          resolved.set(tool.id, {
+            type: "tool_result",
+            tool_use_id: tool.id,
+            is_error: true,
+            content: `Tool "${tool.name}" is outside the configured scope and cannot be called.`,
+          });
+          continue;
+        }
+
         if (catalog.isDestructive(tool.name)) {
           pendingIds.add(tool.id);
           yield {
@@ -165,14 +177,24 @@ export class AgentLoop {
   }
 }
 
-/** Resolves a specific pending tool_use with a human decision, mutating the pending turn in place. */
-export function resolvePendingToolUse(
+/**
+ * Claims a pending tool_use for processing: removes it from pendingIds
+ * synchronously (no `await` in between the caller's membership check and
+ * this call) so a concurrent duplicate confirm request for the same id
+ * observes it already gone, rather than both requests executing the tool.
+ * Returns false if it was already claimed (or never pending).
+ */
+export function claimPendingToolUse(pending: PendingTurn, toolUseId: string): boolean {
+  return pending.pendingIds.delete(toolUseId);
+}
+
+/** Records a claimed tool_use's result, after it has actually run (may involve an await). */
+export function recordPendingToolResult(
   pending: PendingTurn,
   toolUseId: string,
   result: Anthropic.ToolResultBlockParam,
 ): void {
   pending.resolved.set(toolUseId, result);
-  pending.pendingIds.delete(toolUseId);
 }
 
 export function findPendingToolUse(

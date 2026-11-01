@@ -39,6 +39,14 @@ export async function createApp(
   const sessionStore = new SessionStore();
 
   const app = express();
+  // The dashboard's shipped deployment (railway.json) runs behind a reverse
+  // proxy that terminates TLS and forwards one hop to this process. Without
+  // this, express-rate-limit and req.secure both see the proxy's own
+  // address/protocol for every request instead of the real client's,
+  // collapsing per-client rate limits into one shared bucket and making the
+  // session cookie's Secure flag blind to whether the original request was
+  // HTTPS.
+  app.set("trust proxy", 1);
   app.use(express.json());
   app.use(cookieParser(config.sessionSecret));
 
@@ -54,7 +62,7 @@ export async function createApp(
     legacyHeaders: false,
   });
   app.use("/api/auth/login", loginLimiter);
-  app.use("/api/auth", createAuthRouter(sessionStore, config.authToken));
+  app.use("/api/auth", createAuthRouter(sessionStore, config.authToken, agentState));
 
   app.use("/api", requireSession(sessionStore));
   app.use("/api/instances", createInstancesRouter(mcpClient, catalog));

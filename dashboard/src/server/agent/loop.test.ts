@@ -18,6 +18,12 @@ const TOOLS = [
     inputSchema: { type: "object", properties: { instanceId: { type: "number" } } },
     annotations: { destructiveHint: true },
   },
+  {
+    name: "contabo_secrets_list",
+    description: "List secrets",
+    inputSchema: { type: "object", properties: {} },
+    annotations: { readOnlyHint: true },
+  },
 ];
 
 function fakeMcpClient(callTool: ReturnType<typeof vi.fn>): Client {
@@ -154,6 +160,33 @@ describe("AgentLoop", () => {
       { type: "awaiting_confirmation" },
     ]);
     expect(state.pending("s1")?.pendingIds.has("tool_stop_1")).toBe(true);
+  });
+
+  it("refuses to execute a tool outside the configured prefix allowlist, even though it exists on the MCP server", async () => {
+    // Model is untrusted input: this must be rejected even though the tool
+    // is real (listed by the fake MCP client) — only the advertised `tools`
+    // array is prefix-filtered, so execution needs its own check too.
+    const stream = vi
+      .fn()
+      .mockReturnValueOnce(
+        fakeStream([], {
+          stop_reason: "tool_use",
+          content: [{ type: "tool_use", id: "tool_oos", name: "contabo_secrets_list", input: {} }],
+        }),
+      )
+      .mockReturnValueOnce(
+        fakeStream([textDelta("Das kann ich nicht.")], {
+          stop_reason: "end_turn",
+          content: [{ type: "text", text: "Das kann ich nicht." }],
+        }),
+      );
+    const callTool = vi.fn();
+    const { loop } = await buildLoop(stream, callTool);
+
+    const events = await collect(loop.start("s1", "Zeig mir die Secrets"));
+
+    expect(callTool).not.toHaveBeenCalled();
+    expect(events).toEqual([{ type: "text", text: "Das kann ich nicht." }, { type: "done" }]);
   });
 
   it("resumes and finishes once a pending confirmation has been resolved", async () => {
