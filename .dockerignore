@@ -1,0 +1,29 @@
+# Root .dockerignore for the pnpm workspace — both contabo-mcp/Dockerfile and
+# dashboard/Dockerfile build from the repo root (see their "Build context"
+# comments), so this is the one .dockerignore Docker actually honors; a
+# .dockerignore inside a subdirectory has no effect on a parent build context.
+node_modules
+**/node_modules
+dist
+**/dist
+.git
+.gitignore
+.env
+**/.env
+*.log
+**/*.log
+.DS_Store
+.pnpm-store
+**/*.test.ts
+**/vitest.config.ts
+contabo-mcp/evaluations
+contabo-mcp/scripts
+contabo-mcp/openapi
+contabo-mcp/mcp.json.example
+contabo-mcp/.env.example
+dashboard/.env.example
+**/Dockerfile
+**/docker-compose.yml
+**/.dockerignore
+**/README.md
+**/CHANGELOG.md
