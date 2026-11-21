@@ -73,7 +73,7 @@ The panel lists four pieces of information (labels may appear in German or Engli
 
 Until you set an API password, the panel typically asks you to **set a new password** before you can use the API (“Bitte setzen Sie ein neues Passwort, um die API nutzen zu können”).
 
-1. On [API details](https://my.contabo.com/api/details), use the control to set or change the **API password**.
+1. Set or change the **API password** in the **old Contabo UI**: [dedicatedserver.contabo.com/api/details](https://dedicatedserver.contabo.com/api/details). The new panel (`my.contabo.com/account/security`) shows the Client ID, Client Secret, and Username, but has no way to create the API password. Its "Send Link" button only resets your control-panel login password, which is not the API password. The Secrets section (a store for instance credentials) is not it either.
 2. Choose a strong password and store it in a password manager.
 3. Use that value for `CONTABO_API_PASSWORD` — **not** your normal my.contabo.com login password.
 
